@@ -82,7 +82,7 @@ def test_hits_convert_to_agent_hit_and_backend_source():
 
 def test_doc_ids_match_backend_rule_agent_demo_docs():
     backend_docs = {v[0] for v in _SOURCES.values() if v[0].startswith("doc-")}
-    assert backend_docs == {d.doc_id for d in load_docs()}
+    assert backend_docs <= {d.doc_id for d in load_docs()}  # 백엔드가 인용하는 ID 는 모두 있어야 한다
 
 
 def test_outage_exception_is_caught_by_agent():

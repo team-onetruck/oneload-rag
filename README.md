@@ -10,6 +10,8 @@ R3가 맡은 이용 안내 검색 모듈입니다. Agent(R2)의 `search_knowledg
 | `src/hangil_rag/search_memory.py` | DB 없는 키워드 검색 (기본값, 테스트·로컬 시연용) |
 | `src/hangil_rag/search_pgvector.py` | pgvector 하이브리드 검색 초안 (메타데이터 필터 → 벡터 + 키워드) |
 | `src/hangil_rag/ingest.py` | 분할 → 임베딩 → `rag.chunks` 적재 |
+| `localization/` | 사진 위치 인식용 임시 데이터 (답사 전 특징 카드 + 합성 케이스 + 매처 비교). [localization/README.md](localization/README.md) |
+| `docs/requests.md` | 다른 역할에 요청·합의할 것 |
 
 ## 설치
 
@@ -73,6 +75,7 @@ OPENAI_API_KEY=... uv run python -m hangil_rag.ingest
 | --- | --- | --- |
 | `RAG_BACKEND` | `memory` | `pgvector`로 전환 |
 | `RAG_KNOWLEDGE_DIR` | 패키지 안 `knowledge/` | 문서 폴더 |
+| `RAG_INCLUDE_COMMUNITY` | 꺼짐 | `1`이면 이용자 후기 기반 문서(`source_kind: community`)도 검색. **초기 개발용**, 시연·배포에서는 끔 |
 | `RAG_DATABASE_URL` | 로컬 compose DB | pgvector 접속 |
 | `RAG_MIN_SCORE` | `0.3` | pgvector 점수 임계값 (초기값) |
 | `RAG_EMBEDDING_MODEL`, `RAG_EMBEDDING_DIM` | `text-embedding-3-small`, `1536` | 임베딩 모델 |
@@ -122,3 +125,5 @@ uv run pytest -q
   - [서울교통공사 승차권 안내](http://www.seoulmetro.co.kr/kr/page.do?menuIdx=355)
 - 확인하지 못한 항목(결제 수단, 버튼 이름, 개찰구·환급기 위치, 역 이름 영문 표기)은 `TODO(R3)` 주석으로 남겼습니다.
 - 요금은 공식 페이지에 있지만, 요금 문서를 둘지 R2·R6가 합의하기 전이라 넣지 않았습니다.
+- `doc-seoul-help-desks`(`scope: help`)는 문제가 생겼을 때 도움받을 곳을 순서대로 안내합니다. 역 안의 창구(B3 고객안내센터, B2)가 먼저이고, 외국인용 1330, 공항철도 콜센터가 그다음이며, 분실물과 긴급 상황은 마지막입니다.
+- `source_kind: community` 문서는 이용자 후기에서 모은 **미확인** 정보입니다. 초기 개발용이라 `RAG_INCLUDE_COMMUNITY=1`일 때만 검색되고, 답사나 공식 확인 후 공식 문서로 옮깁니다.

@@ -8,7 +8,7 @@ DEMO_IDS = {"doc-arex-train-types", "doc-express-ticket", "doc-allstop-ticket", 
 
 def test_real_knowledge_loads_with_backend_demo_ids():
     docs = load_docs()
-    assert {d.doc_id for d in docs} == DEMO_IDS
+    assert {d.doc_id for d in docs} >= DEMO_IDS  # 백엔드 RuleAgent 데모 ID 는 그대로, 새 문서는 추가 가능
     assert {d.doc_id: d.train_type for d in docs if d.train_type} == {
         "doc-express-ticket": "express",
         "doc-allstop-ticket": "allstop",
@@ -37,6 +37,18 @@ def test_invalid_front_matter_is_rejected(tmp_path, meta, message):
     path = write_doc(tmp_path, "doc-bad", **meta)
     with pytest.raises(ValueError, match=message):
         parse(path)
+
+
+def test_community_docs_are_validated_but_excluded_by_default(tmp_path, monkeypatch):
+    write_doc(tmp_path, "doc-official")
+    write_doc(tmp_path, "doc-forum", source_kind="community", source_url="https://example.invalid/thread")
+    monkeypatch.delenv("RAG_INCLUDE_COMMUNITY", raising=False)
+    assert [d.doc_id for d in load_docs(tmp_path)] == ["doc-official"]
+    monkeypatch.setenv("RAG_INCLUDE_COMMUNITY", "1")
+    assert [d.doc_id for d in load_docs(tmp_path)] == ["doc-forum", "doc-official"]
+    write_doc(tmp_path, "doc-bad", source_kind="community", source_url=None)  # 후기도 링크는 필수
+    with pytest.raises(ValueError, match="source_url"):
+        load_docs(tmp_path, include_community=False)
 
 
 def test_field_check_doc_may_have_no_url(tmp_path):

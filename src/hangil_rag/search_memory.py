@@ -27,6 +27,15 @@ _STOP = {
     "a", "an", "the", "i", "me", "my", "you", "is", "are", "am", "do", "does", "can", "could", "how", "what",
     "where", "which", "when", "to", "of", "in", "on", "at", "for", "it", "this", "that", "and", "or", "please",
 }  # fmt: skip
+# 질문에 흔히 붙는 군말의 2-gram (어디서 · 어떻게 · 되는데 · 받아요 · 알려주세요 ...)과 뜻 없는 한 글자 낱말.
+# shortcut: 손으로 고른 목록. 실제 질문 로그가 쌓이면 R6 평가셋으로 다시 고른다
+_STOP_KO = {
+    "어디", "디서", "디에", "어떻", "떻게", "어떡", "떡해", "해요", "하나", "나요", "되나", "돼요", "되는", "는데",
+    "받아", "아요", "있어", "어요", "없어", "알려", "려줘", "주세", "세요", "싶어", "예요", "인가", "가요",
+    "안", "좀", "거", "수", "뭐", "왜", "또", "더", "잘", "꼭", "다", "이", "그", "저", "제", "내",
+}  # fmt: skip
+# 낱말 끝 조사. '도' · '로' 는 철도 · 통로처럼 명사 끝에도 와서 빼지 않는다
+_PARTICLE = re.compile(r"(에서|에게|까지|부터|이랑|을|를|은|는|에)$")
 
 
 def tokens(text: str) -> set[str]:
@@ -37,7 +46,8 @@ def tokens(text: str) -> set[str]:
                 continue
             out.add(word[:-1] if len(word) > 3 and word.endswith("s") and not word.endswith("ss") else word)
         else:
-            out |= {word} if len(word) == 1 else {word[i : i + 2] for i in range(len(word) - 1)}
+            for w in {word, _PARTICLE.sub("", word) or word}:  # "표를" → 표를 · 표 둘 다
+                out |= ({w} if len(w) == 1 else {w[i : i + 2] for i in range(len(w) - 1)}) - _STOP_KO
     return out
 
 

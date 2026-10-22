@@ -23,6 +23,7 @@ jobs:
       RAG_TEST_DATABASE_URL: postgresql://hangil:hangil@localhost:54329/hangil_test
       RAG_AGENT_DIR: ${{ github.workspace }}/oneload_agent
       RAG_BACKEND_DIR: ${{ github.workspace }}/oneload-backend
+      RAG_DATA_DIR: ${{ github.workspace }}/oneload-data
       # oneload_agent / oneload-backend are private: a read-only token is needed to check them out.
       # Without it (e.g. pull requests from forks) the contract tests are skipped, never silently passed.
       HAS_TEAM_TOKEN: ${{ secrets.TEAM_REPO_TOKEN != '' }}
@@ -44,6 +45,12 @@ jobs:
         with:
           repository: team-onetruck/oneload-backend
           path: oneload-backend
+          token: ${{ secrets.TEAM_REPO_TOKEN }}
+      - uses: actions/checkout@v4
+        if: env.HAS_TEAM_TOKEN == 'true'
+        with:
+          repository: team-onetruck/oneload-data
+          path: oneload-data
           token: ${{ secrets.TEAM_REPO_TOKEN }}
       - name: Agent dependencies for the contract tests
         if: env.HAS_TEAM_TOKEN == 'true'

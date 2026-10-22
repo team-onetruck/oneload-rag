@@ -1,0 +1,138 @@
+# 서울역 위치별 특징 카드 (임시, 답사 전)
+#
+# 사진 위치 인식은 사진 사진끼리 비교하지 않는다. VLM 이 사진에서 읽은 글자를 노드별 표지판 문구(sign_texts)와 비교한다
+# (oneload-backend app/domain/localization.py match_location). 이 파일은 그 문구를 노드마다 모은 것이다.
+#
+# status
+#   desk        공식 자료(안내도 · 역 안내 페이지)에 적힌 시설 이름. 실제 표지판 문구 · 위치와 다를 수 있다
+#   placeholder oneload-data 지도의 현재 임시값을 그대로 옮긴 것
+#   field       현장에서 확인 (아직 없음)
+# 실제 정확도는 현장 사진으로만 잴 수 있다. 이 파일은 매칭 로직 개발 · 시연용이다.
+
+map_id: seoul-station
+map_version: 2026-10-22.1 # oneload-data maps/seoul-station.json 의 노드 기준
+
+sources:
+  arex-map:
+    url: https://www.airportrailroad.com/static/file/emergency_seoul.pdf
+    checked_at: 2026-10-22
+    note: AREX 공식 서울역 안내도 (층별 시설 이름 국·영 표기)
+  arex-station:
+    url: https://www.airportrailroad.com/train/normal/info/010/0
+    checked_at: 2026-10-22
+    note: AREX 서울역 안내 (층별 시설 설명, 승강장 방향)
+  current-map:
+    url: https://github.com/team-onetruck/oneload-data/blob/main/maps/seoul-station.json
+    checked_at: 2026-10-22
+    note: 답사 전 임시값 (2026-10-22.1)
+
+nodes:
+  - node_id: ktx-hall
+    floor_id: 2F
+    landmarks:
+      - landmark_id: lm-ktx-hall
+        sign_texts: [KTX, 맞이방, Departure Hall]
+        source: current-map
+        status: placeholder
+    notes: 안내도상 공항철도 지상 2층 왼쪽에 15번 출구, 오른쪽에 KTX 입구. 실제 표지판 문구는 답사 필요
+
+  - node_id: line1-gates
+    floor_id: B1
+    landmarks:
+      - landmark_id: lm-line1-transfer
+        sign_texts: [공항철도, Airport Railroad, 1호선, Line 1]
+        source: current-map
+        status: placeholder
+    confusable_with: [line4-gates]
+    notes: 서울교통공사 구역이라 AREX 자료에 없음. '공항철도'만 보이면 4호선 쪽과 구분 불가
+
+  - node_id: line4-gates
+    floor_id: B1
+    landmarks:
+      - landmark_id: lm-line4-transfer
+        sign_texts: [공항철도, Airport Railroad, 4호선, Line 4]
+        source: current-map
+        status: placeholder
+    confusable_with: [line1-gates]
+
+  - node_id: arex-concourse
+    floor_id: B2
+    landmarks:
+      - landmark_id: lm-arex-concourse
+        sign_texts: [직통열차, Express Train, 일반열차, All Stop Train]
+        source: current-map
+        status: placeholder
+      - landmark_id: lm-b2-travel-center
+        sign_texts: [트래블센터, Travel Center]
+        source: arex-map
+        status: desk
+      - landmark_id: lm-b2-city-airport-terminal
+        sign_texts: [도심공항터미널, City Airport Terminal]
+        source: arex-map
+        status: desk
+    confusable_with: [express-tickets]
+    notes: 트래블센터는 B2 중앙(역 안내). 도심공항터미널을 이 노드에 둔 것은 추정 (같은 B2)
+
+  - node_id: express-tickets
+    floor_id: B2
+    landmarks:
+      - landmark_id: lm-express-tickets
+        sign_texts: [직통열차 표사는 곳, Express Train Tickets]
+        source: arex-map
+        status: desk
+    confusable_with: [arex-concourse]
+
+  - node_id: express-gates
+    floor_id: B2
+    landmarks: []
+    notes: 공식 자료에 개찰구 표기 없음. 답사 필요
+
+  - node_id: allstop-tickets
+    floor_id: B3
+    landmarks:
+      - landmark_id: lm-allstop-tickets
+        sign_texts: [일반열차 표사는 곳, All-stop Train Ticket Office]
+        source: arex-map
+        status: desk
+      - landmark_id: lm-b3-customer-info
+        sign_texts: [고객안내센터, Customer Information Center]
+        source: arex-station
+        status: desk
+      - landmark_id: lm-b3-ticket-machine
+        sign_texts: [승차권발매기(교통카드충전), Ticket Machine (Traffic Card Charger)]
+        source: arex-map
+        status: desk
+      - landmark_id: lm-b3-transfer
+        sign_texts: ["1,4호선 갈아타는 곳", "Transfer to Line 1, Line 4"]
+        source: arex-map
+        status: desk
+    confusable_with: [arex-concourse, allstop-gates]
+    notes: >-
+      역 안내: B3 중앙에 고객안내센터와 승차권 발매기, 1·4호선 갈아타는 곳이 B3 에서 이어짐.
+      발매기는 B2 에도 있어 발매기 문구만으로는 층 구분이 어렵다.
+      지도는 1·4호선 개찰구를 B2 concourse 에 연결하지만 공식 자료로는 환승 통로가 B3 에서 이어진다 (R4 확인 요청 RQ-17)
+
+  - node_id: allstop-gates
+    floor_id: B3
+    landmarks: []
+    notes: 공식 자료에 개찰구 표기 없음. 답사 필요
+
+  - node_id: express-platform
+    floor_id: B7
+    landmarks:
+      - landmark_id: lm-express-platform
+        sign_texts: [직통열차 승강장, Express Train Platform, "인천공항1,2터미널역", "Incheon Int'l Airport Terminal1,2 Station"]
+        source: arex-map
+        status: desk
+    confusable_with: [allstop-platform]
+    notes: 역 안내 - 직통열차 승강장은 좌측으로 가면 인천공항 1,2터미널역 방향
+
+  - node_id: allstop-platform
+    floor_id: B7
+    landmarks:
+      - landmark_id: lm-allstop-platform
+        sign_texts: [일반열차 승강장, All-stop Train Platform, 공덕역, Gongdeok Station]
+        source: arex-map
+        status: desk
+    confusable_with: [express-platform]
+    notes: 역 안내 - 일반열차 승강장은 좌측으로 가면 공덕역 방향

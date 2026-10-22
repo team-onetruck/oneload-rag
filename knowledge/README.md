@@ -9,10 +9,10 @@
 doc_id: doc-express-ticket          # 필수. doc-소문자-하이픈. 바꾸면 백엔드·Agent·QA가 깨진다
 title_ko: 직통열차 승차권 구매 (서울역)  # 필수
 title_en: Buying an Express train ticket at Seoul Station  # 필수. ':' 가 있으면 따옴표로 감싼다
-scope: ticket                       # 필수. ticket | card | fare
+scope: ticket                       # 필수. ticket | card | fare | help(문제가 생겼을 때 도움받을 곳)
 train_type: express                 # 그 열차 전용 문서만. express | allstop. 공통 문서는 이 줄을 쓰지 않는다
 source_url: https://...             # 필수 키. 대표 출처. field_check 이면 null
-source_kind: official               # 필수. official(공식 자료) | field_check(현장 확인)
+source_kind: official               # 필수. official(공식 자료) | field_check(현장·전화 확인) | community(이용자 후기, 미확인)
 other_sources:                      # 선택. 함께 확인한 다른 출처
   - https://...
 verified_at: 2026-10-22             # 필수. 출처를 열어 내용을 확인한 날 (YYYY-MM-DD)
@@ -41,7 +41,12 @@ verified_by: R3                     # 필수. 확인한 사람
   ```
 
   주석은 검색과 발췌에서 빠지므로 사용자에게 보이지 않는다. `grep -rn "TODO(R3)" knowledge/`로 남은 일을 볼 수 있다.
-- 블로그, 여행 플랫폼, 영상은 출처로 쓰지 않는다. 현장에서 확인한 내용이면 `source_kind: field_check`, `source_url: null`로 두고, 누가 언제 어디서 봤는지 `verified_by`/`verified_at`에 남긴다.
+- 이용자 후기(Reddit, 커뮤니티, 블로그)는 `source_kind: community` 문서에만 쓴다.
+  - 이런 문서는 `RAG_INCLUDE_COMMUNITY=1`일 때만 검색되는 **초기 개발용 미확인 정보**다.
+  - 제목에 `(이용자 후기, 미확인)`을 붙인다.
+  - 본문에는 출처 수와 날짜를 적는다.
+  - 공식 자료나 현장에서 확인되면 공식 문서로 옮기고 community 문서에서는 지운다.
+- 그 밖의 블로그, 여행 플랫폼, 영상은 공식 문서의 출처로 쓰지 않는다. 현장에서 확인한 내용이면 `source_kind: field_check`, `source_url: null`로 두고, 누가 언제 어디서 봤는지 `verified_by`/`verified_at`에 남긴다.
 - 사람 얼굴, 이름, 연락처 같은 개인정보는 넣지 않는다. 이 레포는 공개 예정이다.
 
 ## 문서를 추가하거나 고친 뒤

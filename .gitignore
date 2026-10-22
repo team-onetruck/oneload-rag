@@ -8,3 +8,4 @@ dist/
 # CI checks these out next to the code
 /oneload_agent/
 /oneload-backend/
+/oneload-data/

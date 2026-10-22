@@ -1,0 +1,32 @@
+# 합성 입력 케이스: "사용자 사진에서 VLM 이 이 글자들을 읽었다"고 가정하고 기대하는 위치.
+# 사진 · 모델 없이 매처(backend match_location, agent rank_location)를 비교한다. 실제 사진 정확도와는 다르다.
+#
+# expect: 정답 node_id 하나 (top-1 · top-3 로 채점) | NO_MATCH (후보가 없어야 정답)
+# any_of: 정답이 여러 곳일 수 있는 애매한 사진 (top-3 안에 하나라도 있으면 정답)
+# kind:   clean(문구 그대로) | partial(일부만 읽힘) | typo(OCR 오타) | ambiguous | noise | no_match
+
+cases:
+  - {id: L01, kind: clean, expect: express-tickets, texts: [직통열차 표사는 곳, Express Train Tickets]}
+  - {id: L02, kind: clean, expect: express-tickets, texts: [Express Train Tickets]}
+  - {id: L03, kind: clean, expect: allstop-tickets, texts: [일반열차 표사는 곳]}
+  - {id: L04, kind: clean, expect: allstop-tickets, texts: [Customer Information Center]}
+  - {id: L05, kind: clean, expect: arex-concourse, texts: [트래블센터, Travel Center]}
+  - {id: L06, kind: clean, expect: arex-concourse, texts: [도심공항터미널]}
+  - {id: L07, kind: clean, expect: express-platform, texts: [직통열차 승강장, "인천공항1,2터미널역"]}
+  - {id: L08, kind: clean, expect: allstop-platform, texts: [All-stop Train Platform, Gongdeok Station]}
+  - {id: L09, kind: clean, expect: allstop-tickets, texts: ["Transfer to Line 1, Line 4"]}
+  - {id: L10, kind: clean, expect: ktx-hall, texts: [KTX, 맞이방]}
+  - {id: L11, kind: clean, expect: line4-gates, texts: [공항철도, 4호선]}
+  - {id: L12, kind: partial, expect: allstop-tickets, texts: [All-stop Train Ticket]}
+  - {id: L13, kind: partial, expect: express-platform, texts: [Express Train Platf]}
+  - {id: L14, kind: partial, expect: allstop-tickets, texts: [고객안내]}
+  - {id: L15, kind: typo, expect: express-tickets, texts: [Expres Train Tickets]}
+  - {id: L16, kind: typo, expect: allstop-tickets, texts: [Custmer Information Center]}
+  - {id: L17, kind: typo, expect: express-tickets, texts: [직통열차표사는곳]} # 띄어쓰기 없이 읽힘
+  - {id: L18, kind: noise, expect: express-tickets, texts: [Express Train Tickets, 화장실, Toilet]}
+  - {id: L19, kind: ambiguous, any_of: [line1-gates, line4-gates], texts: [공항철도, Airport Railroad]}
+  - {id: L20, kind: ambiguous, any_of: [allstop-tickets, allstop-platform, arex-concourse], texts: [일반열차]}
+  - {id: L21, kind: no_match, expect: NO_MATCH, texts: [스타벅스, STARBUCKS]}
+  - {id: L22, kind: no_match, expect: NO_MATCH, texts: []}
+  - {id: L23, kind: no_match, expect: NO_MATCH, quality: blurry, texts: [Express Train Tickets]}
+  - {id: L24, kind: no_match, expect: NO_MATCH, texts: [시청역, City Hall]}

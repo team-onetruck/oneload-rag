@@ -35,10 +35,11 @@ class Doc(BaseModel):
     doc_id: str = Field(pattern=r"^doc-[a-z0-9]+(-[a-z0-9]+)*$")
     title_ko: str = Field(min_length=1)
     title_en: str = Field(min_length=1)
-    scope: Literal["ticket", "card", "fare"]
+    scope: Literal["ticket", "card", "fare", "help"]  # help: 문제가 생겼을 때 도움받을 곳
     train_type: Literal["express", "allstop"] | None = None  # 그 열차 전용 문서만
     source_url: str | None  # 키는 필수, 값은 field_check 일 때 null
-    source_kind: Literal["official", "field_check"]
+    # community: 이용자 후기 기반 (초기 개발용, 기본 검색에서 제외). field_check: 현장 · 전화 확인
+    source_kind: Literal["official", "field_check", "community"]
     other_sources: list[str] = []
     verified_at: date
     verified_by: str = Field(min_length=1)
@@ -47,8 +48,8 @@ class Doc(BaseModel):
 
     @model_validator(mode="after")
     def _official_has_url(self) -> Doc:
-        if self.source_kind == "official" and not self.source_url:
-            raise ValueError("source_kind=official 이면 source_url 필수")
+        if self.source_kind != "field_check" and not self.source_url:
+            raise ValueError(f"source_kind={self.source_kind} 이면 source_url 필수")
         return self
 
     def title(self, lang: str) -> str:
@@ -77,7 +78,14 @@ def knowledge_dir() -> Path:
     return _PACKAGED if _PACKAGED.is_dir() else _REPO
 
 
-def load_docs(directory: Path | None = None) -> list[Doc]:
+def load_docs(directory: Path | None = None, include_community: bool | None = None) -> list[Doc]:
+    """모든 문서를 검증하고, community 문서는 include_community(기본: RAG_INCLUDE_COMMUNITY=1)일 때만 돌려준다."""
+    if include_community is None:
+        include_community = os.environ.get("RAG_INCLUDE_COMMUNITY") == "1"
+    return [d for d in _load_all(directory) if include_community or d.source_kind != "community"]
+
+
+def _load_all(directory: Path | None) -> list[Doc]:
     directory = directory or knowledge_dir()
     paths = sorted(p for p in directory.glob("*.md") if p.name.lower() != "readme.md")
     if not paths:

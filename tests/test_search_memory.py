@@ -88,3 +88,26 @@ def test_tokens():
 def test_entry_point_uses_memory_search_by_default(monkeypatch):
     monkeypatch.delenv("RAG_BACKEND", raising=False)
     assert ids(search_knowledge("보증금 환급", "ko", ctx()))[0] == "doc-deposit-refund"
+
+
+@pytest.mark.parametrize(
+    ("query", "lang"),
+    [("카드 결제가 안 되는데 어디서 도움 받아요?", "ko"), ("Where can I get help at the station?", "en")],
+)
+def test_help_desks_doc(search, query, lang):
+    hits = {h.document_id: h for h in search(query, lang, ctx())}
+    assert hits["doc-seoul-help-desks"].scope == "help"
+
+
+def test_particles_do_not_hide_words(search):
+    assert {"표", "표를"} <= tokens("표를") and "철도" in tokens("철도")  # '도' 는 떼지 않음
+    got = ids(search("서울역에 도착했는데 공항철도 표를 어디서 사요?", "ko", ctx()))
+    assert "doc-arex-train-types" in got
+
+
+def test_help_order_puts_station_desks_before_phone_lines(search):
+    """창구(고객안내센터 · B2) → 1330(외국인용) → 공항철도 콜센터 → 분실물 · 긴급전화는 마지막."""
+    for lang, desk in (("ko", "고객안내센터"), ("en", "Customer Information Center")):
+        text = search("도움받을 곳", lang, ctx())[0].excerpt
+        order = [text.index(s) for s in (desk, "1330", "1599-7788", "032-745-7777", "032-745-7400")]
+        assert order == sorted(order), lang

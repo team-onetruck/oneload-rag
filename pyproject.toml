@@ -32,7 +32,7 @@ packages = ["src/hangil_rag"]
 [tool.ruff]
 line-length = 120
 target-version = "py312"
-extend-exclude = ["oneload_agent", "oneload-backend"]
+extend-exclude = ["oneload_agent", "oneload-backend", "oneload-data"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP", "SIM"]
