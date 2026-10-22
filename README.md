@@ -11,7 +11,15 @@ R3가 맡은 이용 안내 검색 모듈입니다. Agent(R2)의 `search_knowledg
 | `src/hangil_rag/search_pgvector.py` | pgvector 하이브리드 검색 초안 (메타데이터 필터 → 벡터 + 키워드) |
 | `src/hangil_rag/ingest.py` | 분할 → 임베딩 → `rag.chunks` 적재 |
 | `localization/` | 사진 위치 인식용 임시 데이터 (답사 전 특징 카드 + 합성 케이스 + 매처 비교). [localization/README.md](localization/README.md) |
-| `docs/requests.md` | 다른 역할에 요청·합의할 것 |
+| `poi/` | 장소 별칭 사전 초안 (API 명세의 R3 책임). 백엔드 `search_pois`로 검사. [poi/README.md](poi/README.md) |
+| `eval/` | 검색 평가셋(질문 44개)과 적중률·임계값 비교 스크립트. [eval/README.md](eval/README.md) |
+| `research/` | 커뮤니티 조사 기록 (주장별 출처) |
+| `docs/requests.md` | 다른 역할에 요청·합의할 것 (RQ-01~29) |
+| `docs/todo.md` | R3 남은 할 일 (우선순위, 확인 방법) |
+| `docs/verification-checklist.md` | 공식 문서 사람 재확인 기록 |
+| `docs/qa-source-map.md` | QA 문항 Q01~Q20 → 근거 문서 (R6 전달용) |
+| `docs/photo-privacy.md` | 촬영 자료·개인정보 처리 절차 초안 |
+| `docs/r3-work-summary.md` | 팀원용 쉬운 설명 |
 
 ## 설치
 
@@ -97,6 +105,8 @@ uv run pytest -q
 - **CI**(`.github/workflows/ci.yml`)는 pgvector 서비스 컨테이너와 두 레포 checkout으로 전부 실행합니다.
   - 두 레포가 private이라 **레포 secret `TEAM_REPO_TOKEN`**(두 레포 읽기 전용 토큰)이 필요합니다.
   - 토큰이 없으면 계약 테스트는 skip으로 표시됩니다(통과로 처리하지 않음).
+
+- CI(GitHub Actions)는 2026-10-22부터 통과 중입니다. 서비스 컨테이너의 실제 pgvector DB에서 적재·검색 테스트까지 돕니다. 실패하면 실패한 테스트 이름과 메시지가 실행 페이지에 주석으로 남습니다(로그는 로그인 필요).
 
 ## 다른 레포와의 계약
 
