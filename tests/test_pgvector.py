@@ -10,7 +10,7 @@ import pytest
 psycopg = pytest.importorskip("psycopg")
 
 from hangil_rag.ingest import ingest, main  # noqa: E402
-from hangil_rag.loader import load_docs  # noqa: E402
+from hangil_rag.loader import chunks, load_docs  # noqa: E402
 from hangil_rag.search_memory import tokens  # noqa: E402
 from hangil_rag.search_pgvector import PgVectorSearch, connect  # noqa: E402
 
@@ -81,9 +81,11 @@ def test_dry_run_needs_no_db_or_api(capsys):
 def test_ingest_then_search():
     emb = FakeEmbedder()
     with connect(TEST_DSN) as conn:
-        assert ingest(conn, load_docs(), emb) == 8  # 문서 4개 × 언어 2개 (소제목 없음)
-        assert ingest(conn, load_docs(), emb) == 8  # 다시 적재해도 중복 없음
-        assert conn.execute("SELECT count(*) AS n FROM rag.chunks").fetchone()["n"] == 8
+        docs = load_docs()
+        expected = sum(len(chunks(d)) for d in docs)  # 언어 절 × 소제목 수 (문서가 늘어도 맞게)
+        assert ingest(conn, docs, emb) == expected
+        assert ingest(conn, docs, emb) == expected  # 다시 적재해도 중복 없음
+        assert conn.execute("SELECT count(*) AS n FROM rag.chunks").fetchone()["n"] == expected
     s = PgVectorSearch(dsn=TEST_DSN, embedder=emb, min_score=0.2)
 
     hits = s("일반열차 승차권 구매 방법", "ko", {"slots": {"train_type": "allstop"}})  # A-21
