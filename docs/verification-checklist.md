@@ -139,3 +139,13 @@
   - 다음 단계: 공항철도 콜센터 1599-7788
 
 - 2026-10-22: R3 확인 완료 추가 (foreigner-transit-cards, tmoney-card, seoul-transit-basics). allstop-ticket은 해외 카드 확인 전까지 보류
+
+### 2026-10-22 R3 확인 뒤 초안 도구가 추가한 내용 (다시 봐야 함)
+
+- [ ] seoul-help-desks
+  - 1330 지원 언어 8개와 해외 번호 +82-2-1330, 긴급 번호 경찰 112·화재/구급 119
+  - 출처: [한국관광공사 Emergency Situations](https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=140042&menuSn=376)
+- [ ] climate-card-short-term
+  - "기본운임 1,550원 이하 대중교통만(심야버스 예외)" → 직통열차(13,000원)에는 사용 불가
+  - 출처: [티머니 기후동행카드 안내](https://pay.tmoney.co.kr/ncs/pct/ugd/ReadClmtAcmpCardFrgnGd.dev) "Usage" 절
+- 온라인 재시도 실패: 공항철도 역 이름 공식 영문 표기 (AREX 영문 페이지 경로를 찾지 못함), 서울역 근처 WOWPASS 무인환전기 위치 (WOWPASS 사이트가 스크립트로만 표시)

@@ -11,6 +11,7 @@ other_sources:
   - https://www.airportrailroad.com/train/express/city/info
   - https://www.airportrailroad.com/help/faq
   - https://www.gongju.go.kr/en/sub02_01_02.do
+  - https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=140042&menuSn=376
   - https://pay.tmoney.co.kr/ncs/pct/ugd/ReadFrgnGd.dev
   - https://mediahub.seoul.go.kr/archives/2019488
 verified_at: 2026-10-22
@@ -40,17 +41,18 @@ verified_by: R3
 
 ### 3. 창구에서 해결되지 않을 때: 전화
 
-- 1330 관광통역안내는 외국인 여행객을 위한 전화 안내다. 24시간 연중무휴로 영어, 일본어, 중국어 등으로 여행 정보를 알려 주고, 택시 기사나 식당 직원과 말이 통하지 않을 때 전화 통역도 도와준다.
+- 1330 관광통역안내는 외국인 여행객을 위한 전화 안내다. 한국어, 영어, 일본어, 중국어, 러시아어, 베트남어, 태국어, 말레이어로 여행 정보를 알려 주고, 택시 기사나 식당 직원과 말이 통하지 않을 때 전화 통역도 도와준다. 24시간 연중무휴로 운영한다. 해외 번호로는 +82-2-1330이다.
 - 서울 교통 외국어 상담은 다산콜센터 02-120번에 전화해서 9번을 누른다. 평일 09:00~18:00에 영어, 중국어, 일본어, 베트남어, 몽골어로 상담한다.
 - 공항철도 열차 이용 문의는 공항철도 콜센터 1599-7788(06:30~23:00)로 한다.
 
-<!-- TODO(R3): 공식 자료 확인 필요 - 1330 언어별 운영 시간과 휴대전화로 거는 방법(한국관광공사 페이지가 열리지 않아 지자체 안내 기준으로 씀) -->
+<!-- TODO(R3): 공식 자료 확인 필요 - 1330 언어별 운영 시간 (한국관광공사 안내에는 언어 목록과 번호만 있음, 24시간은 공주시 안내 기준) -->
 <!-- TODO(R3): 공식 자료 확인 필요 - 공항철도 콜센터의 외국어 응대 여부 -->
 
 ### 4. 물건을 잃어버렸거나 긴급한 일일 때만
 
 - 잃어버린 물건은 공항철도 유실물센터(검암역) 032-745-7777로 문의한다.
 - 긴급한 상황에는 서울역 역무실 긴급전화 032-745-7400으로 연락한다. 화재나 비상시에는 역 직원의 안내에 따라 대피한다.
+- 생명이 위험하거나 범죄 피해를 입었을 때는 경찰 112, 화재·구급 119로 전화한다.
 
 ## en
 
@@ -71,7 +73,7 @@ If you get stuck buying a ticket, your card payment fails, or you cannot find yo
 
 ### 3. If the desks cannot help: phone
 
-- The 1330 Korea Travel Hotline is a phone service for foreign travelers. It runs 24/7 all year in English, Japanese, Chinese and more, gives travel information, and can interpret over the phone when you cannot communicate with a taxi driver or restaurant staff.
+- The 1330 Korea Travel Hotline is a phone service for foreign travelers in Korean, English, Japanese, Chinese, Russian, Vietnamese, Thai and Malay. It gives travel information and can interpret over the phone when you cannot communicate with a taxi driver or restaurant staff. It runs 24/7 all year. From a foreign number, dial +82-2-1330.
 - For Seoul transportation questions in a foreign language, call the Dasan Call Center at 02-120 and press 9 (weekdays 09:00–18:00; English, Chinese, Japanese, Vietnamese, Mongolian).
 - For questions about AREX trains, call the AREX call center at 1599-7788 (06:30–23:00).
 
@@ -79,5 +81,6 @@ If you get stuck buying a ticket, your card payment fails, or you cannot find yo
 
 - For lost items, contact the AREX Lost & Found Center (Geomam Station) at 032-745-7777.
 - In an emergency, call the Seoul Station office emergency line at 032-745-7400. In a fire or other emergency, follow the station staff's instructions to evacuate.
+- If a life is in danger or you are a victim of a crime, call the police at 112 or fire and ambulance at 119.
 
 <!-- 이 절은 국문 절과 공식 안내도 PDF 영문 표기를 옮긴 것. 1330 설명은 공주시 영문 안내 기준 -->

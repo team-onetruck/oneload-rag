@@ -28,6 +28,7 @@ verified_by: R3
 
 - 쓸 수 있는 곳: 서울 지역 지하철, 인천국제공항(인천공항1터미널역·2터미널역)에서 내리기, 서울시 면허 시내·마을버스(심야·순환버스 포함).
 - 공항철도: 서울역~김포공항역 구간에서 타고 내릴 수 있다. 범위 안의 역에서 타서 인천공항1터미널역이나 2터미널역에서 내리는 것도 된다. 하지만 이 두 역에서 타는 것은 안 된다.
+- 기본운임이 1,550원 이하인 대중교통에만 쓸 수 있다(심야버스는 예외). 그래서 공항철도 **직통열차(13,000원)에는 쓸 수 없다.**
 - 쓸 수 없는 곳: 신분당선, GTX, 서울 밖 지하철, 광역버스·공항버스, 다른 지역 버스, 택시, 따릉이, 한강버스, 편의점 같은 티머니 결제처.
 - 범위 안의 역에서 타서 범위 밖의 역에서 내리면, 내리는 역에서 역무원이 운임을 따로 받는다.
 - 범위 밖 노선과 만나는 환승역에서는 범위 안 노선의 개찰구를 쓴다. 예: 강남역은 신분당선이 아니라 2호선 개찰구.
@@ -42,7 +43,6 @@ verified_by: R3
 - 환불은 사용 기간 안에 끝내야 한다: 역 무인충전기에서 카드를 대고 '환불(사용정지)'을 누른 뒤, 티타운 고객센터(서울 중구 후암로 110 서울시티타워 1층)에서 신청한다(여권이 필요할 수 있음). 3영업일 뒤 같은 곳에서 현금으로 받는다.
 - 외국어 상담: 다산콜센터(서울) 02-120번에 전화해서 9번을 누른다(평일 09:00~18:00).
 
-<!-- TODO(R3): 공식 자료 확인 필요 - 공항철도 직통열차에 쓸 수 있는지(문서에 언급 없음). 범위 안 공항철도 역(서울역~김포공항 등)은 서비스범위 검색으로 확인 -->
 <!-- 권종별 가격·카드 값은 doc-fare-passes-cards (scope=fare) -->
 
 ## en
@@ -58,6 +58,7 @@ verified_by: R3
 
 - Covered: the subway within Seoul, getting off at Incheon International Airport (Terminal 1 and Terminal 2 stations), and Seoul-licensed city and village buses (including night and circular buses).
 - AREX: you can get on and off between Seoul Station and Gimpo Airport. You can also board at a covered station and get off at Incheon Airport Terminal 1 or Terminal 2 station, but you cannot board at those two stations.
+- It only works on public transportation with a base fare of KRW 1,550 or less (night buses excepted), so it **cannot be used on the AREX Express train (KRW 13,000).**
 - Not covered: the Shinbundang Line, GTX, subways outside Seoul, wide-area buses and airport buses, buses licensed by other regions, taxis, Ttareungi bikes, the Hangang Bus, and T-money merchants such as convenience stores.
 - If you board inside the covered area and get off outside it, staff at the exit station charge the fare separately.
 - At a transfer station shared with an uncovered line, use the gates of the covered line (e.g. at Gangnam, use the Line 2 gates, not the Shinbundang Line).
