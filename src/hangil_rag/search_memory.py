@@ -19,7 +19,7 @@ from .schemas import KnowledgeHit
 log = logging.getLogger("hangil_rag")
 
 TOP_K = 3  # Agent 도 상위 3개만 쓴다 (agent.py _search)
-MIN_SCORE = 0.2  # 초기값. R3 · R6 가 평가셋으로 정한다
+MIN_SCORE = 0.25  # eval/retrieval.py --sweep 기준 (2026-10-22, 평가셋 44문항). R6 가 확정
 RELATIVE_CUTOFF = 0.5  # 1위 점수의 절반 미만은 뺀다 ("ticket" 같은 흔한 낱말 하나로 엉뚱한 문서가 근거로 붙지 않게)
 
 _WORD = re.compile(r"[0-9a-z]+|[가-힣]+")

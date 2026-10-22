@@ -1,0 +1,59 @@
+# 검색 평가셋 (R3 초안): 질문 → 정답 문서. 설계서 5.3 "임계값과 k 는 R3 · R6 가 평가셋으로 정한다"
+#
+# gold: 이 중 하나라도 상위 3개(Agent 가 쓰는 개수) 안에 있으면 정답. [] 이면 "아무 문서도 나오지 않아야" 정답 (범위 밖 질문).
+# train: Agent 가 넘기는 열차 슬롯 (express · allstop). 없으면 미정.
+# 출처: QA service_gold.csv(Q), 커뮤니티 조사 막히는 곳(P), Agent 내부 검색어(A), 카드 · 패스 질문(C)
+
+cases:
+  # 결제 · 열차 종류
+  - {id: R01, q: "How do I pay?", lang: en, gold: [doc-express-ticket, doc-allstop-ticket, doc-arex-train-types], from: Q01}
+  - {id: R02, q: "공항철도는 어떻게 결제해?", lang: ko, gold: [doc-express-ticket, doc-allstop-ticket, doc-arex-train-types], from: Q02}
+  - {id: R03, q: "What is the difference between Express and All-stop?", lang: en, gold: [doc-arex-train-types], from: Q06}
+  - {id: R04, q: "직통열차 일반열차 차이", lang: ko, gold: [doc-arex-train-types], from: A-04}
+  - {id: R05, q: "How long does the Express take to the airport?", lang: en, train: express, gold: [doc-arex-train-types]}
+  - {id: R06, q: "일반열차는 인천공항까지 몇 분 걸려요?", lang: ko, train: allstop, gold: [doc-arex-train-types]}
+  # 표 사기
+  - {id: R07, q: "Where do I buy an Express ticket?", lang: en, train: express, gold: [doc-express-ticket], from: P1}
+  - {id: R08, q: "직통열차 승차권 구매 방법", lang: ko, train: express, gold: [doc-express-ticket], from: A-02}
+  - {id: R09, q: "일반열차 승차권 구매 방법", lang: ko, train: allstop, gold: [doc-allstop-ticket], from: A-21}
+  - {id: R10, q: "How do I ride the All-stop train?", lang: en, train: allstop, gold: [doc-allstop-ticket]}
+  - {id: R11, q: "Can I buy a single-journey ticket with my foreign credit card?", lang: en, train: allstop, gold: [doc-allstop-ticket, doc-seoul-transit-basics], from: P3}
+  - {id: R12, q: "What should I press on the ticket machine?", lang: en, gold: [doc-express-ticket, doc-allstop-ticket], from: Q11}
+  - {id: R13, q: "서울역에 도착했는데 공항철도 표를 어디서 사요?", lang: ko, gold: [doc-express-ticket, doc-allstop-ticket, doc-arex-train-types], from: P1}
+  # 교통카드 · 보증금
+  - {id: R14, q: "What is a transit card?", lang: en, gold: [doc-tmoney-card, doc-seoul-transit-basics, doc-allstop-ticket], from: Q07}
+  - {id: R15, q: "교통카드는 어디서 충전해?", lang: ko, gold: [doc-tmoney-card], from: Q08}
+  - {id: R16, q: "How do I get my deposit back?", lang: en, gold: [doc-deposit-refund], from: Q09}
+  - {id: R17, q: "보증금 환급은 어떻게 해?", lang: ko, gold: [doc-deposit-refund], from: A-07}
+  - {id: R18, q: "Why was I charged an extra 500 won?", lang: en, gold: [doc-deposit-refund, doc-fare-arex-allstop], from: P8}
+  # 요금
+  - {id: R19, q: "직통열차 요금 얼마야?", lang: ko, train: express, gold: [doc-fare-arex-express], from: A-08}
+  - {id: R20, q: "How much is the fare right now?", lang: en, gold: [doc-fare-arex-express, doc-fare-arex-allstop], from: Q10}
+  - {id: R21, q: "How much from Seoul Station to Incheon Airport Terminal 2 by All-stop train?", lang: en, train: allstop, gold: [doc-fare-arex-allstop]}
+  - {id: R22, q: "공덕에서 김포공항까지 얼마예요?", lang: ko, train: allstop, gold: [doc-fare-arex-allstop]}
+  - {id: R23, q: "How much is a 3-day Climate Card?", lang: en, gold: [doc-fare-passes-cards]}
+  # 패스 · 카드
+  - {id: R24, q: "기후동행카드 단기권은 어디서 사요?", lang: ko, gold: [doc-climate-card-short-term], from: C}
+  - {id: R25, q: "Can I use the Climate Card to go to Incheon Airport?", lang: en, gold: [doc-climate-card-short-term], from: C}
+  - {id: R26, q: "기후동행카드 공항철도역에서 충전돼요?", lang: ko, gold: [doc-climate-card-short-term], from: C}
+  - {id: R27, q: "I have a WOWPASS. How do I ride the subway?", lang: en, gold: [doc-wowpass], from: C}
+  - {id: R28, q: "와우패스 티머니 잔액 환불은 어디서 해요?", lang: ko, gold: [doc-wowpass, doc-tmoney-card], from: C}
+  - {id: R29, q: "Where can I buy Mpass?", lang: en, gold: [doc-foreigner-transit-cards, doc-fare-passes-cards], from: C}
+  - {id: R30, q: "코리아투어카드 아직 쓸 수 있어요?", lang: ko, gold: [doc-foreigner-transit-cards], from: C}
+  # 대중교통 이용
+  - {id: R31, q: "How do I transfer from bus to subway?", lang: en, gold: [doc-seoul-transit-basics]}
+  - {id: R32, q: "환승 할인 받으려면 어떻게 해요?", lang: ko, gold: [doc-seoul-transit-basics]}
+  - {id: R33, q: "내릴 때 카드를 안 찍으면 어떻게 돼요?", lang: ko, gold: [doc-seoul-transit-basics]}
+  # 도움받을 곳 · 막히는 곳
+  - {id: R34, q: "카드 결제가 안 되는데 어디서 도움 받아요?", lang: ko, gold: [doc-seoul-help-desks], from: P3}
+  - {id: R35, q: "Where can I get help at the station?", lang: en, gold: [doc-seoul-help-desks]}
+  - {id: R36, q: "I lost my wallet.", lang: en, gold: [doc-seoul-help-desks]}
+  - {id: R37, q: "지갑을 잃어버렸어요", lang: ko, gold: [doc-seoul-help-desks]}
+  - {id: R38, q: "Can I check in for my flight at Seoul Station?", lang: en, gold: [doc-seoul-help-desks, doc-express-ticket]}
+  - {id: R39, q: "1호선으로 갈아타는 곳이 어디예요?", lang: ko, gold: [doc-allstop-ticket, doc-seoul-help-desks], from: P4}
+  - {id: R40, q: "Where is the Express platform at Seoul Station?", lang: en, gold: [doc-arex-train-types], from: P1}
+  # 범위 밖: 아무 문서도 나오지 않아야 정답
+  - {id: R41, q: "What is the weather tomorrow?", lang: en, gold: [], from: Q15}
+  - {id: R42, q: "근처 맛집 추천해줘", lang: ko, gold: []}
+  - {id: R43, q: "How do I get to Gyeongbokgung Palace?", lang: en, gold: []}
+  - {id: R44, q: "명동 가는 버스 번호 알려줘", lang: ko, gold: []}
