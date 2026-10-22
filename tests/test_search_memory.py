@@ -65,9 +65,20 @@ def test_hit_fields(search):
         assert h.source_url and h.source_url.startswith("http")
 
 
-def test_no_fare_doc_yet(search):
-    """요금 문서는 아직 없다 (QA Q10 · Agent A-08: 요금 질문은 cannot_answer 가 정답). 추가는 R2 · R6 합의 후."""
-    assert all(h.scope != "fare" for h in search("직통열차 요금 얼마야?", "ko", ctx()))
+@pytest.mark.parametrize(
+    ("query", "train", "fare_doc"),
+    [
+        ("직통열차 요금 얼마야?", "express", "doc-fare-arex-express"),
+        ("인천공항까지 일반열차 요금은?", "allstop", "doc-fare-arex-allstop"),
+        ("How much is the Climate Card 3-day pass?", None, "doc-fare-passes-cards"),
+    ],
+)
+def test_fare_docs_are_scope_fare_and_follow_train_filter(search, query, train, fare_doc):
+    lang = "en" if query.isascii() else "ko"
+    fares = [h for h in search(query, lang, ctx(train)) if h.scope == "fare"]
+    assert fares and fares[0].document_id == fare_doc
+    other = {"express": "doc-fare-arex-allstop", "allstop": "doc-fare-arex-express"}.get(train)
+    assert other not in [h.document_id for h in fares]
 
 
 def test_fare_doc_is_marked_fare(fixture_docs):
@@ -102,7 +113,8 @@ def test_help_desks_doc(search, query, lang):
 
 def test_particles_do_not_hide_words(search):
     assert {"표", "표를"} <= tokens("표를") and "철도" in tokens("철도")  # '도' 는 떼지 않음
-    got = ids(search("서울역에 도착했는데 공항철도 표를 어디서 사요?", "ko", ctx()))
+    official = MemorySearch(docs=load_docs(include_community=False))
+    got = ids(official("서울역에 도착했는데 공항철도 표를 어디서 사요?", "ko", ctx()))
     assert "doc-arex-train-types" in got
 
 

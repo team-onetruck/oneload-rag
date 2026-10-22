@@ -12,6 +12,8 @@ def test_real_knowledge_loads_with_backend_demo_ids():
     assert {d.doc_id: d.train_type for d in docs if d.train_type} == {
         "doc-express-ticket": "express",
         "doc-allstop-ticket": "allstop",
+        "doc-fare-arex-express": "express",
+        "doc-fare-arex-allstop": "allstop",
     }
 
 

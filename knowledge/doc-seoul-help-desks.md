@@ -11,6 +11,7 @@ other_sources:
   - https://www.airportrailroad.com/train/express/city/info
   - https://www.airportrailroad.com/help/faq
   - https://www.gongju.go.kr/en/sub02_01_02.do
+  - https://pay.tmoney.co.kr/ncs/pct/ugd/ReadFrgnGd.dev
 verified_at: 2026-10-22
 verified_by: claude-draft
 ---
@@ -39,6 +40,7 @@ verified_by: claude-draft
 ### 3. 창구에서 해결되지 않을 때: 전화
 
 - 1330 관광통역안내는 외국인 여행객을 위한 전화 안내다. 24시간 연중무휴로 영어, 일본어, 중국어 등으로 여행 정보를 알려 주고, 택시 기사나 식당 직원과 말이 통하지 않을 때 전화 통역도 도와준다.
+- 서울 교통 외국어 상담은 다산콜센터 120번에 전화해서 9번을 누른다.
 - 공항철도 열차 이용 문의는 공항철도 콜센터 1599-7788(06:30~23:00)로 한다.
 
 <!-- TODO(R3): 공식 자료 확인 필요 - 1330 언어별 운영 시간과 휴대전화로 거는 방법(한국관광공사 페이지가 열리지 않아 지자체 안내 기준으로 씀) -->
@@ -69,6 +71,7 @@ If you get stuck buying a ticket, your card payment fails, or you cannot find yo
 ### 3. If the desks cannot help: phone
 
 - The 1330 Korea Travel Hotline is a phone service for foreign travelers. It runs 24/7 all year in English, Japanese, Chinese and more, gives travel information, and can interpret over the phone when you cannot communicate with a taxi driver or restaurant staff.
+- For Seoul transportation questions in a foreign language, call the Dasan Call Center at 120 and press 9.
 - For questions about AREX trains, call the AREX call center at 1599-7788 (06:30–23:00).
 
 ### 4. Only for lost items or emergencies

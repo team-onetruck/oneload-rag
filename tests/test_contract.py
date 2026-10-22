@@ -62,6 +62,11 @@ QUERIES = [
     "도움받을 곳",
     "기후동행카드 단기권",
     "환승 할인",
+    "직통열차 요금",
+    "일반열차 요금 인천공항",
+    "엠패스 티머니트래블카드",
+    "WOWPASS",
+    "티머니 충전 환불",
 ]
 
 
@@ -133,8 +138,18 @@ def test_a07_usage_answer_cites_deposit_doc():
     assert r.status == "answered" and r.sources[0].document_id == "doc-deposit-refund"
 
 
-def test_a08_fare_is_not_invented():
-    r = ask(ctx(), "직통열차 요금 얼마야?")
+def test_a08_fare_is_answered_only_from_fare_docs():
+    """요금 문서(scope=fare)가 생겨 A-08 의 기대가 '보류' → '요금 문서 근거로 답'으로 바뀐다 (RQ-11)."""
+    r = ask(ctx(slots=Slots(train_type="express")), "직통열차 요금 얼마야?")
+    assert r.status == "answered" and [s.document_id for s in r.sources] == ["doc-fare-arex-express"]
+    assert "13,000" in r.assistant_message
+
+
+def test_fare_without_fare_doc_is_still_not_invented():
+    def no_fare(q, lang, c):
+        return [h for h in search_knowledge(q, lang, c) if h.scope != "fare"]
+
+    r = ask(ctx(), "직통열차 요금 얼마야?", search=no_fare)
     assert r.status == "cannot_answer" and not re.search(r"\d", r.assistant_message) and r.sources == []
 
 

@@ -124,7 +124,8 @@ uv run pytest -q
   - [서울시 1회용 교통카드 안내](https://news.seoul.go.kr/traffic/archives/1763)
   - [서울교통공사 승차권 안내](http://www.seoulmetro.co.kr/kr/page.do?menuIdx=355)
 - 확인하지 못한 항목(결제 수단, 버튼 이름, 개찰구·환급기 위치, 역 이름 영문 표기)은 `TODO(R3)` 주석으로 남겼습니다.
-- 요금은 공식 페이지에 있지만, 요금 문서를 둘지 R2·R6가 합의하기 전이라 넣지 않았습니다.
+- 요금 문서(`scope: fare`): `doc-fare-arex-express`, `doc-fare-arex-allstop`, `doc-fare-passes-cards`. Agent는 요금 질문에 이 문서들만 근거로 씁니다. 요금은 바뀔 수 있어 문서마다 확인일이 있습니다.
+- 교통카드·패스(`scope: card`): `doc-tmoney-card`, `doc-foreigner-transit-cards`(티머니트래블카드, 엠패스, 판매 중단된 코리아투어카드), `doc-wowpass`, `doc-climate-card-short-term`(국내용 30일권은 2026-10-01 종료, 단기권은 계속 운영).
 - `doc-seoul-transit-basics`(`scope: transit`)는 서울 지하철·버스 이용법을 다룹니다(교통카드 태그, 환승 할인, 2026년 3월부터 1~8호선 신형 발매기의 해외 카드 결제).
 - `doc-climate-card-short-term`은 여행객용 기후동행카드 단기권을 다룹니다. **2026년 10월 1일 바뀐 이용 범위**를 반영했고, 인천공항역은 내리기만 되고 타기는 안 된다는 점을 담았습니다. 가격은 RQ-11 결정 뒤에 넣습니다.
 - `doc-seoul-help-desks`(`scope: help`)는 문제가 생겼을 때 도움받을 곳을 순서대로 안내합니다. 역 안의 창구(B3 고객안내센터, B2)가 먼저이고, 외국인용 1330, 공항철도 콜센터가 그다음이며, 분실물과 긴급 상황은 마지막입니다.
