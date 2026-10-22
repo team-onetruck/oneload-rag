@@ -10,6 +10,8 @@ other_sources:
   - https://news.seoul.go.kr/traffic/archives/1763
   - http://www.seoulmetro.co.kr/kr/page.do?menuIdx=355
   - http://www.seoulmetro.co.kr/en/page.do?menuIdx=644
+  - https://mediahub.seoul.go.kr/archives/2017343
+  - https://mediahub.seoul.go.kr/archives/2015499
 verified_at: 2026-10-22
 verified_by: claude-draft
 ---
@@ -21,6 +23,7 @@ verified_by: claude-draft
 - 서울과 수도권의 지하철, 버스는 교통카드를 단말기에 대고(태그) 탄다. 선불교통카드는 지하철과 버스 모두에 쓸 수 있고, 1회용 교통카드는 수도권 도시철도(지하철)에서만 쓸 수 있다.
 - 지하철에서는 개찰구 오른쪽의 교통카드 단말기에 카드를 댄다.
 - 탈 때와 내릴 때 모두 단말기에 태그해야 한다. 내릴 때 태그하지 않으면 환승이 끊기고, 다음에 탈 때 추가 요금이 붙는다.
+- 2026년 3월 7일부터는 지하철만 타고 내릴 때 태그하지 않아도 다음 승차 때 기본운임(어른 1,550원, 청소년 900원, 어린이 550원)이 추가로 붙는다. 선·후불 교통카드가 대상이고, 정기권·1회권·우대권은 제외된다.
 - 지하철과 시내버스는 탄 뒤 5시간, 마을버스는 1시간이 넘으면 내릴 때 기본요금이 다시 붙는다.
 
 ### 환승 할인
@@ -45,6 +48,7 @@ verified_by: claude-draft
 - On the subway and buses in Seoul and the capital area, you tap a transit card on the reader. A prepaid transit card works on both the subway and buses. A single-journey ticket works only on urban railways (the subway).
 - On the subway, tap your card on the reader on the right side of the gate.
 - Tap both when you get on and when you get off. If you do not tap when getting off, your transfer is cut and you pay extra on the next ride.
+- Since 7 March 2026, even if you ride only the subway, not tapping out adds the base fare (KRW 1,550 adult, KRW 900 youth, KRW 550 child) on your next ride. This applies to prepaid and postpaid transit cards, not to commuter passes, single-journey tickets or concession cards.
 - If you stay on the subway or a city bus for more than 5 hours (1 hour on a village bus), the base fare is charged again when you get off.
 
 ### Transfer discount

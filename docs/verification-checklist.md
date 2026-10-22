@@ -24,7 +24,7 @@
     - 인천공항1터미널 4,750, 2터미널 5,350
   - 표 아래 주석: 1회용 +100원, 보증금 500원
   - 어린이·청소년 운임 규칙(기본운임 550원/900원, 추가운임 50%/80%)
-- [ ] **doc-fare-arex-express**: 공항철도 직통열차 요금
+- [x] **doc-fare-arex-express**: 공항철도 직통열차 요금
   - <https://www.airportrailroad.com/train/express/introduce>
   - "열차운임": 어른 13,000, 정상운임 18,500(1터미널)/19,100(2터미널), 어린이 9,500
   - "직통열차 할인 정보" 표: 할인 대상, 중복 불가
@@ -43,11 +43,11 @@
 
 ## 2. 자동으로 읽지 못해 사람 확인이 꼭 필요한 문서
 
-- [ ] **doc-wowpass**: WOWPASS 사용법
+- [x] **doc-wowpass**: WOWPASS 사용법
   - <https://www.wowpass.io/ko/guide>
   - 페이지가 스크립트로 그려져 자동 수집이 안 됐습니다. **붙여 넣은 텍스트**를 기준으로 썼습니다.
   - 확인할 것: 두 잔액이 별개라는 점, 16종 통화 목록, 티머니 환불 금액 구간(2만/3만/5만 원), 잔액 유효기간 6년
-- [ ] **doc-seoul-help-desks**: 서울역 공항철도에서 도움받을 곳
+- [x] **doc-seoul-help-desks**: 서울역 공항철도에서 도움받을 곳
   - B3 고객안내센터, B2 Express Train Tickets·Travel Center·City Airport Terminal
     - <https://www.airportrailroad.com/static/file/emergency_seoul.pdf> (안내도)
     - <https://www.airportrailroad.com/train/normal/info/010/0> (페이지 아래 층별 설명)
@@ -61,7 +61,7 @@
 
 ## 3. 시연 시나리오 핵심 문서
 
-- [ ] **doc-express-ticket**: 직통열차 승차권 구매 (서울역)
+- [x] **doc-express-ticket**: 직통열차 승차권 구매 (서울역)
   - <https://www.airportrailroad.com/train/express/introduce> ("승차권 구입 및 타는 곳")
   - <https://www.airportrailroad.com/train/normal/info/010/0> (지하 2층 설명: 트레블센터 근처 발매기, 도심공항터미널)
   - <https://www.airportrailroad.com/static/file/emergency_seoul.pdf> (영문 시설명)
@@ -71,11 +71,11 @@
   - <https://www.airportrailroad.com/train/normal/info/010/0> (지하 3층 설명)
   - <https://www.airportrailroad.com/static/file/emergency_seoul.pdf> (영문 시설명)
   - 해외 신용카드로 1회용 교통카드 구매 (2025-02): <https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=221111>
-- [ ] **doc-arex-train-types**: 공항철도 열차 종류
+- [x] **doc-arex-train-types**: 공항철도 열차 종류
   - 직통열차 노선, 무정차, 지정좌석, 43분/51분: <https://www.airportrailroad.com/train/express/introduce>
   - 일반열차 정차역, 59분/66분(+2~6분): <https://www.airportrailroad.com/train/normal/introduce>
   - 승강장 지하 7층: <https://www.airportrailroad.com/train/normal/info/010/0>, <https://www.airportrailroad.com/static/file/emergency_seoul.pdf>
-- [ ] **doc-deposit-refund**: 1회용 교통카드 보증금 환급
+- [x] **doc-deposit-refund**: 1회용 교통카드 보증금 환급
   - 보증금 500원, 환급기, 분실·훼손 시 환급 불가, 수도권 도시철도만: <https://news.seoul.go.kr/traffic/archives/1763>
   - 발급·태그·환급 순서: <http://www.seoulmetro.co.kr/kr/page.do?menuIdx=355> (영문: <http://www.seoulmetro.co.kr/en/page.do?menuIdx=644>)
   - 서울역 보증금 환급기 3대: <https://www.airportrailroad.com/train/normal/info/010/0> ("역무자동화 설비". 원문 오타 "보증급")
@@ -83,7 +83,7 @@
 
 ## 4. 교통카드·패스 문서
 
-- [ ] **doc-climate-card-short-term**: 기후동행카드 단기권
+- [x] **doc-climate-card-short-term**: 기후동행카드 단기권
   - 권종, 이용 범위(2026-10-01부터), 인천공항역은 내리기만, 판매처: <https://news.seoul.go.kr/traffic/archives/510651>
   - 미리 충전 불가, 애플페이 불가, 외국인 구매: <https://news.seoul.go.kr/traffic/public/climatecard-faq/faq-short> (Q14·Q15·Q71·Q95·Q98)
   - 30일권 종료, 단기권 계속: <https://news.seoul.go.kr/traffic/public/climatecard-faq/faq-stop> (Q3·Q5)
@@ -104,3 +104,36 @@
 ## 확인하지 않아도 되는 것
 
 - `doc-community-*` 문서 2개는 이용자 후기 기반 미확인 문서입니다(`source_kind: community`). 사실 확인 대상이 아니라 공식 확인이 되면 공식 문서로 옮길 후보입니다.
+
+## 확인 기록
+
+### 2026-10-22 R3 1차 확인
+
+**확인 완료 (`verified_by: R3`)**: fare-arex-express, wowpass, seoul-help-desks, express-ticket, arex-train-types, deposit-refund, climate-card-short-term
+
+**확인 중 반영한 수정**
+- fare-arex-express: 할인 요금 9,500원(어린이·경로·장애인·국가유공자)
+- wowpass: 무인환전기 화폐·권종, 출금 안내(10만 원씩, 1회 1,000원), 6년 유효, 1,000원 미만 동전 출금 불가, 티머니 잔액은 따로 환급
+- seoul-help-desks·climate-card: 다산콜 외국어 상담은 평일 09:00~18:00, 지원 언어 5개 ([서울시 미디어허브](https://mediahub.seoul.go.kr/archives/2019488))
+
+**R3 확인 뒤 초안 도구가 새로 넣은 내용 (`claude-draft` 유지, 다시 봐야 함)**
+- [ ] fare-arex-allstop: **역간 기준운임 전체 표** 추가 (서울 열은 R3 확인 완료, 나머지 칸은 같은 공식 표에서 옮김)
+- [ ] fare-passes-cards: 청소년 요금 추가
+  - 기후동행카드 청소년 7일권 13,000원, 2026-09-01부터, 청소년 인증 필요 ([FAQ](https://news.seoul.go.kr/traffic/public/climatecard-faq/faq-short))
+  - 지하철 기본운임 어른 1,550원 / 청소년 900원 / 어린이 550원 ([미디어허브](https://mediahub.seoul.go.kr/archives/2017343))
+  - 티머니 생년월일 등록 필요
+  - 엠패스는 청소년 가격 안내 없음
+- [ ] tmoney-card
+  - 충전처를 GS25·CU·세븐일레븐·이마트24 등으로 줄임 (미니스톱·365PLUS는 뺌)
+  - 선불카드 충전은 현금만 ([미디어허브 2025-09](https://mediahub.seoul.go.kr/archives/2015499))
+  - 환불 문구 일반화
+  - 청소년·어린이 등록 추가
+- [ ] seoul-transit-basics: 하차 미태그 페널티 추가 (2026-03-07부터, 1,550/900/550원, 정기권·1회권·우대권 제외, [미디어허브](https://mediahub.seoul.go.kr/archives/2017343))
+- [ ] foreigner-transit-cards: 엠패스 최신 여부 TODO 추가
+
+**보류**
+- allstop-ticket: 공항철도 1회용 교통카드의 **해외 발행 카드 지원 범위**를 자세히 확인해야 함.
+  - 시작일이 자료마다 다름: 2024-12-19, 2024-12-27
+  - 공항철도 공지사항은 검색되지 않았음
+  - 한국관광공사(2025-02)는 "본국 신용카드로 가능"이라고 함
+  - 다음 단계: 공항철도 콜센터 1599-7788

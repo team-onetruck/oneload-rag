@@ -12,7 +12,7 @@ other_sources:
   - https://news.seoul.go.kr/traffic/public/climatecard-faq/faq-stop
   - https://pay.tmoney.co.kr/ncs/pct/ugd/ReadClmtAcmpCardFrgnGd.dev
 verified_at: 2026-10-22
-verified_by: claude-draft
+verified_by: R3
 ---
 
 ## ko
@@ -40,7 +40,7 @@ verified_by: claude-draft
 - 2026년 3월 17일부터 1~8호선 신형 발매기에서 해외 발행 신용·체크카드로 단기권을 사고 충전할 수 있다. 서비스이용료가 평균 3.7% 붙는다.
 - 카드 한 장을 여러 사람이 함께 쓸 수 없다.
 - 환불은 사용 기간 안에 끝내야 한다: 역 무인충전기에서 카드를 대고 '환불(사용정지)'을 누른 뒤, 티타운 고객센터(서울 중구 후암로 110 서울시티타워 1층)에서 신청한다(여권이 필요할 수 있음). 3영업일 뒤 같은 곳에서 현금으로 받는다.
-- 외국어 상담: 다산콜센터(서울) 120번에 전화해서 9번을 누른다.
+- 외국어 상담: 다산콜센터(서울) 02-120번에 전화해서 9번을 누른다(평일 09:00~18:00).
 
 <!-- TODO(R3): 공식 자료 확인 필요 - 공항철도 직통열차에 쓸 수 있는지(문서에 언급 없음). 범위 안 공항철도 역(서울역~김포공항 등)은 서비스범위 검색으로 확인 -->
 <!-- 권종별 가격·카드 값은 doc-fare-passes-cards (scope=fare) -->
@@ -70,6 +70,6 @@ verified_by: claude-draft
 - Since 17 March 2026, the new machines on Lines 1–8 accept foreign-issued credit and debit cards for buying and charging short-term passes, with a service fee of about 3.7% on average.
 - One card cannot be shared by several people.
 - Refunds must be finished within the period of use: tap the card on a station reload machine and press "Refund (Stop Card Use)", then apply at the T-Town Customer Center (Seoul City Tower 1F, 110 Huam-ro, Jung-gu; passport may be required). Collect the cash there 3 business days later.
-- Foreign language help: call the Dasan Call Center (Seoul) at 120 and press 9.
+- Foreign language help: call the Dasan Call Center (Seoul) at 02-120 and press 9 (weekdays 09:00–18:00).
 
 <!-- 서울시 국문 안내를 옮긴 것 -->
