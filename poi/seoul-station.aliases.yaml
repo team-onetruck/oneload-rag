@@ -1,0 +1,105 @@
+# 서울역 장소 별칭 사전 (R3 초안) — API 명세 v0.3 1장 "RAG/Data: 장소 별칭 사전"
+#
+# 백엔드 MapData.search_pois 는 "질문(poi_query)이 이름 · 별칭 안에 통째로 들어 있으면" 찾는다 (소문자 부분 문자열).
+# 그래서 별칭은 사람들이 실제로 쓰는 짧은 표현을 많이 넣어야 한다. 반영은 oneload-data 지도(R4)에서 한다.
+#
+# from: arex-map(공식 안내도 표기) · floor-sign(서울역 층별안내판 문구) · phrase(여행객이 쓰는 표현, 커뮤니티 조사 · 시연 시나리오)
+# 같은 표현이 두 POI 에 있으면 일부러 둘 다 나오게 한 것이다 (예: "arex ticket" → 직통 · 일반 둘 다 → Agent 가 되묻는다).
+
+map_id: seoul-station
+map_version: 2026-10-22.1
+
+pois:
+  poi-express-tickets:
+    add:
+      - {text: 직통열차 표사는 곳, from: arex-map}
+      - {text: 공항철도 직통열차 표사는곳, from: floor-sign}
+      - {text: express train tickets, from: arex-map}
+      - {text: airport railroad express train tickets, from: floor-sign}
+      - {text: 직통열차 승차권, from: phrase}
+      # '직통열차 고객안내센터'는 넣지 않는다: '고객안내센터'만 물어도 여기로 와서 B3 고객안내센터(제안 POI)와 겹친다
+      - {text: 직통 승차권, from: phrase}
+      - {text: 공항철도 표, from: phrase}
+      - {text: 공항철도 승차권, from: phrase}
+      - {text: express train ticket, from: phrase}
+      - {text: arex express ticket, from: phrase}
+      - {text: airport express ticket, from: phrase}
+      - {text: non-stop train ticket, from: phrase}
+      - {text: arex ticket, from: phrase}
+      - {text: airport railroad ticket, from: phrase}
+      - {text: airport train ticket, from: phrase}
+
+  poi-allstop-tickets:
+    add:
+      - {text: 일반열차 표사는 곳, from: arex-map}
+      - {text: 공항철도 일반열차 표사는곳, from: floor-sign}
+      - {text: all-stop train ticket office, from: arex-map}
+      - {text: airport railroad all stop train tickets, from: floor-sign}
+      - {text: ticket machine (traffic card charger), from: arex-map}
+      - {text: 승차권발매기, from: arex-map}
+      - {text: 일반열차 승차권, from: phrase}
+      - {text: 1회용 교통카드 발매기, from: phrase}
+      - {text: 일회용 교통카드, from: phrase}
+      - {text: 교통카드 충전, from: phrase}
+      - {text: 공항철도 표, from: phrase}
+      - {text: 공항철도 승차권, from: phrase}
+      - {text: all-stop ticket, from: phrase}
+      - {text: all stop train ticket, from: phrase}
+      - {text: single-journey ticket machine, from: phrase}
+      - {text: single journey ticket, from: phrase}
+      - {text: arex ticket, from: phrase}
+      - {text: airport railroad ticket, from: phrase}
+      - {text: airport train ticket, from: phrase}
+
+  poi-express-platform:
+    add:
+      - {text: 직통열차 승강장, from: arex-map}
+      - {text: 공항철도 직통열차 승강장, from: floor-sign}
+      - {text: express train platform, from: arex-map}
+      - {text: airport railroad express train platform, from: floor-sign}
+      - {text: 직통열차 타는 곳, from: phrase}
+      - {text: 공항철도 승강장, from: phrase}
+      - {text: express platform, from: phrase}
+      - {text: airport express platform, from: phrase}
+      - {text: arex platform, from: phrase}
+
+  poi-allstop-platform:
+    add:
+      - {text: 일반열차 승강장, from: arex-map}
+      - {text: 공항철도 일반열차 승강장, from: floor-sign}
+      - {text: all-stop train platform, from: arex-map}
+      - {text: airport railroad all stop train platform, from: floor-sign}
+      - {text: 일반열차 타는 곳, from: phrase}
+      - {text: 공항철도 승강장, from: phrase}
+      - {text: all-stop platform, from: phrase}
+      - {text: all stop platform, from: phrase}
+      - {text: arex platform, from: phrase}
+
+# 지도에 아직 없는 장소 (RQ-05 · RQ-25). 노드 · 위치는 R4 가 정한다. 층은 공식 자료 기준
+proposed:
+  - name: {ko: 고객안내센터, en: Customer Information Center}
+    floor_id: B3
+    category: help
+    aliases: [고객안내센터, 안내센터, 공항철도 고객안내센터, customer information center, information center, info center, help desk]
+    source: https://www.airportrailroad.com/static/file/emergency_seoul.pdf
+  - name: {ko: 트래블센터, en: Travel Center}
+    floor_id: B2
+    category: help
+    aliases: [트래블센터, 공항철도 트래블센터, travel center, arex travel center]
+    source: https://www.airportrailroad.com/static/file/emergency_seoul.pdf
+    note: 코레일 2층 트래블센터와 이름이 겹침 (RQ-19)
+  - name: {ko: 도심공항터미널, en: City Airport Terminal}
+    floor_id: B2
+    category: service
+    aliases: [도심공항터미널, 서울역 도심공항터미널, 탑승수속, 출국심사, city airport terminal, check-in, early check-in, baggage drop]
+    source: https://www.airportrailroad.com/train/express/city/info
+  - name: {ko: 1·4호선 갈아타는 곳, en: "Transfer to Line 1, Line 4"}
+    floor_id: B3
+    category: transfer
+    aliases: [1호선 갈아타는 곳, 4호선 갈아타는 곳, 1호선 환승, 4호선 환승, 지하철 환승, transfer to line 1, transfer to line 4, line 1, line 4, subway transfer]
+    source: https://www.airportrailroad.com/static/file/emergency_seoul.pdf
+  - name: {ko: 티머니타운, en: Tmoney Town}
+    floor_id: null # 서울역 10번 출구 서울시티타워 1층 (공항철도 구역 밖)
+    category: service
+    aliases: [티머니타운, 티머니 타운, 티타운, 엠패스, tmoney town, t-money town, mpass, t-money refund]
+    source: https://pay.tmoney.co.kr/ncs/pct/tmnyintd/ReadFrgnMpassIntd.dev

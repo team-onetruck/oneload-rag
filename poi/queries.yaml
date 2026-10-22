@@ -1,0 +1,49 @@
+# Agent 가 만들 법한 poi_query (짧은 장소 표현) → 기대 POI.
+# expect: 정답 POI 목록. 둘 이상이면 "애매해서 둘 다 나와야 정답" (Agent 가 되묻는다). [] 이면 지도에 없는 곳.
+# proposed: true 는 지도에 아직 없는 장소 (RQ-05 · RQ-25) — 지금은 찾을 수 없는 게 정상
+
+queries:
+  # 직통열차 표
+  - {q: 직통열차 표, expect: [poi-express-tickets]}
+  - {q: 직통열차 표 사는 곳, expect: [poi-express-tickets]}
+  - {q: 직통열차 표사는 곳, expect: [poi-express-tickets]}
+  - {q: 직통열차 승차권, expect: [poi-express-tickets]}
+  - {q: express ticket, expect: [poi-express-tickets]}
+  - {q: express train ticket, expect: [poi-express-tickets]}
+  - {q: express train tickets, expect: [poi-express-tickets]}
+  - {q: airport express ticket, expect: [poi-express-tickets]}
+  - {q: non-stop train ticket, expect: [poi-express-tickets]}
+  # 일반열차 표
+  - {q: 일반열차 표, expect: [poi-allstop-tickets]}
+  - {q: 일반열차 표 사는 곳, expect: [poi-allstop-tickets]}
+  - {q: 일반열차 승차권, expect: [poi-allstop-tickets]}
+  - {q: 1회용 교통카드, expect: [poi-allstop-tickets]}
+  - {q: 교통카드 충전, expect: [poi-allstop-tickets]}
+  - {q: all-stop ticket, expect: [poi-allstop-tickets]}
+  - {q: all stop train ticket, expect: [poi-allstop-tickets]}
+  - {q: single journey ticket, expect: [poi-allstop-tickets]}
+  - {q: ticket machine, expect: [poi-allstop-tickets]}
+  # 승강장
+  - {q: 직통열차 타는 곳, expect: [poi-express-platform]}
+  - {q: 직통열차 승강장, expect: [poi-express-platform]}
+  - {q: express platform, expect: [poi-express-platform]}
+  - {q: express train platform, expect: [poi-express-platform]}
+  - {q: 일반열차 타는 곳, expect: [poi-allstop-platform]}
+  - {q: 일반열차 승강장, expect: [poi-allstop-platform]}
+  - {q: all-stop platform, expect: [poi-allstop-platform]}
+  - {q: all stop train platform, expect: [poi-allstop-platform]}
+  # 일부러 애매한 질문 (둘 다 나와야 Agent 가 되묻는다)
+  - {q: 공항철도 표, expect: [poi-express-tickets, poi-allstop-tickets]}
+  - {q: arex ticket, expect: [poi-express-tickets, poi-allstop-tickets]}
+  - {q: airport train ticket, expect: [poi-express-tickets, poi-allstop-tickets]}
+  - {q: 공항철도 승강장, expect: [poi-express-platform, poi-allstop-platform]}
+  - {q: arex platform, expect: [poi-express-platform, poi-allstop-platform]}
+  # 지도에 아직 없는 장소 (제안 POI)
+  - {q: 고객안내센터, expect: [], proposed: true}
+  - {q: information center, expect: [], proposed: true}
+  - {q: 도심공항터미널, expect: [], proposed: true}
+  - {q: 4호선 갈아타는 곳, expect: [], proposed: true}
+  - {q: 티머니타운, expect: [], proposed: true}
+  # 지도에 없는 곳
+  - {q: 화장실, expect: []}
+  - {q: 스타벅스, expect: []}
