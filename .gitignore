@@ -9,3 +9,4 @@ dist/
 /oneload_agent/
 /oneload-backend/
 /oneload-data/
+pytest-report.xml

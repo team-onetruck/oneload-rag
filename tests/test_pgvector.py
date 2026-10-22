@@ -79,21 +79,27 @@ def test_dry_run_needs_no_db_or_api(capsys):
 
 @needs_db
 def test_ingest_then_search():
+    """연결 동작만 본다 (적재 개수 · 열차 필터 · 언어 · scope). 가짜 임베더라 순위 품질은 보지 않는다."""
     emb = FakeEmbedder()
+    docs = load_docs()
     with connect(TEST_DSN) as conn:
-        docs = load_docs()
-        expected = sum(len(chunks(d)) for d in docs)  # 언어 절 × 소제목 수 (문서가 늘어도 맞게)
+        expected = sum(len(chunks(d)) for d in docs)  # 언어 절 × 소제목 수
         assert ingest(conn, docs, emb) == expected
         assert ingest(conn, docs, emb) == expected  # 다시 적재해도 중복 없음
         assert conn.execute("SELECT count(*) AS n FROM rag.chunks").fetchone()["n"] == expected
-    s = PgVectorSearch(dsn=TEST_DSN, embedder=emb, min_score=0.2)
+    s = PgVectorSearch(dsn=TEST_DSN, embedder=emb, min_score=0.0, k=len(docs))
+    by_id = {d.doc_id: d for d in docs}
 
-    hits = s("일반열차 승차권 구매 방법", "ko", {"slots": {"train_type": "allstop"}})  # A-21
-    got = [h.document_id for h in hits]
-    assert "doc-allstop-ticket" in got and "doc-express-ticket" not in got
+    allstop = s("일반열차 승차권 구매 방법", "ko", {"slots": {"train_type": "allstop"}})  # A-21
+    assert allstop and all(by_id[h.document_id].train_type in (None, "allstop") for h in allstop)
 
-    en = s("How do I get my deposit back?", "en", {"slots": {"train_type": "unknown"}})
-    assert en[0].document_id == "doc-deposit-refund" and "deposit refund machine" in en[0].excerpt
-    assert en[0].title == "Getting the single-journey ticket deposit back" and en[0].scope == "card"
+    deposit = by_id["doc-deposit-refund"]
+    en = s(deposit.title_en, "en", {})  # 제목 그대로 물으면 그 문서가 1위
+    assert en[0].document_id == deposit.doc_id and en[0].title == deposit.title_en
+    assert "deposit refund machine" in en[0].excerpt and en[0].scope == "card"
+    ko = s(deposit.title_ko, "ko", {})
+    assert ko[0].title == deposit.title_ko and "보증금 환급기" in ko[0].excerpt
 
-    assert all(h.scope != "fare" for h in s("직통열차 요금 얼마야?", "ko", {}))  # 요금 문서는 아직 없음
+    fares = [h for h in s("직통열차 요금", "ko", {"slots": {"train_type": "express"}}) if h.scope == "fare"]
+    assert "doc-fare-arex-express" in [h.document_id for h in fares]
+    assert "doc-fare-arex-allstop" not in [h.document_id for h in fares]

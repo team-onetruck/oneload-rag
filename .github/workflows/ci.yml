@@ -56,7 +56,18 @@ jobs:
         if: env.HAS_TEAM_TOKEN == 'true'
         run: uv pip install -r oneload_agent/requirements.txt
       - name: Tests (contract tests must run when the token is set)
-        run: uv run --no-sync pytest -q -rs
+        run: uv run --no-sync pytest -q -rs --junitxml=pytest-report.xml
+      # Job logs need a GitHub login; annotations are visible on the public run page.
+      - name: Failed tests as annotations
+        if: failure()
+        run: |
+          uv run --no-sync python - <<'PY'
+          import xml.etree.ElementTree as ET
+          for case in ET.parse("pytest-report.xml").iter("testcase"):
+              for bad in list(case.iter("failure")) + list(case.iter("error")):
+                  msg = (bad.get("message") or "").replace("\n", " ")[:300]
+                  print(f"::error title={case.get('classname')}.{case.get('name')}::{msg}")
+          PY
         env:
           RAG_REQUIRE_CONTRACT: ${{ env.HAS_TEAM_TOKEN == 'true' && '1' || '0' }}
       - name: Wheel ships the knowledge documents
