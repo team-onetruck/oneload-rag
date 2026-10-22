@@ -66,7 +66,7 @@
   - <https://www.airportrailroad.com/train/normal/info/010/0> (지하 2층 설명: 트레블센터 근처 발매기, 도심공항터미널)
   - <https://www.airportrailroad.com/static/file/emergency_seoul.pdf> (영문 시설명)
   - 참고: 역 안내 페이지는 "트레블센터", 안내도는 "트래블센터"로 표기가 다릅니다. 문서는 안내도 표기를 따랐습니다.
-- [ ] **doc-allstop-ticket**: 일반열차 타는 방법
+- [ ] (보류) **doc-allstop-ticket**: 일반열차 타는 방법
   - <https://www.airportrailroad.com/train/normal/introduce> ("승차권 구입 및 타는 곳")
   - <https://www.airportrailroad.com/train/normal/info/010/0> (지하 3층 설명)
   - <https://www.airportrailroad.com/static/file/emergency_seoul.pdf> (영문 시설명)
@@ -90,12 +90,12 @@
   - 기후동행패스는 서울시민용: <https://news.seoul.go.kr/traffic/archives/518138>
   - 해외 카드 구매·충전 (2026-03-17~): <https://news.seoul.go.kr/traffic/archives/516544>
   - 공항철도 서울역~김포공항 구간, **공항철도·코레일 역에서 충전 불가**, 환불 절차, 편의점 결제 불가: <https://pay.tmoney.co.kr/ncs/pct/ugd/ReadClmtAcmpCardFrgnGd.dev>
-- [ ] **doc-foreigner-transit-cards**: 티머니트래블카드, 엠패스, 코리아투어카드
+- [x] **doc-foreigner-transit-cards**: 티머니트래블카드, 엠패스, 코리아투어카드
   - 트래블카드·트래블카드+ 특징과 판매처, 코리아투어카드 판매 중단: <https://pay.tmoney.co.kr/ncs/pct/tmnyintd/ReadFrgnKoreaTourCardIntd.dev>
   - 엠패스 이용 범위(공항철도 일반열차, 급행 제외), 하루 20회, 티머니타운 발급(평일 09~18시), 하루 계산 방식: <https://pay.tmoney.co.kr/ncs/pct/tmnyintd/ReadFrgnMpassIntd.dev>
-- [ ] **doc-tmoney-card**: 티머니 충전과 환불
+- [x] **doc-tmoney-card**: 티머니 충전과 환불
   - <https://pay.tmoney.co.kr/ncs/pct/ugd/ReadFrgnGd.dev> (Top-up, Refund 절)
-- [ ] **doc-seoul-transit-basics**: 서울 지하철·버스 타는 법
+- [x] **doc-seoul-transit-basics**: 서울 지하철·버스 타는 법
   - 환승 할인 대상(공항철도 포함), 30분/60분, 최대 4회, 하차 태그, 5시간/1시간 규칙: <https://news.seoul.go.kr/traffic/transfer_discount>
   - 1~8호선 신형 발매기 해외 카드: <https://news.seoul.go.kr/traffic/archives/516544>
   - 1회용 교통카드는 도시철도만: <https://news.seoul.go.kr/traffic/archives/1763>
@@ -123,13 +123,13 @@
   - 지하철 기본운임 어른 1,550원 / 청소년 900원 / 어린이 550원 ([미디어허브](https://mediahub.seoul.go.kr/archives/2017343))
   - 티머니 생년월일 등록 필요
   - 엠패스는 청소년 가격 안내 없음
-- [ ] tmoney-card
+- [x] tmoney-card
   - 충전처를 GS25·CU·세븐일레븐·이마트24 등으로 줄임 (미니스톱·365PLUS는 뺌)
   - 선불카드 충전은 현금만 ([미디어허브 2025-09](https://mediahub.seoul.go.kr/archives/2015499))
   - 환불 문구 일반화
   - 청소년·어린이 등록 추가
-- [ ] seoul-transit-basics: 하차 미태그 페널티 추가 (2026-03-07부터, 1,550/900/550원, 정기권·1회권·우대권 제외, [미디어허브](https://mediahub.seoul.go.kr/archives/2017343))
-- [ ] foreigner-transit-cards: 엠패스 최신 여부 TODO 추가
+- [x] seoul-transit-basics: 하차 미태그 페널티 추가 (2026-03-07부터, 1,550/900/550원, 정기권·1회권·우대권 제외, [미디어허브](https://mediahub.seoul.go.kr/archives/2017343))
+- [x] foreigner-transit-cards: 엠패스 최신 여부 TODO 추가
 
 **보류**
 - allstop-ticket: 공항철도 1회용 교통카드의 **해외 발행 카드 지원 범위**를 자세히 확인해야 함.
@@ -137,3 +137,5 @@
   - 공항철도 공지사항은 검색되지 않았음
   - 한국관광공사(2025-02)는 "본국 신용카드로 가능"이라고 함
   - 다음 단계: 공항철도 콜센터 1599-7788
+
+- 2026-10-22: R3 확인 완료 추가 (foreigner-transit-cards, tmoney-card, seoul-transit-basics). allstop-ticket은 해외 카드 확인 전까지 보류

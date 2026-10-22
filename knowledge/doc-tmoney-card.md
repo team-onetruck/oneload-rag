@@ -9,7 +9,7 @@ other_sources:
   - https://mediahub.seoul.go.kr/archives/2019488
 source_kind: official
 verified_at: 2026-10-22
-verified_by: claude-draft
+verified_by: R3
 ---
 
 ## ko

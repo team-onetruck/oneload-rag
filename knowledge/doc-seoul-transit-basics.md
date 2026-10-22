@@ -13,7 +13,7 @@ other_sources:
   - https://mediahub.seoul.go.kr/archives/2017343
   - https://mediahub.seoul.go.kr/archives/2015499
 verified_at: 2026-10-22
-verified_by: claude-draft
+verified_by: R3
 ---
 
 ## ko

@@ -8,7 +8,7 @@ source_kind: official
 other_sources:
   - https://pay.tmoney.co.kr/ncs/pct/tmnyintd/ReadFrgnMpassIntd.dev
 verified_at: 2026-10-22
-verified_by: claude-draft
+verified_by: R3
 ---
 
 ## ko
