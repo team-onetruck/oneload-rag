@@ -8,6 +8,7 @@ source_kind: official
 other_sources:
   - https://www.airportrailroad.com/train/normal/introduce
   - https://www.airportrailroad.com/train/normal/info/010/0
+  - https://www.airportrailroad.com/static/file/emergency_seoul.pdf
 verified_at: 2026-10-22
 verified_by: claude-draft
 ---
@@ -29,6 +30,7 @@ AREX runs two kinds of trains.
 
 - The Express train runs non-stop between Seoul Station and Incheon Airport Terminal 1 and Terminal 2. You must buy a ticket before boarding, and seats are reserved. It takes 43 minutes from Seoul Station to Terminal 1 and 51 minutes to Terminal 2.
 - The All-stop train stops at every station between Seoul Station and Incheon Airport Terminal 2, including Gimpo Airport. You ride it with a single-journey ticket (1회용 교통카드) or a prepaid transit card. It takes 59 minutes from Seoul Station to Terminal 1 and 66 minutes to Terminal 2 (some trains take 2 to 6 minutes longer).
-- At Seoul Station, the platforms for both trains are on B7 (basement level 7).
+- At Seoul Station, both the "Express Train Platform" and the "All-stop Train Platform" are on B7 (basement level 7).
 
-<!-- TODO(R3): 공식 영문 자료 확인 필요 - 이 절은 공식 국문 안내를 옮긴 것. 열차·역 이름의 공식 영문 표기 확인 -->
+<!-- 승강장 영문명은 서울역 안내도 PDF 표기. 나머지 문장은 국문 안내를 옮긴 것 -->
+<!-- TODO(R3): 공식 영문 자료 확인 필요 - 역 이름 영문 표기(이 절에서는 Gimpo Airport만 씀) -->

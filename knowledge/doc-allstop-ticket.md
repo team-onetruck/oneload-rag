@@ -8,6 +8,7 @@ source_url: https://www.airportrailroad.com/train/normal/introduce
 source_kind: official
 other_sources:
   - https://www.airportrailroad.com/train/normal/info/010/0
+  - https://www.airportrailroad.com/static/file/emergency_seoul.pdf
 verified_at: 2026-10-22
 verified_by: claude-draft
 ---
@@ -28,6 +29,6 @@ verified_by: claude-draft
 - You ride the All-stop train with a single-journey ticket (1회용 교통카드) or a prepaid transit card.
 - Buy a single-journey ticket at the automatic ticket machine in any station. A single-journey ticket includes a deposit (see the deposit refund guide).
 - Buy a prepaid transit card at a transit card seller (such as a convenience store) or a transit card vending machine, and top it up at the automatic ticket machine.
-- At Seoul Station, the All-stop ticket area is on B3 (basement level 3). The customer service center and ticket machines are in the middle of B3, and the transfer to Line 1 and Line 4 also connects from B3.
+- At Seoul Station, the "All-stop Train Ticket Office" is on B3 (basement level 3). The Customer Information Center and ticket machines ("Ticket Machine (Traffic Card Charger)") are in the middle of B3, and "Transfer to Line 1, Line 4" also connects from B3.
 
-<!-- TODO(R3): 공식 영문 자료 확인 필요 - 이 절은 공식 국문 안내를 옮긴 것. 기기·시설 이름의 공식 영문 표기 확인 -->
+<!-- 영문 시설명은 서울역 안내도 PDF 표기. 나머지 문장은 국문 안내를 옮긴 것 -->

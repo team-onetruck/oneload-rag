@@ -97,6 +97,8 @@ uv run pytest -q
 
 ## 다른 레포와의 계약
 
+다른 역할에 요청하거나 합의할 것은 [docs/requests.md](docs/requests.md)에 따로 모읍니다.
+
 | 상대 | 계약 | 기준 코드 |
 | --- | --- | --- |
 | R2 Agent | `search_knowledge(query, language, context) -> list[KnowledgeHit]` | `oneload_agent/hangil_r2/knowledge.py` (`KnowledgeSearch`) |
@@ -115,7 +117,8 @@ uv run pytest -q
   - [AREX 직통열차 소개](https://www.airportrailroad.com/train/express/introduce)
   - [AREX 일반열차 소개](https://www.airportrailroad.com/train/normal/introduce)
   - [AREX 서울역 안내](https://www.airportrailroad.com/train/normal/info/010/0)
+  - [AREX 서울역 안내도 PDF](https://www.airportrailroad.com/static/file/emergency_seoul.pdf) (영문 시설명)
   - [서울시 1회용 교통카드 안내](https://news.seoul.go.kr/traffic/archives/1763)
   - [서울교통공사 승차권 안내](http://www.seoulmetro.co.kr/kr/page.do?menuIdx=355)
-- 확인하지 못한 항목(결제 수단, 버튼 이름, 개찰구·환급기 위치, 공식 영문 표기)은 `TODO(R3)` 주석으로 남겼습니다.
+- 확인하지 못한 항목(결제 수단, 버튼 이름, 개찰구·환급기 위치, 역 이름 영문 표기)은 `TODO(R3)` 주석으로 남겼습니다.
 - 요금은 공식 페이지에 있지만, 요금 문서를 둘지 R2·R6가 합의하기 전이라 넣지 않았습니다.
