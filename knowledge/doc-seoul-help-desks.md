@@ -17,7 +17,7 @@ verified_by: claude-draft
 
 ## ko
 
-표를 사거나 길을 찾다가 막히면 아래 순서로 도움을 받는다. 먼저 역 안의 안내 창구를 찾고, 전화는 그다음이다.
+표를 사거나 카드 결제가 안 되거나 길을 찾다가 막히면 아래 순서로 도움을 받는다. 먼저 역 안의 안내 창구를 찾고, 전화는 그다음이다.
 
 ### 1. 지하 3층 고객안내센터
 
@@ -51,7 +51,7 @@ verified_by: claude-draft
 
 ## en
 
-If you get stuck buying a ticket or finding your way, ask for help in this order: first a help desk inside the station, then a phone line.
+If you get stuck buying a ticket, your card payment fails, or you cannot find your way, ask for help in this order: first a help desk inside the station, then a phone line.
 
 ### 1. Customer Information Center on B3
 

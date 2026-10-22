@@ -35,7 +35,7 @@ class Doc(BaseModel):
     doc_id: str = Field(pattern=r"^doc-[a-z0-9]+(-[a-z0-9]+)*$")
     title_ko: str = Field(min_length=1)
     title_en: str = Field(min_length=1)
-    scope: Literal["ticket", "card", "fare", "help"]  # help: 문제가 생겼을 때 도움받을 곳
+    scope: Literal["ticket", "card", "fare", "help", "transit"]  # help: 도움받을 곳 · transit: 대중교통 이용 일반
     train_type: Literal["express", "allstop"] | None = None  # 그 열차 전용 문서만
     source_url: str | None  # 키는 필수, 값은 field_check 일 때 null
     # community: 이용자 후기 기반 (초기 개발용, 기본 검색에서 제외). field_check: 현장 · 전화 확인

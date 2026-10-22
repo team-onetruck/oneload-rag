@@ -9,7 +9,7 @@
 doc_id: doc-express-ticket          # 필수. doc-소문자-하이픈. 바꾸면 백엔드·Agent·QA가 깨진다
 title_ko: 직통열차 승차권 구매 (서울역)  # 필수
 title_en: Buying an Express train ticket at Seoul Station  # 필수. ':' 가 있으면 따옴표로 감싼다
-scope: ticket                       # 필수. ticket | card | fare | help(문제가 생겼을 때 도움받을 곳)
+scope: ticket                       # 필수. ticket | card | fare | help(도움받을 곳) | transit(지하철·버스 이용 일반)
 train_type: express                 # 그 열차 전용 문서만. express | allstop. 공통 문서는 이 줄을 쓰지 않는다
 source_url: https://...             # 필수 키. 대표 출처. field_check 이면 null
 source_kind: official               # 필수. official(공식 자료) | field_check(현장·전화 확인) | community(이용자 후기, 미확인)

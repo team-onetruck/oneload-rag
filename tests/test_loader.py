@@ -96,3 +96,11 @@ def test_chunks_split_by_heading(tmp_path):
         ("ko", "결제", "확인 필요"),
         ("en", "Doc C", "intro only"),
     ]
+
+
+def test_real_community_docs_are_marked_unverified():
+    community = [d for d in load_docs(include_community=True) if d.source_kind == "community"]
+    assert community, "community 문서가 없음"
+    for d in community:
+        assert d.doc_id.startswith("doc-community-"), d.doc_id
+        assert d.title_ko.endswith("(이용자 후기, 미확인)") and d.title_en.endswith("(user reports, unverified)")

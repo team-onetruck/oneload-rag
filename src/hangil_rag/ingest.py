@@ -5,6 +5,9 @@
 
 색인은 knowledge/ 로 언제든 다시 만들 수 있는 파생 데이터라 마이그레이션 이력 없이 매번 새로 만든다.
 백엔드 alembic 은 public 스키마만 비교하므로(include_schemas 없음) rag 스키마를 건드리지 않는다.
+이용자 후기 문서(source_kind=community)는 적재 시점에 RAG_INCLUDE_COMMUNITY=1 일 때만 들어간다.
+shortcut: pgvector 검색에는 '후기는 마지막 한 자리' 규칙(search_memory)이 없다.
+          후기 문서를 pgvector 에 넣게 되면 source_kind 열을 추가해 같은 규칙을 적용한다
 """
 
 from __future__ import annotations

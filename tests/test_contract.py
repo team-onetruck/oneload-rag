@@ -59,12 +59,15 @@ QUERIES = [
     "일반열차 교통카드",
     "보증금 환급",
     "How do I get my deposit back?",
+    "도움받을 곳",
+    "기후동행카드 단기권",
+    "환승 할인",
 ]
 
 
 def all_hits() -> list[KnowledgeHit]:
     hits = [h for q in QUERIES for lang in ("ko", "en") for h in search_knowledge(q, lang, {})]
-    assert {h.document_id for h in hits} == {d.doc_id for d in load_docs()}
+    assert {h.document_id for h in hits} >= {d.doc_id for d in load_docs() if d.source_kind != "community"}
     return hits
 
 

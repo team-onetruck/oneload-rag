@@ -9,6 +9,7 @@ other_sources:
   - http://www.seoulmetro.co.kr/kr/page.do?menuIdx=355
   - http://www.seoulmetro.co.kr/en/page.do?menuIdx=644
   - https://www.airportrailroad.com/train/normal/info/010/0
+  - https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=221111
 verified_at: 2026-10-22
 verified_by: claude-draft
 ---
@@ -20,8 +21,9 @@ verified_by: claude-draft
 - 카드를 잃어버리거나 훼손하지 않았다면 보증금은 언제든지 돌려받을 수 있다. 본인 부주의로 잃어버리거나 훼손하면 돌려받을 수 없다.
 - 1회용 교통카드는 수도권 도시철도에서만 쓸 수 있다.
 - 공항철도 서울역에는 보증금 환급기가 3대 있다.
+- 보증금 환급기는 도착역에서 개찰구를 나간 뒤에 이용한다(한국관광공사 안내).
 
-<!-- TODO(R3): 공식 자료 확인 필요 - 공항철도 서울역 보증금 환급기의 위치(층) -->
+<!-- TODO(R3): 공식 자료 확인 필요 - 공항철도 서울역 보증금 환급기의 정확한 위치(층·개찰구) -->
 <!-- TODO(R3): 공식 자료 확인 필요 - 환급기에서 카드가 나오지 않거나 오류가 날 때의 공식 안내 -->
 
 ## en
@@ -31,5 +33,6 @@ verified_by: claude-draft
 - You can get the deposit back at any time as long as the ticket is not lost or damaged. If you lose or damage it through your own fault, the deposit is not refunded.
 - Single-journey tickets work only on the urban railways of the Seoul metropolitan area.
 - AREX Seoul Station has three deposit refund machines.
+- Use the deposit refund machine after you go out through the gate at your arrival station (Korea Tourism Organization).
 
 <!-- TODO(R3): 공식 영문 자료 확인 필요 - 첫 두 항목은 서울교통공사 영문 안내 기준, 나머지는 국문 안내를 옮긴 것 -->

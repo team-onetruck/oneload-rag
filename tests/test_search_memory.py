@@ -1,6 +1,7 @@
 import pytest
 
 from hangil_rag import MemorySearch, search_knowledge
+from hangil_rag.loader import load_docs
 from hangil_rag.search_memory import tokens
 
 
@@ -29,8 +30,8 @@ def test_express_slot_drops_allstop_only_doc(search):
 
 
 @pytest.mark.parametrize("context", [ctx(), {}, {"slots": None}])
-def test_unknown_train_keeps_all_docs(search, context):
-    hits = search("승차권 구매 직통열차 일반열차", "ko", context)
+def test_unknown_train_keeps_all_docs(context):
+    hits = MemorySearch(docs=load_docs(include_community=False))("승차권 구매 직통열차 일반열차", "ko", context)
     assert {"doc-express-ticket", "doc-allstop-ticket"} <= set(ids(hits))
 
 
@@ -111,3 +112,31 @@ def test_help_order_puts_station_desks_before_phone_lines(search):
         text = search("도움받을 곳", lang, ctx())[0].excerpt
         order = [text.index(s) for s in (desk, "1330", "1599-7788", "032-745-7777", "032-745-7400")]
         assert order == sorted(order), lang
+
+
+@pytest.mark.parametrize(
+    ("query", "lang", "doc"),
+    [
+        ("기후동행카드 단기권은 어디서 사요?", "ko", "doc-climate-card-short-term"),
+        ("Can I use the Climate Card to Incheon Airport?", "en", "doc-climate-card-short-term"),
+        ("버스에서 지하철로 환승 할인 받으려면?", "ko", "doc-seoul-transit-basics"),
+        ("How do I transfer between bus and subway?", "en", "doc-seoul-transit-basics"),
+    ],
+)
+def test_transit_and_pass_docs(search, query, lang, doc):
+    assert doc in ids(search(query, lang, ctx()))
+
+
+def test_community_docs_only_when_enabled(monkeypatch):
+    query = "해외카드로 직통열차 표를 살 수 있어요?"
+    monkeypatch.delenv("RAG_INCLUDE_COMMUNITY", raising=False)
+    assert not any(i.startswith("doc-community-") for i in ids(MemorySearch()(query, "ko", ctx())))
+    monkeypatch.setenv("RAG_INCLUDE_COMMUNITY", "1")
+    assert "doc-community-arex-payments" in ids(MemorySearch()(query, "ko", ctx()))
+
+
+def test_community_takes_at_most_the_last_slot(monkeypatch):
+    monkeypatch.setenv("RAG_INCLUDE_COMMUNITY", "1")
+    got = ids(MemorySearch()("승차권 구매 직통열차 일반열차", "ko", ctx()))
+    community = [i for i in got if i.startswith("doc-community-")]
+    assert len(community) <= 1 and (not community or got[-1] == community[0])

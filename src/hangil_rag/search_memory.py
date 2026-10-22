@@ -73,7 +73,11 @@ class MemorySearch:
                 scored.append((score, doc))
         scored.sort(key=lambda x: x[0], reverse=True)
         cutoff = max(self.min_score, top(scored) * RELATIVE_CUTOFF)
-        hits = [(s, d) for s, d in scored if s >= cutoff][: self.k]
+        passed = [(s, d) for s, d in scored if s >= cutoff]
+        # 이용자 후기(미확인, RAG_INCLUDE_COMMUNITY=1 일 때만 있음)는 공식 문서 뒤 마지막 한 자리까지만
+        official = [x for x in passed if x[1].source_kind != "community"]
+        community = [x for x in passed if x[1].source_kind == "community"][:1]
+        hits = official[: self.k - len(community)] + community if community else official[: self.k]
         if not hits:  # 반환은 둘 다 빈 목록, 구분은 로그로만 (임계값 조정용)
             log.info("rag_empty reason=%s top_score=%.2f", "below_threshold" if scored else "no_match", top(scored))
         return [to_hit(d, language, d.body(language)) for _, d in hits]
