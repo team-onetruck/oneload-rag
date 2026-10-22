@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.egg-info/
+dist/
+.pytest_cache/
+.ruff_cache/
+.env
+# CI checks these out next to the code
+/oneload_agent/
+/oneload-backend/

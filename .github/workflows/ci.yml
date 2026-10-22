@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      db:
+        image: pgvector/pgvector:pg17 # same image as oneload-backend compose.yaml
+        env:
+          POSTGRES_USER: hangil
+          POSTGRES_PASSWORD: hangil
+          POSTGRES_DB: hangil_test
+        ports: ["54329:5432"]
+        options: >-
+          --health-cmd "pg_isready -U hangil" --health-interval 2s --health-timeout 3s --health-retries 20
+    env:
+      RAG_TEST_DATABASE_URL: postgresql://hangil:hangil@localhost:54329/hangil_test
+      RAG_AGENT_DIR: ${{ github.workspace }}/oneload_agent
+      RAG_BACKEND_DIR: ${{ github.workspace }}/oneload-backend
+      # oneload_agent / oneload-backend are private: a read-only token is needed to check them out.
+      # Without it (e.g. pull requests from forks) the contract tests are skipped, never silently passed.
+      HAS_TEAM_TOKEN: ${{ secrets.TEAM_REPO_TOKEN != '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --frozen --all-extras
+      # Linted before the other repos are checked out so ruff never sees their code.
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+      - uses: actions/checkout@v4
+        if: env.HAS_TEAM_TOKEN == 'true'
+        with:
+          repository: team-onetruck/oneload_agent
+          path: oneload_agent
+          token: ${{ secrets.TEAM_REPO_TOKEN }}
+      - uses: actions/checkout@v4
+        if: env.HAS_TEAM_TOKEN == 'true'
+        with:
+          repository: team-onetruck/oneload-backend
+          path: oneload-backend
+          token: ${{ secrets.TEAM_REPO_TOKEN }}
+      - name: Agent dependencies for the contract tests
+        if: env.HAS_TEAM_TOKEN == 'true'
+        run: uv pip install -r oneload_agent/requirements.txt
+      - name: Tests (contract tests must run when the token is set)
+        run: uv run --no-sync pytest -q -rs
+        env:
+          RAG_REQUIRE_CONTRACT: ${{ env.HAS_TEAM_TOKEN == 'true' && '1' || '0' }}
+      - name: Wheel ships the knowledge documents
+        run: |
+          uv build --wheel -o dist
+          python -c "import sys, zipfile; n = zipfile.ZipFile(sys.argv[1]).namelist(); \
+          assert sum(p.startswith('hangil_rag/knowledge/doc-') for p in n) >= 4, n" dist/*.whl
