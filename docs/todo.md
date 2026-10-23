@@ -70,7 +70,7 @@
 | ~~pgvector 로컬 검증~~ | 완료 (2026-10-23) | 로컬 Docker DB에서 통합 테스트 통과 |
 | ~~실제 임베딩으로 적재·평가~~ | 완료 (2026-10-23) | 메모리 검색이 더 나아서 MVP는 메모리 유지 권장. `eval/README.md` |
 | ~~버전 태그 `v0.1.0`~~ | 완료 (2026-10-23) | `pip install "hangil-rag @ git+https://github.com/team-onetruck/oneload-rag@v0.1.0"` |
-| CI 계약 테스트 켜기 | 레포 관리자가 `TEAM_REPO_TOKEN` 등록 (RQ-14) | 지금은 옆 레포가 없어서 skip |
+| ~~CI 계약 테스트 켜기~~ | 완료 (2026-10-23) | 토큰 등록 후 CI에서 Agent·백엔드 연결 테스트 실행 중 |
 | 별칭 사전 지도 반영 | R4 (RQ-27) | `poi/` 초안 완성 |
 | 검색 임계값 확정 | R6 (RQ-12) | 평가셋 기준 0.25 적용 |
 | QA 정답 근거 반영 | R6 (RQ-13) | `docs/qa-source-map.md` |
