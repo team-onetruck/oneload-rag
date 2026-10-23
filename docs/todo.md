@@ -67,9 +67,9 @@
 
 | 할 일 | 필요한 것 | 비고 |
 |---|---|---|
-| pgvector 로컬 검증 | `brew install pgvector` 또는 Docker 허락 | CI(GitHub)의 실제 pgvector DB에서는 적재·검색 테스트 통과함 |
-| 실제 임베딩으로 적재·평가 | OpenAI 키, 비용 승인 | 적재 후 `RAG_BACKEND=pgvector uv run python eval/retrieval.py` |
-| 버전 태그 `v0.1.0` | 공개 시점 결정 | R4가 `pip install ...@v0.1.0`로 연결 (RQ-02) |
+| ~~pgvector 로컬 검증~~ | 완료 (2026-10-23) | 로컬 Docker DB에서 통합 테스트 통과 |
+| ~~실제 임베딩으로 적재·평가~~ | 완료 (2026-10-23) | 메모리 검색이 더 나아서 MVP는 메모리 유지 권장. `eval/README.md` |
+| ~~버전 태그 `v0.1.0`~~ | 완료 (2026-10-23) | `pip install "hangil-rag @ git+https://github.com/team-onetruck/oneload-rag@v0.1.0"` |
 | CI 계약 테스트 켜기 | 레포 관리자가 `TEAM_REPO_TOKEN` 등록 (RQ-14) | 지금은 옆 레포가 없어서 skip |
 | 별칭 사전 지도 반영 | R4 (RQ-27) | `poi/` 초안 완성 |
 | 검색 임계값 확정 | R6 (RQ-12) | 평가셋 기준 0.25 적용 |

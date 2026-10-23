@@ -24,7 +24,8 @@ DEFAULT_DSN = "postgresql://hangil:hangil@localhost:54329/hangil"  # 백엔드 c
 DEFAULT_MODEL, DEFAULT_DIM = "text-embedding-3-small", 1536
 TOP_K = 3
 MIN_SCORE = 0.3  # 초기값. R3 · R6 가 평가셋으로 정한다
-KEYWORD_WEIGHT = 0.3  # "직통" · "AREX" · "T-money" 같은 고유명사는 키워드가 강하다 (설계서 4장)
+KEYWORD_WEIGHT = 0.5  # eval/retrieval.py 실측(2026-10-23): 0.3 보다 범위 밖 차단 2/4 → 4/4.
+# "직통" · "AREX" · "T-money" 같은 고유명사는 키워드가 강하다 (설계서 4장)
 TIMEOUT_S = 3  # /messages 15초 예산 안에서 검색이 오래 붙잡지 않게
 
 # shortcut: 모든 청크에 점수를 매기는 전체 스캔. 청크가 수천 개를 넘으면 벡터 인덱스 후보 + 키워드 후보 합치기로
