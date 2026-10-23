@@ -18,6 +18,6 @@ def test_gold_ids_exist():
 
 
 def test_quality_does_not_drop():
-    """2026-10-22 기준 top-3 38/40, 범위 밖 빈 결과 3/4. 문서를 추가하다 크게 떨어지면 알린다."""
+    """2026-10-23 (RAG #3 이후) top-3 38/40, 범위 밖 빈 결과 4/4. 문서를 추가하다 크게 떨어지면 알린다."""
     r = retrieval.score(MemorySearch(docs=load_docs(include_community=False)))
-    assert r["hit3"] >= 36 and r["empty"] >= 3, (r["hit3"], r["empty"])
+    assert r["hit3"] >= 37 and r["empty"] == 4, (r["hit3"], r["empty"])

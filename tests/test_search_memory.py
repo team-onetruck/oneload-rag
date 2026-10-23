@@ -152,3 +152,35 @@ def test_community_takes_at_most_the_last_slot(monkeypatch):
     got = ids(MemorySearch()("승차권 구매 직통열차 일반열차", "ko", ctx()))
     community = [i for i in got if i.startswith("doc-community-")]
     assert len(community) <= 1 and (not community or got[-1] == community[0])
+
+
+# ── RAG #3: 범위 밖 · 실시간 질문은 빈 결과, 기존 정답은 유지 ─────────────────────────────
+@pytest.mark.parametrize(
+    "query",
+    [
+        "서울역 근처 호텔 객실 가격 알려줘",  # RAG #3 재현 질문 1
+        "지금 서울역 직통열차 빈 좌석이 몇 개 남았나요?",  # RAG #3 재현 질문 2
+        "서울역에서 저녁 먹을 식당을 예약해 줘",
+        "인천공항 내일 날씨 알려주세요",
+    ],
+)
+def test_out_of_scope_questions_are_empty(query):
+    assert MemorySearch(docs=load_docs(include_community=False))(query, "ko", {"slots": {}}) == []
+
+
+@pytest.mark.parametrize(
+    "query", ["Are there seats left on the Express?", "직통열차 잔여석", "실시간 좌석 현황", "남은 자리 있어요?"]
+)
+def test_realtime_questions_are_empty(query):
+    assert MemorySearch(docs=load_docs(include_community=False))(query, "ko", {"slots": {}}) == []
+
+
+def test_price_words_find_fare_docs():
+    """'얼마' 처럼 요금이라는 낱말이 없어도 요금 문서를 찾는다."""
+    got = ids(MemorySearch()("서울역에서 직통열차 성인 승차권은 얼마인가요?", "ko", ctx("express")))
+    assert "doc-fare-arex-express" in got
+
+
+def test_demonstratives_do_not_make_a_question_out_of_scope():
+    """'이거 뭐 눌러?' 의 '이거' 는 영어 this 처럼 기능어다 (발매기 사진 질문)."""
+    assert MemorySearch()("직통열차 이거 뭐 눌러?", "ko", ctx("express"))

@@ -20,7 +20,8 @@ os.environ.pop("RAG_INCLUDE_COMMUNITY", None)
 from hangil_rag import search_knowledge, search_memory  # noqa: E402
 from hangil_rag.search_memory import MemorySearch  # noqa: E402
 
-CASES = yaml.safe_load((Path(__file__).resolve().parent / "retrieval.yaml").read_text(encoding="utf-8"))["cases"]
+HERE = Path(__file__).resolve().parent
+CASES = yaml.safe_load((HERE / "retrieval.yaml").read_text(encoding="utf-8"))["cases"]
 
 
 def score(search, cases=CASES) -> dict:
@@ -70,8 +71,13 @@ def sweep() -> str:
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--sweep", action="store_true", help="메모리 검색 임계값 후보 비교")
+    ap.add_argument("--holdout", action="store_true", help="고정된 보류 검증 질문(retrieval_holdout.yaml)으로 실행")
     a = ap.parse_args(argv)
-    print(sweep() if a.sweep else report(score(search_knowledge)))
+    if a.holdout:
+        holdout = yaml.safe_load((HERE / "retrieval_holdout.yaml").read_text(encoding="utf-8"))["cases"]
+        print(report(score(search_knowledge, holdout)))
+    else:
+        print(sweep() if a.sweep else report(score(search_knowledge)))
     return 0
 
 
