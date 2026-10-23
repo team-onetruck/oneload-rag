@@ -149,3 +149,11 @@
   - "기본운임 1,550원 이하 대중교통만(심야버스 예외)" → 직통열차(13,000원)에는 사용 불가
   - 출처: [티머니 기후동행카드 안내](https://pay.tmoney.co.kr/ncs/pct/ugd/ReadClmtAcmpCardFrgnGd.dev) "Usage" 절
 - 온라인 재시도 실패: 공항철도 역 이름 공식 영문 표기 (AREX 영문 페이지 경로를 찾지 못함), 서울역 근처 WOWPASS 무인환전기 위치 (WOWPASS 사이트가 스크립트로만 표시)
+
+## 2026-10-23 추가 (공항철도 블로그 2021-06, `claude-draft`)
+
+출처: https://arexkorea.blogspot.com/2021/06/this-stop-is-seoul-station-heart-of.html
+
+- [ ] doc-seoul-arex-transfer: 새 문서 전체 (공식 안내도 PDF 층 정보 + 블로그의 KTX 가는 길, 무빙워크, 환승 추가요금 없음, 칸 번호, B7 엘리베이터, 왼쪽 통행)
+- [ ] doc-seoul-help-desks: B3 고객안내센터 "일반열차 개찰구 밖 왼쪽, 문 옆 벨" (R3 확인 문서에 추가된 문장)
+- [ ] doc-allstop-ticket: B3 발매기 위치 (고객안내센터 오른쪽, AI 발매기 맞은편, 교통카드 판매기)

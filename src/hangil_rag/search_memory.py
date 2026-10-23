@@ -69,7 +69,7 @@ _FILLER_EN = {
 # 실시간 현황은 문서로 답할 수 없다 (잔여석 · 빈 좌석 · 실시간). shortcut: 표현 목록, 질문 로그가 쌓이면 보강
 _REALTIME = re.compile(
     r"실시간|잔여\s*(좌석|석)|(빈|남은)\s*(좌석|자리|석)|자리\s*(가\s*)?남|real[- ]?time"
-    r"|seats?\s+(left|available|remaining)|(empty|free|available)\s+seats?",
+    r"|seats?\s+((are|is)\s+)?(left|available|remaining)|(empty|free|available)\s+seats?",
     re.I,
 )
 

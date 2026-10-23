@@ -8,6 +8,7 @@ source_kind: official
 other_sources:
   - https://www.airportrailroad.com/train/normal/info/010/0
   - https://www.airportrailroad.com/train/express/introduce
+  - https://arexkorea.blogspot.com/2021/06/this-stop-is-seoul-station-heart-of.html
   - https://www.airportrailroad.com/train/express/city/info
   - https://www.airportrailroad.com/help/faq
   - https://www.gongju.go.kr/en/sub02_01_02.do
@@ -27,9 +28,10 @@ verified_by: R3
 - 공항철도 서울역 지하 3층 중앙에 고객안내센터(안내도 영문 표기: Customer Information Center)가 있다.
 - 같은 지하 3층에 일반열차 표 사는 곳(All-stop Train Ticket Office)과 승차권 발매기가 있다.
 - 1호선·4호선과 공항철도를 갈아타는 길(Transfer to Line 1, Line 4)도 지하 3층에서 이어진다.
+- 공항철도 블로그(2021년 6월) 안내: 고객안내센터는 지하 3층 일반열차 개찰구 밖 왼쪽에 있다. 찾아가면 문 옆의 벨을 누른다.
 
 <!-- TODO(R3): 공식 자료 확인 필요 - 고객안내센터 운영 시간, 외국어 응대 여부, 도와주는 일(승차권·교통카드 문제 등) -->
-<!-- TODO(R3): 확인 필요 - 2023 블로그 사진의 B3 층별 안내판(공항철도 회의실 안내)에는 "B2 고객안내센터"만 보이고 B3 칸에는 회의실만 있음. B3 고객안내센터가 지금도 있는지 ☎ 1599-7788 (2021 공식 블로그 사진 15번에는 고객안내센터 정면이 있음) -->
+<!-- TODO(R3): 확인 필요 - 2023 블로그 사진의 B3 회의실 안내판에는 "B2 고객안내센터"만 보임. 2021 공항철도 블로그로 B3 위치는 확인했지만 지금도 같은지 ☎ 1599-7788 -->
 
 ### 2. 지하 2층 직통열차 고객안내센터, 트래블센터, 도심공항터미널
 
@@ -64,6 +66,7 @@ If you get stuck buying a ticket, your card payment fails, or you cannot find yo
 - The Customer Information Center is in the middle of B3 (basement level 3) at AREX Seoul Station.
 - The All-stop Train Ticket Office and ticket machines are on the same floor, B3.
 - The transfer between AREX and Line 1 / Line 4 ("Transfer to Line 1, Line 4") also connects from B3.
+- From the AREX blog (June 2021): the Customer Information Center is on B3, outside the All-stop train gates on the left. Press the bell next to the door when you visit.
 
 ### 2. Express Train Tickets, Travel Center and City Airport Terminal on B2
 

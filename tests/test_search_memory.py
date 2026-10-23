@@ -169,7 +169,14 @@ def test_out_of_scope_questions_are_empty(query):
 
 
 @pytest.mark.parametrize(
-    "query", ["Are there seats left on the Express?", "직통열차 잔여석", "실시간 좌석 현황", "남은 자리 있어요?"]
+    "query",
+    [
+        "Are there seats left on the Express?",
+        "How many seats are left?",
+        "직통열차 잔여석",
+        "실시간 좌석 현황",
+        "남은 자리 있어요?",
+    ],
 )
 def test_realtime_questions_are_empty(query):
     assert MemorySearch(docs=load_docs(include_community=False))(query, "ko", {"slots": {}}) == []
