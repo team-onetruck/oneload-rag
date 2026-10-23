@@ -129,16 +129,21 @@ class MemorySearch:
         )
         return best / total if total else 0.0
 
+    def scope_reason(self, query: str, train: str | None) -> str | None:
+        """RAG #3: 답할 범위 밖이면 빈 결과 사유, 아니면 None. pgvector 검색도 같은 판정을 쓴다."""
+        if _REALTIME.search(query):  # 실시간 현황은 근거 문서가 없다
+            return "realtime"
+        if (cov := self.coverage(query, train)) < MIN_COVERAGE:  # 문서에 없는 주제
+            return f"out_of_scope coverage={cov:.2f}"
+        return None
+
     def __call__(self, query: str, language: str, context: dict) -> list[KnowledgeHit]:
         train = (context.get("slots") or {}).get("train_type")
         q = _expand(tokens(query))
         if not q:
             return []
-        if _REALTIME.search(query):  # RAG #3: 실시간 현황은 근거 문서가 없다
-            log.info("rag_empty reason=realtime")
-            return []
-        if (cov := self.coverage(query, train)) < MIN_COVERAGE:  # RAG #3: 문서에 없는 주제
-            log.info("rag_empty reason=out_of_scope coverage=%.2f", cov)
+        if reason := self.scope_reason(query, train):
+            log.info("rag_empty reason=%s", reason)
             return []
         scored = []
         for doc, title, body in self._index:

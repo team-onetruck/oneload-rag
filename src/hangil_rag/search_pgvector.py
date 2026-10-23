@@ -1,4 +1,4 @@
-"""pgvector 하이브리드 검색 (초안): 메타데이터 필터 → 벡터 + 키워드 점수 → 임계값 → 상위 k.
+"""pgvector 하이브리드 검색 (초안): 범위 판정 → 메타데이터 필터 → 벡터 + 키워드 점수 → 임계값 → 상위 k.
 
 색인은 ingest.py 가 만든 `rag.chunks` (백엔드 테이블과 섞이지 않게 별도 스키마, 같은 Postgres).
 환경 변수: RAG_DATABASE_URL · RAG_EMBEDDING_MODEL · RAG_EMBEDDING_DIM · RAG_MIN_SCORE (.env.example).
@@ -17,6 +17,7 @@ from psycopg.rows import dict_row
 
 from .loader import TRAIN_TYPES
 from .schemas import KnowledgeHit, unavailable
+from .search_memory import MemorySearch
 
 log = logging.getLogger("hangil_rag")
 
@@ -87,14 +88,21 @@ class PgVectorSearch:
         k: int = TOP_K,
         min_score: float | None = None,
         keyword_weight: float = KEYWORD_WEIGHT,
+        gate: MemorySearch | None = None,
     ):
         self.dsn = dsn or database_url()
         self.embedder = embedder or OpenAIEmbedder()
         self.k, self.keyword_weight = k, keyword_weight
         self.min_score = min_score if min_score is not None else float(_env("RAG_MIN_SCORE", MIN_SCORE))
+        # RAG #3 범위 판정은 메모리 검색과 같게, 패키지에 든 knowledge/ 문서로 한다 (임베딩 · DB 를 부르기 전).
+        # shortcut: DB 에 적재한 문서와 패키지 문서가 같다고 본다. 다른 폴더를 적재하면 gate 에 같은 문서를 넘긴다
+        self.gate = gate or MemorySearch()
 
     def __call__(self, query: str, language: str, context: dict) -> list[KnowledgeHit]:
         train = (context.get("slots") or {}).get("train_type")
+        if reason := self.gate.scope_reason(query, train):
+            log.info("rag_empty reason=%s", reason)
+            return []
         params = {"q": query, "kw": self.keyword_weight, "train": train if train in TRAIN_TYPES else None}
         try:
             params["vec"] = vector_literal(self.embedder.embed([query])[0])

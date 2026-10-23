@@ -71,6 +71,12 @@ def test_pick_threshold_gives_empty():
     assert s._pick([row("a", "ko", 0.9)], "ko") == [] and s._pick([], "ko") == []
 
 
+@pytest.mark.parametrize("q", ["서울역 근처 호텔 객실 가격 알려줘", "지금 직통열차 빈 좌석 몇 개야?"])
+def test_out_of_scope_is_empty_before_embedding_or_db(q):  # RAG #3
+    embedder = FakeEmbedder()
+    assert PgVectorSearch(dsn="unused", embedder=embedder)(q, "ko", {"slots": {}}) == [] and embedder.calls == 0
+
+
 def test_dry_run_needs_no_db_or_api(capsys):
     assert main(["--dry-run"]) == 0
     out = capsys.readouterr().out
