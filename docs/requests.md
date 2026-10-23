@@ -15,7 +15,7 @@ R3(RAG·데이터)가 작업하면서 다른 역할에 요청하거나 함께 �
 | ID | 대상 | 요약 | 상태 |
 | --- | --- | --- | --- |
 | RQ-01 | R4 | 백엔드·`oneload-data`가 인용하는 AREX 공식 URL이 404 | 제안 |
-| RQ-02 | R4 | `MockKnowledgeSearch` → `hangil_rag.search_knowledge` 교체 | 제안 |
+| RQ-02 | R4 | `MockKnowledgeSearch` → `hangil_rag.search_knowledge` 교체 (QA INT-07) | 패치 준비 (`docs/backend-integration/`) |
 | RQ-03 | R4 | 같은 Postgres의 `rag` 스키마 사용, 확장 권한, 적재 시점 | 제안 |
 | RQ-04 | R4 | `RuleAgent` 데모 출처 제목·URL이 실제 문서와 다름 | 제안 |
 | RQ-05 | R4 | "도움받을 곳" POI 추가 (고객안내센터, 트래블센터, 환승통로 등) | 제안 |
@@ -44,6 +44,7 @@ R3(RAG·데이터)가 작업하면서 다른 역할에 요청하거나 함께 �
 | RQ-28 | R4·R2 | `search_pois`는 "질문이 별칭 안에 통째로 있을 때만" 찾음 → 낱말 단위 비교 검토 | 제안 |
 | RQ-29 | R6·R1 | 촬영·개인정보 처리 절차 초안(`docs/photo-privacy.md`)의 ⚠️ 항목 결정 | 제안 |
 | RQ-30 | 요청자·R2·R4 | RAG를 MCP 서버로도 제공 (용도·실행 방식 확인 필요) | 확인 중 |
+| RQ-31 | R4·infra | 배포 때 Agent 코드(`hangil_r2/`, `prompts/`)를 서버로 복사 + `AI_MODE=llm` secret | 제안 |
 
 ## R4 (Backend · 공간 데이터)
 
@@ -343,6 +344,24 @@ R3는 실제 코드를 따랐습니다. 설계서를 고칠지 정해 주세요.
   2. stdio인지 HTTP인지, HTTP면 어디에 띄우고 인증은 어떻게 할지
   3. 백엔드 연결은 함수 방식을 유지해도 되는지
 
+### RQ-31 백엔드 연결 패치와 배포 (R4·infra, QA INT-07)
+
+- `oneload-rag/docs/backend-integration/`에 R4용 패치와 안내를 두었습니다.
+- 패치 내용:
+  - `AI_MODE` 설정 추가 (기본 `rule`)
+  - `llm`일 때 Agent·Vision·RAG 조립
+  - 의존성 추가
+- 백엔드 복사본에서 확인한 결과:
+  - 기본값에서 백엔드 테스트 44개 통과
+  - `llm` 모드 조립 확인
+  - API 단위 연결 6/6 통과
+- **배포에 필요한 것 (방법 A)**
+  1. 백엔드 CI deploy 작업에서 `oneload_agent` checkout (읽기 토큰 secret)
+  2. `deploy.sh`가 `hangil_r2/`·`prompts/`를 `~/hangil-api`로 복사
+  3. 백엔드 secret `AI_MODE=llm`
+- 장기적으로는 RQ-07(Agent 패키지화) 뒤 git 의존성으로 바꾸는 방법 B가 깔끔합니다.
+- 참고: 이번 시험이 Python 3.12(백엔드 버전)에서 돌았으므로 Agent는 3.12에서도 동작합니다.
+
 ## 변경 이력
 
 - 2026-10-22: 처음 작성. RQ-01~RQ-15
@@ -353,3 +372,4 @@ R3는 실제 코드를 따랐습니다. 설계서를 고칠지 정해 주세요.
 - 2026-10-22: RQ-27(별칭 사전), RQ-28(search_pois 비교 방식), RQ-29(촬영·개인정보) 추가. RQ-12·13·21·22 상태 갱신
 - 2026-10-23: RQ-14 반영 (TEAM_REPO_TOKEN 등록, CI 계약 테스트 실행 확인)
 - 2026-10-23: RQ-30(MCP 서버 요청) 추가. 이슈 #1(CI 필수 모드)·#2(README Vision 연결) 수정
+- 2026-10-23: RQ-02 패치 준비, RQ-31(배포 때 Agent 복사·AI_MODE) 추가

@@ -20,6 +20,8 @@ R3가 맡은 이용 안내 검색 모듈입니다. Agent(R2)의 `search_knowledg
 | `docs/qa-source-map.md` | QA 문항 Q01~Q20 → 근거 문서 (R6 전달용) |
 | `docs/photo-privacy.md` | 촬영 자료·개인정보 처리 절차 초안 |
 | `docs/r3-work-summary.md` | 팀원용 쉬운 설명 |
+| `docs/backend-integration/` | R4용 백엔드 연결 패치 초안과 안내 (QA INT-07) |
+| `scripts/e2e_backend.py` | 백엔드 API로 Agent + RAG 연결을 끝까지 확인 (FakeLLM, 로컬 compose DB) |
 
 ## 설치
 
