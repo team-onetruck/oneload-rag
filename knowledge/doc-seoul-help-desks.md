@@ -15,7 +15,7 @@ other_sources:
   - https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=140042&menuSn=376
   - https://pay.tmoney.co.kr/ncs/pct/ugd/ReadFrgnGd.dev
   - https://mediahub.seoul.go.kr/archives/2019488
-verified_at: 2026-10-22
+verified_at: 2026-10-23
 verified_by: R3
 ---
 

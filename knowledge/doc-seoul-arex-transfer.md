@@ -11,7 +11,7 @@ other_sources:
   - https://www.arex.or.kr/file/%EC%97%AC%EA%B0%9D%EC%9A%B4%EC%86%A1%EC%95%BD%EA%B4%80(2025.12.26.).pdf
   - https://www.airportrailroad.com/train/normal/info/010
 verified_at: 2026-10-23
-verified_by: claude-draft
+verified_by: R3
 ---
 
 ## ko

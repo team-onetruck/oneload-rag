@@ -10,7 +10,7 @@ other_sources:
   - https://www.airportrailroad.com/train/normal/info/010/0
   - https://www.airportrailroad.com/static/file/emergency_seoul.pdf
   - https://www.airportrailroad.com/train/express/guide
-verified_at: 2026-10-22
+verified_at: 2026-10-23
 verified_by: R3
 ---
 

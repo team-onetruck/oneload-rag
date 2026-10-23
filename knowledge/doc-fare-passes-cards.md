@@ -14,8 +14,8 @@ other_sources:
   - https://www.wowpass.io/ko/guide
   - https://news.seoul.go.kr/traffic/public/climatecard-faq/faq-short
   - https://mediahub.seoul.go.kr/archives/2017343
-verified_at: 2026-10-22
-verified_by: claude-draft
+verified_at: 2026-10-23
+verified_by: R3
 ---
 
 ## ko

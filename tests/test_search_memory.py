@@ -1,3 +1,5 @@
+from datetime import date
+
 import pytest
 
 from hangil_rag import MemorySearch, search_knowledge
@@ -61,7 +63,7 @@ def test_nothing_relevant_is_empty(search, query):
 
 def test_hit_fields(search):
     for h in search("직통열차 일반열차 승차권 보증금", "ko", ctx()):
-        assert h.verified_at == "2026-10-22" and h.scope in {"ticket", "card"}
+        assert date.fromisoformat(h.verified_at) and h.scope in {"ticket", "card"}  # 다시 확인하면 날짜가 바뀐다
         assert h.source_url and h.source_url.startswith("http")
 
 

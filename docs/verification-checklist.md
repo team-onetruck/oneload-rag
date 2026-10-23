@@ -1,6 +1,8 @@
 # 공식 문서 사람 재확인 체크리스트
 
-모든 공식 문서는 지금 `verified_by: claude-draft`입니다. 초안 작성 도구가 출처 페이지를 열어 옮겨 적었다는 뜻이고, 사람이 대조하지는 않았습니다.
+**2026-10-23: 공식 문서 14개 모두 R3가 출처와 대조 완료 (`verified_by: R3`).** 이용자 후기 문서 2개(`doc-community-*`)는 원래 미확인 정보라 `claude-draft`로 둡니다. 아래 목록은 기록으로 남깁니다.
+
+(이전 설명) 공식 문서가 `verified_by: claude-draft`이면, 초안 작성 도구가 출처 페이지를 열어 옮겨 적었고 사람이 대조하지 않았다는 뜻입니다.
 
 **확인하는 방법**
 1. 각 문서의 출처 URL을 브라우저로 엽니다.
@@ -14,7 +16,7 @@
 
 ## 1. 숫자가 많은 요금 문서 (먼저)
 
-- [ ] **doc-fare-arex-allstop**: 공항철도 일반열차 요금 (서울역 출발)
+- [x] **doc-fare-arex-allstop**: 공항철도 일반열차 요금 (서울역 출발)
   - <https://www.airportrailroad.com/train/normal/fare>
   - **주의**: 요금표(삼각형 표)를 텍스트로 풀어 읽었습니다. "역간 기준운임" 표의 **서울 열**을 위에서 아래로 따라가며 확인하세요.
     - 공덕·홍대입구·DMC 1,550
@@ -28,7 +30,7 @@
   - <https://www.airportrailroad.com/train/express/introduce>
   - "열차운임": 어른 13,000, 정상운임 18,500(1터미널)/19,100(2터미널), 어린이 9,500
   - "직통열차 할인 정보" 표: 할인 대상, 중복 불가
-- [ ] **doc-fare-passes-cards**: 패스·카드 가격과 수수료
+- [x] **doc-fare-passes-cards**: 패스·카드 가격과 수수료
   - 기후동행카드 단기권 1/2/3/5/7일권 5,000/8,000/10,000/15,000/20,000, 실물카드 3,000
     - <https://news.seoul.go.kr/traffic/archives/510651>
     - <https://pay.tmoney.co.kr/ncs/pct/ugd/ReadClmtAcmpCardFrgnGd.dev>
@@ -66,7 +68,7 @@
   - <https://www.airportrailroad.com/train/normal/info/010/0> (지하 2층 설명: 트레블센터 근처 발매기, 도심공항터미널)
   - <https://www.airportrailroad.com/static/file/emergency_seoul.pdf> (영문 시설명)
   - 참고: 역 안내 페이지는 "트레블센터", 안내도는 "트래블센터"로 표기가 다릅니다. 문서는 안내도 표기를 따랐습니다.
-- [ ] (보류) **doc-allstop-ticket**: 일반열차 타는 방법
+- [x] (보류) **doc-allstop-ticket**: 일반열차 타는 방법
   - <https://www.airportrailroad.com/train/normal/introduce> ("승차권 구입 및 타는 곳")
   - <https://www.airportrailroad.com/train/normal/info/010/0> (지하 3층 설명)
   - <https://www.airportrailroad.com/static/file/emergency_seoul.pdf> (영문 시설명)
@@ -117,8 +119,8 @@
 - seoul-help-desks·climate-card: 다산콜 외국어 상담은 평일 09:00~18:00, 지원 언어 5개 ([서울시 미디어허브](https://mediahub.seoul.go.kr/archives/2019488))
 
 **R3 확인 뒤 초안 도구가 새로 넣은 내용 (`claude-draft` 유지, 다시 봐야 함)**
-- [ ] fare-arex-allstop: **역간 기준운임 전체 표** 추가 (서울 열은 R3 확인 완료, 나머지 칸은 같은 공식 표에서 옮김)
-- [ ] fare-passes-cards: 청소년 요금 추가
+- [x] fare-arex-allstop: **역간 기준운임 전체 표** 추가 (서울 열은 R3 확인 완료, 나머지 칸은 같은 공식 표에서 옮김)
+- [x] fare-passes-cards: 청소년 요금 추가
   - 기후동행카드 청소년 7일권 13,000원, 2026-09-01부터, 청소년 인증 필요 ([FAQ](https://news.seoul.go.kr/traffic/public/climatecard-faq/faq-short))
   - 지하철 기본운임 어른 1,550원 / 청소년 900원 / 어린이 550원 ([미디어허브](https://mediahub.seoul.go.kr/archives/2017343))
   - 티머니 생년월일 등록 필요
@@ -142,10 +144,10 @@
 
 ### 2026-10-22 R3 확인 뒤 초안 도구가 추가한 내용 (다시 봐야 함)
 
-- [ ] seoul-help-desks
+- [x] seoul-help-desks
   - 1330 지원 언어 8개와 해외 번호 +82-2-1330, 긴급 번호 경찰 112·화재/구급 119
   - 출처: [한국관광공사 Emergency Situations](https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=140042&menuSn=376)
-- [ ] climate-card-short-term
+- [x] climate-card-short-term
   - "기본운임 1,550원 이하 대중교통만(심야버스 예외)" → 직통열차(13,000원)에는 사용 불가
   - 출처: [티머니 기후동행카드 안내](https://pay.tmoney.co.kr/ncs/pct/ugd/ReadClmtAcmpCardFrgnGd.dev) "Usage" 절
 - 온라인 재시도 실패: 공항철도 역 이름 공식 영문 표기 (AREX 영문 페이지 경로를 찾지 못함), 서울역 근처 WOWPASS 무인환전기 위치 (WOWPASS 사이트가 스크립트로만 표시)
@@ -154,12 +156,12 @@
 
 출처: https://arexkorea.blogspot.com/2021/06/this-stop-is-seoul-station-heart-of.html
 
-- [ ] doc-seoul-arex-transfer: 새 문서 전체 (공식 안내도 PDF 층 정보 + 블로그의 KTX 가는 길, 무빙워크, 환승 추가요금 없음, 칸 번호, B7 엘리베이터, 왼쪽 통행)
-- [ ] doc-seoul-help-desks: B3 고객안내센터 "일반열차 개찰구 밖 왼쪽, 문 옆 벨" (R3 확인 문서에 추가된 문장)
-- [ ] doc-allstop-ticket: B3 발매기 위치 (고객안내센터 오른쪽, AI 발매기 맞은편, 교통카드 판매기)
+- [x] doc-seoul-arex-transfer: 새 문서 전체 (공식 안내도 PDF 층 정보 + 블로그의 KTX 가는 길, 무빙워크, 환승 추가요금 없음, 칸 번호, B7 엘리베이터, 왼쪽 통행)
+- [x] doc-seoul-help-desks: B3 고객안내센터 "일반열차 개찰구 밖 왼쪽, 문 옆 벨" (R3 확인 문서에 추가된 문장)
+- [x] doc-allstop-ticket: B3 발매기 위치 (고객안내센터 오른쪽, AI 발매기 맞은편, 교통카드 판매기)
 
 ## 2026-10-23 추가 (공항철도 여객운송약관 2026-01-05 시행본, 직통열차 이용안내, 서울역 안내 — R3 원문 대조함, `claude-draft`)
 
-- [ ] doc-express-ticket: 결제 수단 (현금·신용카드, 해외 발행 카드 6종, 간편결제는 온라인만, 발매기 4개 언어) — 직통열차 이용안내 https://www.airportrailroad.com/train/express/guide
-- [ ] doc-seoul-arex-transfer: 약관 제42조(직통 승차권은 도착 시각까지만 유효), 제8조 2·3항(환승게이트 추가요금 없음, 독립운임구간 승객은 그 구간 운임), 승강장 엘리베이터 승차위치 4-1·4-3 (서울역 안내). 2021 블로그의 "엘리베이터 3-2칸"은 공식 역 안내와 달라 뺐음
-- [ ] doc-allstop-ticket: 약관 제4조 1항(1회용 교통카드 신용카드 결제, 2024-12-27 개정)
+- [x] doc-express-ticket: 결제 수단 (현금·신용카드, 해외 발행 카드 6종, 간편결제는 온라인만, 발매기 4개 언어) — 직통열차 이용안내 https://www.airportrailroad.com/train/express/guide
+- [x] doc-seoul-arex-transfer: 약관 제42조(직통 승차권은 도착 시각까지만 유효), 제8조 2·3항(환승게이트 추가요금 없음, 독립운임구간 승객은 그 구간 운임), 승강장 엘리베이터 승차위치 4-1·4-3 (서울역 안내). 2021 블로그의 "엘리베이터 3-2칸"은 공식 역 안내와 달라 뺐음
+- [x] doc-allstop-ticket: 약관 제4조 1항(1회용 교통카드 신용카드 결제, 2024-12-27 개정)

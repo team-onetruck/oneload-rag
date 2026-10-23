@@ -6,8 +6,8 @@ scope: fare
 train_type: allstop
 source_url: https://www.airportrailroad.com/train/normal/fare
 source_kind: official
-verified_at: 2026-10-22
-verified_by: claude-draft
+verified_at: 2026-10-23
+verified_by: R3
 ---
 
 ## ko

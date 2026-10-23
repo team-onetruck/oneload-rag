@@ -12,8 +12,8 @@ other_sources:
   - https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=221111
   - https://www.arex.or.kr/file/%EC%97%AC%EA%B0%9D%EC%9A%B4%EC%86%A1%EC%95%BD%EA%B4%80(2025.12.26.).pdf
   - https://arexkorea.blogspot.com/2021/06/this-stop-is-seoul-station-heart-of.html
-verified_at: 2026-10-22
-verified_by: claude-draft
+verified_at: 2026-10-23
+verified_by: R3
 ---
 
 ## ko
