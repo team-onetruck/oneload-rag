@@ -103,3 +103,13 @@ def test_ingest_then_search():
     fares = [h for h in s("직통열차 요금", "ko", {"slots": {"train_type": "express"}}) if h.scope == "fare"]
     assert "doc-fare-arex-express" in [h.document_id for h in fares]
     assert "doc-fare-arex-allstop" not in [h.document_id for h in fares]
+
+
+def test_empty_env_values_fall_back_to_defaults(monkeypatch):
+    """.env.example 을 복사해 키만 채우면 나머지는 빈 값으로 들어온다."""
+    from hangil_rag.search_pgvector import DEFAULT_DSN, MIN_SCORE, database_url
+
+    for name in ("RAG_DATABASE_URL", "RAG_MIN_SCORE", "RAG_EMBEDDING_MODEL", "RAG_EMBEDDING_DIM"):
+        monkeypatch.setenv(name, "")
+    assert database_url() == DEFAULT_DSN
+    assert PgVectorSearch(embedder=FakeEmbedder()).min_score == MIN_SCORE

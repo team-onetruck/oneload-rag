@@ -50,8 +50,8 @@ class OpenAIEmbedder:
     def __init__(self, model: str | None = None, dim: int | None = None):
         from openai import OpenAI
 
-        self.model = model or os.environ.get("RAG_EMBEDDING_MODEL", DEFAULT_MODEL)
-        self.dim = int(dim or os.environ.get("RAG_EMBEDDING_DIM", DEFAULT_DIM))
+        self.model = model or _env("RAG_EMBEDDING_MODEL", DEFAULT_MODEL)
+        self.dim = int(dim or _env("RAG_EMBEDDING_DIM", DEFAULT_DIM))
         self._client = OpenAI(timeout=TIMEOUT_S)
 
     def embed(self, texts: list[str]) -> list[list[float]]:
@@ -59,8 +59,13 @@ class OpenAIEmbedder:
         return [d.embedding for d in res.data]
 
 
+def _env(name: str, default):
+    """빈 값도 '설정 안 함'으로 본다 (.env.example 을 복사해 일부만 채운 경우)."""
+    return os.environ.get(name) or default
+
+
 def database_url() -> str:
-    return os.environ.get("RAG_DATABASE_URL", DEFAULT_DSN)
+    return _env("RAG_DATABASE_URL", DEFAULT_DSN)
 
 
 def vector_literal(vector: list[float]) -> str:
@@ -85,7 +90,7 @@ class PgVectorSearch:
         self.dsn = dsn or database_url()
         self.embedder = embedder or OpenAIEmbedder()
         self.k, self.keyword_weight = k, keyword_weight
-        self.min_score = min_score if min_score is not None else float(os.environ.get("RAG_MIN_SCORE", MIN_SCORE))
+        self.min_score = min_score if min_score is not None else float(_env("RAG_MIN_SCORE", MIN_SCORE))
 
     def __call__(self, query: str, language: str, context: dict) -> list[KnowledgeHit]:
         train = (context.get("slots") or {}).get("train_type")
