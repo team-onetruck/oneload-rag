@@ -1,69 +1,41 @@
-diff --git a/app/config.py b/app/config.py
-index 32a6421..ae3015f 100644
---- a/app/config.py
-+++ b/app/config.py
-@@ -1,5 +1,6 @@
- from functools import lru_cache
- from pathlib import Path
-+from typing import Literal
- 
- from pydantic_settings import BaseSettings, SettingsConfigDict
- 
-@@ -23,6 +24,10 @@ class Settings(BaseSettings):
-     max_image_bytes: int = 2 * 1024 * 1024
-     recent_messages: int = 10
- 
-+    # "llm" wires the R2 agent/vision (OpenAI) and R3 knowledge search; "rule" keeps RuleAgent/NoVision.
-+    # The server sets it with the AI_MODE environment variable. Tests and local runs stay on "rule".
-+    ai_mode: Literal["rule", "llm"] = "rule"
-+
- 
- @lru_cache
- def get_settings() -> Settings:
 diff --git a/app/main.py b/app/main.py
-index 48486df..23e1863 100644
+index 42f1a99..5bf1184 100644
 --- a/app/main.py
 +++ b/app/main.py
-@@ -53,4 +53,18 @@ def create_app(
-     return app
+@@ -3,7 +3,8 @@ import os
+ 
+ from fastapi import FastAPI
+ from fastapi.middleware.cors import CORSMiddleware
+-from hangil_r2 import LLMAgent, LLMVision, MockKnowledgeSearch, OpenAILLM
++from hangil_r2 import LLMAgent, LLMVision, OpenAILLM
++from hangil_rag import search_knowledge
+ 
+ from app.ai.contracts import Agent, VisionExtractor
+ from app.ai.rule_agent import RuleAgent
+@@ -26,7 +27,7 @@ def production_ai() -> tuple[Agent, VisionExtractor]:
+ 
+     llm = OpenAILLM()
+     vision = LLMVision(llm)
+-    agent = LLMAgent(llm, search_knowledge=MockKnowledgeSearch(), vision=vision, fallback=RuleAgent())
++    agent = LLMAgent(llm, search_knowledge=search_knowledge, vision=vision, fallback=RuleAgent())
+     return agent, vision
  
  
--app = create_app()
-+def _ai_collaborators() -> tuple[Agent | None, VisionExtractor | None]:
-+    """AI_MODE=llm: R2 agent + vision with R3 knowledge search. The same vision serves /messages photos and
-+    /localizations. Imported lazily so tests and AI_MODE=rule need none of the AI packages."""
-+    if get_settings().ai_mode != "llm":
-+        return None, None
-+    from hangil_r2 import LLMAgent, LLMVision, OpenAILLM
-+    from hangil_rag import search_knowledge
-+
-+    llm = OpenAILLM()
-+    vision = LLMVision(llm)
-+    return LLMAgent(llm, search_knowledge=search_knowledge, vision=vision, fallback=RuleAgent()), vision
-+
-+
-+_agent, _vision = _ai_collaborators()
-+app = create_app(agent=_agent, vision=_vision)
 diff --git a/pyproject.toml b/pyproject.toml
-index e37a380..d6620e8 100644
+index 49dc076..1b832d3 100644
 --- a/pyproject.toml
 +++ b/pyproject.toml
-@@ -6,7 +6,9 @@ requires-python = ">=3.12"
+@@ -6,6 +6,7 @@ requires-python = ">=3.12"
  dependencies = [
      "alembic>=1.20.1",
      "fastapi>=0.159.1",
 +    "hangil-rag",
      "networkx>=3.7",
-+    "oneload-agent",
+     "oneload-agent",
      "psycopg[binary]>=3.3.6",
-     "pydantic-settings>=2.16.1",
-     "python-multipart>=0.0.32",
-@@ -30,3 +32,8 @@ select = ["E", "F", "I", "B", "UP", "SIM"]
- 
- [tool.pytest.ini_options]
- testpaths = ["tests"]
-+
-+# R2 agent and R3 search as tarballs: the slim image has no git, so git URLs fail to build.
-+[tool.uv.sources]
+@@ -37,3 +38,5 @@ testpaths = ["tests"]
+ # and pin oneload_agent main by URL instead (see README).
+ [tool.uv.sources]
+ oneload-agent = { path = "../oneload_agent", editable = true }
++# R3 search, pinned to a release tag by URL (the slim image has no git).
 +hangil-rag = { url = "https://github.com/team-onetruck/oneload-rag/archive/refs/tags/v0.2.0.tar.gz" }
-+oneload-agent = { url = "https://github.com/team-onetruck/oneload_agent/archive/54c321f7d86f55f5d3178744088b2c3827d73914.tar.gz" }

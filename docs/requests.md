@@ -15,7 +15,7 @@ R3(RAG·데이터)가 작업하면서 다른 역할에 요청하거나 함께 �
 | ID | 대상 | 요약 | 상태 |
 | --- | --- | --- | --- |
 | RQ-01 | R4 | 백엔드·`oneload-data`가 인용하는 AREX 공식 URL이 404 | 제안 |
-| RQ-02 | R4 | `MockKnowledgeSearch` → `hangil_rag.search_knowledge` 교체 (QA INT-07) | 패치 준비 (backend `c9b8d8a` 기준, `docs/backend-integration/`) |
+| RQ-02 | R4 | `MockKnowledgeSearch` → `hangil_rag.search_knowledge` 교체 (QA INT-07) | Agent·Vision 운영 조립 반영됨. **검색만 Mock** → 2줄 패치 준비 (backend `b1aa5f5`) |
 | RQ-03 | R4 | 같은 Postgres의 `rag` 스키마 사용, 확장 권한, 적재 시점 | 제안 |
 | RQ-04 | R4 | `RuleAgent` 데모 출처 제목·URL이 실제 문서와 다름 | 제안 |
 | RQ-05 | R4 | "도움받을 곳" POI 추가 (고객안내센터, 트래블센터, 환승통로 등) | 제안 |
@@ -426,3 +426,4 @@ R3는 실제 코드를 따랐습니다. 설계서를 고칠지 정해 주세요.
 - 2026-10-23: RAG #3 범위 판정을 pgvector 검색에도 적용
 - 2026-10-23: RQ-07 R2 반영 확인. 패치를 backend `c9b8d8a`·`oneload-agent` 의존성·`hangil-rag` v0.2.0 기준으로 갱신
 - 2026-10-23: RQ-32(근거 판단은 Agent에서, RAG #3 후속) 추가. R6 v2 재검증 결과 반영
+- 2026-10-23: RQ-02 갱신. 백엔드 운영 조립에 LLMAgent·LLMVision 반영됨(backend `f9d790f`~). 검색만 `MockKnowledgeSearch()`라 `hangil_rag.search_knowledge`로 바꾸는 최소 패치로 교체 (68 passed, Docker 확인)

@@ -9,7 +9,7 @@ QA가 P0로 남긴 **INT-07**("Backend 기본 RuleAgent/NoVision, 실제 Agent/V
 | 출처 | 내용 |
 | --- | --- |
 | 설계서 v0.2 2.3, API 명세 v0.3 3장 | 단일 백엔드 프로세스 안에서 Agent·RAG를 **함수 호출**로 연결 (분리하면 내부 HTTP) |
-| 지금 코드 (backend `c9b8d8a`, agent `54c321f`, infra `8587d3b`) | 백엔드는 `app = create_app()` 그대로라 **RuleAgent/NoVision**. compose에는 `db`·`api`·`caddy`만 있고 Agent·RAG 서비스는 없음 |
+| 지금 코드 (backend `b1aa5f5`, agent `eca420e`) | 백엔드 안에서 LLMAgent·LLMVision을 조립함(방안 A로 진행 중). **검색만 `MockKnowledgeSearch()`** |
 | 팀 답변 (RQ-30) | **백엔드와 LangGraph(Agent)는 분리**, Agent가 **MCP 도구 호출**로 RAG를 부름, 서버 안 Docker의 내부 HTTP |
 
 두 가지 방안이 있습니다. R2·R4가 정하면 R3가 자료를 맞춥니다.
@@ -23,15 +23,13 @@ QA가 P0로 남긴 **INT-07**("Backend 기본 RuleAgent/NoVision, 실제 Agent/V
 
 ## 방안 A: 백엔드 안 조립 (패치 초안)
 
+**2026-10-23 갱신 (backend `b1aa5f5`):** R4·R2가 운영 조립(`production_ai()`)에 LLMAgent·LLMVision을 넣었습니다. 남은 건 검색이 `MockKnowledgeSearch()`인 것 하나입니다(QA INT-07 partial). 패치는 그 부분만 바꿉니다.
+
 - 패치: [`backend-ai-wiring.patch`](backend-ai-wiring.patch)
-- `app/config.py`: `ai_mode: Literal["rule", "llm"] = "rule"`
-- `app/main.py`: `llm`이면 `LLMAgent` + 같은 `LLMVision` + `hangil_rag.search_knowledge` + fallback `RuleAgent`를 조립합니다. **기본 `rule`은 지금과 같습니다.**
-- `pyproject.toml`: R3 검색과 R2 Agent를 **GitHub 압축 파일 주소**로 받습니다.
-  - `hangil-rag`: 태그 `v0.2.0` (RAG #3 범위 판정 포함)
-  - `oneload-agent`: R2가 패키지로 만든 커밋 `54c321f` (아직 태그 없음). 지시문·데모 자료도 패키지 안에 들어 있습니다.
-  - 백엔드 이미지(`python:3.12-slim`)에는 git이 없어서 git 주소로 받으면 `docker build`가 "Git executable not found"로 실패합니다(R3 확인).
-  - `langgraph`·`langchain-openai`·`python-dotenv`는 `oneload-agent`가 함께 설치하므로 백엔드에 따로 적지 않습니다.
-  - 참고: `uv lock`을 하면 `langgraph-sdk` 제약 때문에 `websockets`가 17.3 → 16.1.1로 내려갑니다. 백엔드 테스트에는 영향이 없었습니다.
+- `app/main.py`: `MockKnowledgeSearch()` → `hangil_rag.search_knowledge`
+- `pyproject.toml`: `hangil-rag`를 태그 압축 파일 주소(`v0.2.0`)로 추가
+  - 백엔드 이미지(`python:3.12-slim`)에 git이 없어서 git 주소는 빌드가 실패합니다.
+  - `scripts/pin_agent.sh`는 `oneload-agent`만 바꾸므로 이 주소와 충돌하지 않습니다.
 
 ```sh
 cd oneload-backend
@@ -39,22 +37,16 @@ git apply ../oneload-rag/docs/backend-integration/backend-ai-wiring.patch
 uv lock && uv run ruff check . && uv run pytest -q
 ```
 
-**R3가 확인한 것**
+**R3가 확인한 것 (backend `b1aa5f5`, agent `eca420e`, 복제본에서)**
 
 | 확인 | 결과 |
 | --- | --- |
-| backend `c9b8d8a`에 `git apply --check` | ✅ |
-| 기본값(rule)에서 백엔드 테스트·ruff | ✅ 48 passed |
-| `AI_MODE=llm` 조립 | ✅ LLMAgent + 같은 LLMVision + hangil_rag + fallback RuleAgent, `/health` 200 |
-| 백엔드 Docker 이미지 빌드 (`c9b8d8a`의 Dockerfile + 패치) | ✅ 이미지 안에서 `AI_MODE=llm` 조립, `hangil_rag` 문서 13개, Agent 지시문 3개 읽힘 |
-| 백엔드 API 단위 연결 (`scripts/e2e_backend.py`, FakeLLM) | ✅ 6/6 |
+| `git apply --check` | ✅ |
+| ruff·백엔드 테스트 | ✅ 68 passed |
+| `OPENAI_API_KEY`가 있을 때 운영 조립 | ✅ LLMAgent·LLMVision, `agent.search_knowledge is hangil_rag.search_knowledge` |
+| Docker 이미지 (`pin_agent.sh` 후 `docker build`) | ✅ 이미지 안에서도 같은 조립, RAG 문서 13개 |
 
-(2026-10-23, 가짜 키로 조립만 확인. 실제 OpenAI 호출은 하지 않았습니다.)
-
-**방안 A에 남은 일**
-- R4: 패치 적용 후 `uv lock`, 서버에 `AI_MODE=llm`과 `OPENAI_API_KEY` 설정 (infra)
-- R2: Agent에 버전 태그(예: `v0.1.0`)를 달아 주면 커밋 주소 대신 태그 주소로 바꿉니다.
-- Agent 코드를 이미지에 복사하는 일은 이제 필요 없습니다(RQ-07 해결).
+(가짜 키로 조립만 확인. 실제 OpenAI 호출은 하지 않았습니다.)
 
 ## 방안 B: RAG를 compose 서비스로 띄우기 (R3 준비 완료)
 
