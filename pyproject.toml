@@ -1,6 +1,6 @@
 [project]
 name = "hangil-rag"
-version = "0.2.0"
+version = "0.3.0"
 description = "Hangil (한길) R3 RAG: knowledge documents, chunking, loading and search behind the agent's search_knowledge tool"
 requires-python = ">=3.12"
 dependencies = [
