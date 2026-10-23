@@ -1,0 +1,38 @@
+# RAG #3 개선 뒤 확인용 새 보류 검증 질문 (R3 작성, 2026-10-23)
+#
+# 규칙: 개선(범위 판정 · 실시간 구분 · 가격 표현)을 마친 뒤, 실행하기 전에 커밋해 고정한다. 결과를 보고 질문을 고치지 않는다.
+# R3 44문항(eval/retrieval.yaml) · R6 32문항(oneload-qa eval/retrieval_cases.json)과 주제 · 표현이 겹치지 않게 썼다.
+# gold: 이 중 하나라도 상위 3개 안에 있으면 정답. [] 이면 아무 문서도 나오지 않아야 정답.
+# 한계: R3가 쓴 질문이라 완전히 독립된 검증은 아니다. R6 의 새 보류 검증셋으로 다시 확인해야 한다.
+
+cases:
+  # 정답이 있는 질문 (16)
+  - {id: H01, q: "Which floor of Seoul Station has the AREX Express ticket office?", lang: en, train: express, gold: [doc-express-ticket]}
+  - {id: H02, q: "공항 가는 일반열차는 몇 층에서 타요?", lang: ko, train: allstop, gold: [doc-arex-train-types, doc-allstop-ticket]}
+  - {id: H03, q: "How long is the all-stop ride to Terminal 2?", lang: en, train: allstop, gold: [doc-arex-train-types]}
+  - {id: H04, q: "1회용 교통카드 보증금 500원은 언제 돌려받아요?", lang: ko, gold: [doc-deposit-refund]}
+  - {id: H05, q: "Can I pay for a single-journey card with a credit card from my country?", lang: en, train: allstop, gold: [doc-allstop-ticket]}
+  - {id: H06, q: "기후동행카드 1일권 가격", lang: ko, gold: [doc-fare-passes-cards, doc-climate-card-short-term]}
+  - {id: H07, q: "Does the Climate Card work on buses too?", lang: en, gold: [doc-climate-card-short-term]}
+  - {id: H08, q: "티머니 카드 잔액 환불 수수료는요?", lang: ko, gold: [doc-tmoney-card, doc-fare-passes-cards]}
+  - {id: H09, q: "와우패스에 엔화 지폐로 충전할 수 있나요?", lang: ko, gold: [doc-wowpass]}
+  - {id: H10, q: "Where in Seoul can I get an Mpass card?", lang: en, gold: [doc-foreigner-transit-cards, doc-fare-passes-cards]}
+  - {id: H11, q: "지하철 내려서 버스 탈 때 몇 분 안에 타야 환승돼요?", lang: ko, gold: [doc-seoul-transit-basics]}
+  - {id: H12, q: "Is there an information desk inside the AREX station?", lang: en, gold: [doc-seoul-help-desks]}
+  - {id: H13, q: "서울역 도심공항터미널에서 출국심사도 받을 수 있나요?", lang: ko, gold: [doc-seoul-help-desks]}
+  - {id: H14, q: "청소년 지하철 기본운임은 얼마예요?", lang: ko, gold: [doc-fare-passes-cards]}
+  - {id: H15, q: "All-stop fare from Seoul Station to Gimpo Airport", lang: en, train: allstop, gold: [doc-fare-arex-allstop]}
+  - {id: H16, q: "Is the Korea Tour Card still sold?", lang: en, gold: [doc-foreigner-transit-cards]}
+  # 범위 밖 · 실시간: 아무 문서도 나오지 않아야 정답 (12)
+  - {id: H17, q: "명동에서 쇼핑하기 좋은 곳 추천해 줘", lang: ko, gold: []}
+  - {id: H18, q: "What's today's exchange rate for US dollars?", lang: en, gold: []}
+  - {id: H19, q: "근처 게스트하우스 하룻밤 얼마예요?", lang: ko, gold: []}
+  - {id: H20, q: "How many seats are left on the next Express train?", lang: en, train: express, gold: []}
+  - {id: H21, q: "다음 직통열차 잔여석 확인해 줘", lang: ko, train: express, gold: []}
+  - {id: H22, q: "Where can I buy a SIM card at Seoul Station?", lang: en, gold: []}
+  - {id: H23, q: "부산 가는 KTX 시간표 알려줘", lang: ko, gold: []}
+  - {id: H24, q: "택시 기본요금이 얼마예요?", lang: ko, gold: []}
+  - {id: H25, q: "Recommend a day trip from Seoul", lang: en, gold: []}
+  - {id: H26, q: "인천공항 면세점은 몇 시에 열어요?", lang: ko, gold: []}
+  - {id: H27, q: "Is there free Wi-Fi on the subway?", lang: en, gold: []}
+  - {id: H28, q: "공항 라운지 이용하는 방법 알려줘", lang: ko, gold: []}
