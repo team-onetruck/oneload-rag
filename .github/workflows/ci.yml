@@ -27,6 +27,8 @@ jobs:
       # oneload_agent / oneload-backend are private: a read-only token is needed to check them out.
       # Without it (e.g. pull requests from forks) the contract tests are skipped, never silently passed.
       HAS_TEAM_TOKEN: ${{ secrets.TEAM_REPO_TOKEN != '' }}
+      # Token present -> contract tests must run: a failed checkout/import fails the job instead of skipping.
+      RAG_REQUIRE_CONTRACT: ${{ secrets.TEAM_REPO_TOKEN != '' && '1' || '0' }}
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
@@ -68,8 +70,6 @@ jobs:
                   msg = (bad.get("message") or "").replace("\n", " ")[:300]
                   print(f"::error title={case.get('classname')}.{case.get('name')}::{msg}")
           PY
-        env:
-          RAG_REQUIRE_CONTRACT: ${{ env.HAS_TEAM_TOKEN == 'true' && '1' || '0' }}
       - name: Wheel ships the knowledge documents
         run: |
           uv build --wheel -o dist
