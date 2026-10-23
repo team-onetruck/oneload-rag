@@ -17,7 +17,9 @@ queries:
   - {q: 일반열차 표, expect: [poi-allstop-tickets]}
   - {q: 일반열차 표 사는 곳, expect: [poi-allstop-tickets]}
   - {q: 일반열차 승차권, expect: [poi-allstop-tickets]}
-  - {q: 1회용 교통카드, expect: [poi-allstop-tickets]}
+  - {q: 1회용 교통카드, expect: [poi-allstop-tickets, poi-single-use-card-refund]}  # 지도 2026-10-23.1: 반납기 POI 이름에도 들어 있음
+  - {q: 보증금 환급기, expect: [poi-single-use-card-refund]}
+  - {q: deposit refund, expect: [poi-single-use-card-refund]}
   - {q: 교통카드 충전, expect: [poi-allstop-tickets]}
   - {q: all-stop ticket, expect: [poi-allstop-tickets]}
   - {q: all stop train ticket, expect: [poi-allstop-tickets]}

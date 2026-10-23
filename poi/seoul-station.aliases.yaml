@@ -7,7 +7,7 @@
 # 같은 표현이 두 POI 에 있으면 일부러 둘 다 나오게 한 것이다 (예: "arex ticket" → 직통 · 일반 둘 다 → Agent 가 되묻는다).
 
 map_id: seoul-station
-map_version: 2026-10-22.1
+map_version: 2026-10-23.1
 
 pois:
   poi-express-tickets:
@@ -50,6 +50,14 @@ pois:
       - {text: arex ticket, from: phrase}
       - {text: airport railroad ticket, from: phrase}
       - {text: airport train ticket, from: phrase}
+
+  poi-single-use-card-refund:
+    add:
+      - {text: 보증금 환급기, from: floor-sign}  # 2019 스트리트뷰 B3 기계 표기 (photos/seoul-station-streetview)
+      - {text: 보증금 환급, from: phrase}
+      - {text: 보증금 돌려받는 곳, from: phrase}
+      - {text: deposit refund, from: phrase}
+      - {text: get my deposit back, from: phrase}
 
   poi-express-platform:
     add:
