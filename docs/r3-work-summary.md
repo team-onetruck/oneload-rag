@@ -25,6 +25,7 @@
 | **촬영·개인정보 절차 초안** (`docs/photo-privacy.md`) | 답사 사진의 동의, 위치정보 제거, 얼굴 블러, 두 사람 확인 절차 |
 | **실제 임베딩 비교** | OpenAI 임베딩으로 pgvector에 적재해 같은 평가셋으로 비교. 지금 문서 규모에서는 키워드 검색이 비슷하거나 더 나아서(38/40 vs 36/40) **MVP는 키워드 검색 유지를 권함**. pgvector 1회 검색은 약 0.2초 |
 | **버전 태그 `v0.1.0`** | 백엔드가 `pip install "hangil-rag @ git+https://github.com/team-onetruck/oneload-rag@v0.1.0"`로 바로 설치 가능 |
+| **MCP 서버** | Agent가 도구 호출로 RAG를 부를 수 있게 `search_knowledge`를 MCP 도구로 열었습니다. Docker 이미지를 서버 안에 띄우면 내부 HTTP(`http://<컨테이너>:8000/mcp`)로 부릅니다. LangChain 어댑터로 호출되는 것까지 확인했습니다 |
 | **자동 검사(CI)** | GitHub에 올릴 때마다 테스트 77개가 자동으로 돎. 실제 pgvector DB에 넣고 찾는 것까지 확인. 지금 통과 중 |
 
 ## 3. 역할별로 알아야 할 것 · 부탁

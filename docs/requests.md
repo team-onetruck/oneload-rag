@@ -43,7 +43,7 @@ R3(RAG·데이터)가 작업하면서 다른 역할에 요청하거나 함께 �
 | RQ-27 | R4 | 장소 별칭 사전(`poi/`)을 지도 POI `aliases`에 반영 | 제안 |
 | RQ-28 | R4·R2 | `search_pois`는 "질문이 별칭 안에 통째로 있을 때만" 찾음 → 낱말 단위 비교 검토 | 제안 |
 | RQ-29 | R6·R1 | 촬영·개인정보 처리 절차 초안(`docs/photo-privacy.md`)의 ⚠️ 항목 결정 | 제안 |
-| RQ-30 | 요청자·R2·R4 | RAG를 MCP 서버로도 제공 (용도·실행 방식 확인 필요) | 확인 중 |
+| RQ-30 | 요청자·R2·R4 | RAG를 MCP 서버로도 제공 | 반영 (MCP 서버 + Docker). 구조 확인 필요 |
 | RQ-31 | R4·infra | 배포 때 Agent 코드(`hangil_r2/`, `prompts/`)를 서버로 복사 + `AI_MODE=llm` secret | 제안 |
 
 ## R4 (Backend · 공간 데이터)
@@ -362,6 +362,26 @@ R3는 실제 코드를 따랐습니다. 설계서를 고칠지 정해 주세요.
 - 장기적으로는 RQ-07(Agent 패키지화) 뒤 git 의존성으로 바꾸는 방법 B가 깔끔합니다.
 - 참고: 이번 시험이 Python 3.12(백엔드 버전)에서 돌았으므로 Agent는 3.12에서도 동작합니다.
 
+### RQ-30 반영 (2026-10-23)
+
+- **받은 답변**
+  1. Agent가 LLM 도구 호출로 MCP를 부름
+  2. 서버 안에서 Docker로 띄우고 내부 HTTP로 호출
+  3. 백엔드와 LangGraph(Agent)는 분리되어 있음
+- **R3가 만든 것**
+  - `python -m hangil_rag.mcp_server`: streamable HTTP, `/mcp`, `/health`
+  - 도구 `search_knowledge(query, language, train_type)`
+  - `Dockerfile`
+- **R3가 확인한 것**
+  - 같은 Docker 네트워크의 다른 컨테이너에서 `http://hangil-rag:8000/mcp` 호출 정상
+  - `langchain-mcp-adapters` 0.3.2(MCP 클라이언트 1.30)로 호출 정상
+  - CI가 매번 이미지를 빌드해 헬스 체크와 도구 호출까지 확인
+- **R2에게:** README의 `MultiServerMCPClient` 예시로 도구를 불러오면 됩니다. 도구 오류(`isError`)는 근거 없음으로 보류해 주세요.
+- **R4·infra에게:** RAG 컨테이너를 같은 Docker 네트워크에 띄워 주세요. 기본은 메모리 검색이라 DB와 키가 필요 없습니다.
+- **확인 필요 (구조):** "백엔드와 LangGraph가 분리"되어 있다면, RQ-02·RQ-31의 연결 패치(`docs/backend-integration/`)가 전제한 "백엔드 안에서 `LLMAgent`를 함수로 조립"과 다를 수 있습니다. 실제 서비스 구성을 R2·R4가 알려 주시면 패치와 안내를 맞추겠습니다.
+  - 백엔드 → Agent: 별도 서비스로 부르나요?
+  - Agent → RAG: MCP로 부르나요?
+
 ## 변경 이력
 
 - 2026-10-22: 처음 작성. RQ-01~RQ-15
@@ -373,3 +393,4 @@ R3는 실제 코드를 따랐습니다. 설계서를 고칠지 정해 주세요.
 - 2026-10-23: RQ-14 반영 (TEAM_REPO_TOKEN 등록, CI 계약 테스트 실행 확인)
 - 2026-10-23: RQ-30(MCP 서버 요청) 추가. 이슈 #1(CI 필수 모드)·#2(README Vision 연결) 수정
 - 2026-10-23: RQ-02 패치 준비, RQ-31(배포 때 Agent 복사·AI_MODE) 추가
+- 2026-10-23: RQ-30 반영 (MCP 서버, Docker, CI 확인). 백엔드-Agent 분리 구조 확인 요청

@@ -21,6 +21,7 @@ R3가 맡은 이용 안내 검색 모듈입니다. Agent(R2)의 `search_knowledg
 | `docs/photo-privacy.md` | 촬영 자료·개인정보 처리 절차 초안 |
 | `docs/r3-work-summary.md` | 팀원용 쉬운 설명 |
 | `docs/backend-integration/` | R4용 백엔드 연결 패치 초안과 안내 (QA INT-07) |
+| `src/hangil_rag/mcp_server.py`, `Dockerfile` | MCP 서버 (Agent가 도구 호출로 부름, Docker 내부 HTTP) |
 | `scripts/e2e_backend.py` | 백엔드 API로 Agent + RAG 연결을 끝까지 확인 (FakeLLM, 로컬 compose DB) |
 
 ## 설치
@@ -55,6 +56,33 @@ app = create_app(agent=agent, vision=vision)
 
 - **검색 방식 선택:** 기본은 메모리 검색입니다. `RAG_BACKEND=pgvector`이면 pgvector를 쓰며, 이때는 먼저 [적재](#pgvector-적재)해야 합니다.
 - **장애 처리:** 검색 장애가 나면 `SearchUnavailable`을 던집니다. Agent(`hangil_r2`)가 같은 프로세스에 있으면 이 예외는 Agent의 `ToolUnavailable`이기도 합니다. 따라서 Agent는 감싸는 코드 없이 `cannot_answer`로 보류합니다.
+
+## MCP 서버 (R2 Agent의 도구 호출용)
+
+Agent가 LLM 도구 호출로 RAG를 부르는 구성(서버 안 Docker, 내부 HTTP)을 위해 `search_knowledge`를 MCP 도구로도 엽니다. 파이썬 함수 `hangil_rag.search_knowledge`는 그대로 쓸 수 있습니다.
+
+```sh
+docker build -t hangil-rag .
+docker run -p 127.0.0.1:8000:8000 hangil-rag         # 같은 Docker 네트워크에서는 http://<컨테이너 이름>:8000/mcp
+# 로컬에서 바로: uv sync --extra mcp && uv run python -m hangil_rag.mcp_server
+```
+
+| 항목 | 내용 |
+| --- | --- |
+| 주소 | `POST /mcp` (streamable HTTP, stateless, JSON 응답). `GET /health`는 Docker healthcheck용 |
+| 도구 | `search_knowledge(query, language="ko"\|"en", train_type="express"\|"allstop"\|null)` |
+| 결과 | `{"result": [KnowledgeHit, ...]}`: 최대 3개, 필드는 `document_id`, `title`, `excerpt`, `source_url`, `verified_at`, `scope`. 빈 목록이면 확인된 정보 없음 |
+| 장애 | 검색 장애는 도구 오류(`isError`)로 돌아갑니다. Agent는 근거 없음으로 보류하면 됩니다 |
+| 설정 | `RAG_MCP_HOST`·`RAG_MCP_PORT`(기본 `0.0.0.0:8000`), 검색 설정은 아래 환경 변수와 같음 |
+
+R2(LangGraph)에서 쓰는 예입니다. `langchain-mcp-adapters` 0.3.2(MCP 클라이언트 1.30)로 이 서버(MCP 2.3)를 호출하는 것을 확인했습니다.
+
+```python
+from langchain_mcp_adapters.client import MultiServerMCPClient
+
+client = MultiServerMCPClient({"rag": {"transport": "streamable_http", "url": "http://hangil-rag:8000/mcp"}})
+tools = await client.get_tools()  # [search_knowledge]
+```
 
 ## 검색
 

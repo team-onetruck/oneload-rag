@@ -70,6 +70,18 @@ jobs:
                   msg = (bad.get("message") or "").replace("\n", " ")[:300]
                   print(f"::error title={case.get('classname')}.{case.get('name')}::{msg}")
           PY
+      - name: MCP server image builds and answers over HTTP
+        run: |
+          docker build -q -t hangil-rag:ci .
+          docker run -d --name rag -p 127.0.0.1:18000:8000 hangil-rag:ci
+          for i in $(seq 30); do curl -fs http://127.0.0.1:18000/health && break; sleep 1; done
+          uv run --no-sync python -c "import asyncio; from mcp import Client
+          async def main():
+              async with Client('http://127.0.0.1:18000/mcp') as c:
+                  r = await c.call_tool('search_knowledge', {'query': '보증금 환급'})
+                  assert not r.is_error and r.structured_content['result'][0]['document_id'] == 'doc-deposit-refund', r
+          asyncio.run(main())"
+          docker rm -f rag
       - name: Wheel ships the knowledge documents
         run: |
           uv build --wheel -o dist

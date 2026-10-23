@@ -11,6 +11,7 @@ dependencies = [
 [project.optional-dependencies]
 pgvector = ["psycopg[binary]>=3.3"]
 openai = ["openai>=1.60"]
+mcp = ["mcp>=2.3,<3"]
 
 [dependency-groups]
 dev = [
