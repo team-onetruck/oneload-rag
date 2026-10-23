@@ -17,7 +17,7 @@ from pathlib import Path
 import yaml
 
 HERE = Path(__file__).resolve().parent
-STATUSES = {"desk", "placeholder", "field"}
+STATUSES = {"desk", "placeholder", "photo", "field"}
 
 
 def find(env: str, name: str) -> Path | None:

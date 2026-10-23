@@ -6,11 +6,13 @@
 # status
 #   desk        공식 자료(안내도 · 역 안내 페이지)에 적힌 시설 이름. 실제 표지판 문구 · 위치와 다를 수 있다
 #   placeholder oneload-data 지도의 현재 임시값을 그대로 옮긴 것
+#   photo       공개 사진·영상·스트리트뷰 속 표지판에서 읽은 문구 (2019~2026). 촬영 시기마다 표지가 다를 수 있다.
+#               사진 파일은 저작권 때문에 레포 밖(hangil/photos/, 내부용)에 두고, 여기에는 문구와 원래 출처 URL만 적는다
 #   field       현장에서 확인 (아직 없음)
 # 실제 정확도는 현장 사진으로만 잴 수 있다. 이 파일은 매칭 로직 개발 · 시연용이다.
 
 map_id: seoul-station
-map_version: 2026-10-22.1 # oneload-data maps/seoul-station.json 의 노드 기준
+map_version: 2026-10-23.1 # oneload-data maps/seoul-station.json 의 노드 기준
 
 sources:
   arex-map:
@@ -23,8 +25,28 @@ sources:
     note: AREX 서울역 안내 (층별 시설 설명, 승강장 방향)
   current-map:
     url: https://github.com/team-onetruck/oneload-data/blob/main/maps/seoul-station.json
-    checked_at: 2026-10-22
-    note: 답사 전 임시값 (2026-10-22.1)
+    checked_at: 2026-10-23
+    note: 답사 전 임시값 (2026-10-23.1)
+  photo-youtube-2026:
+    url: https://www.youtube.com/watch?v=ZHzWbnz2ErE
+    checked_at: 2026-10-23
+    note: 유튜브 영상 캡처 15장 (직통 하차 → 1·4호선 환승 구역, GTX-A 표지 있음). 내부 폴더 photos/seoul-station-youtube-ZHzWbnz2ErE
+  photo-arex-blog-2021:
+    url: https://arexkorea.blogspot.com/2021/06/this-stop-is-seoul-station-heart-of.html
+    checked_at: 2026-10-23
+    note: 공항철도 블로그 사진 18장 (2021-06, B6·B3·B7 층 표시). 내부 폴더 photos/seoul-station-arex-blog-2021
+  photo-blog-2023:
+    url: https://kangdbang.tistory.com/1665
+    checked_at: 2026-10-23
+    note: 개인 블로그 사진 12장 (2023 무렵, B7 → B3 → 2층 KTX). 내부 폴더 photos/seoul-station-kangdbang-blog
+  photo-konest:
+    url: https://www.konest.com/contents/airport_info_detail.html?id=1445
+    checked_at: 2026-10-23
+    note: 여행 안내 사이트 사진 4장 (1·4호선 → 공항철도). 내부 폴더 photos/seoul-station-konest
+  streetview-2019:
+    url: https://www.google.com/maps/@?api=1&map_action=pano&pano=guaisedJ38EkMqoIZcCUxA&heading=342&pitch=0&fov=90
+    checked_at: 2026-10-23
+    note: 구글 스트리트뷰 (B3 2019-11, B2 2019-07). 장면별 URL은 내부 폴더 photos/seoul-station-streetview/README.md
 
 nodes:
   - node_id: ktx-hall
@@ -34,6 +56,18 @@ nodes:
         sign_texts: [KTX, 맞이방, Departure Hall]
         source: current-map
         status: placeholder
+      - landmark_id: lm-ktx-hall-platforms-photo
+        sign_texts: [타는 곳, Platforms, 11번홈~14번홈 타는 곳]
+        source: photo-blog-2023
+        status: photo
+      - landmark_id: lm-ktx-hall-arex-entrance-photo
+        sign_texts: [공항철도 도심공항터미널, Airport Railroad & City Airport Terminal]
+        source: photo-blog-2023
+        status: photo
+      - landmark_id: lm-ktx-hall-arex-elevator-photo
+        sign_texts: [공항철도 타는 곳, Airport Railroad, 직통열차(B2), 일반열차(B3)]
+        source: photo-blog-2023
+        status: photo
     notes: 안내도상 공항철도 지상 2층 왼쪽에 15번 출구, 오른쪽에 KTX 입구. 실제 표지판 문구는 답사 필요
 
   - node_id: line1-gates
@@ -43,6 +77,10 @@ nodes:
         sign_texts: [공항철도, Airport Railroad, 1호선, Line 1]
         source: current-map
         status: placeholder
+      - landmark_id: lm-line1-transfer-gate-photo
+        sign_texts: [1호선, Line 1, 추가요금 없음, No additional fare, 비상 게이트, EMERGENCY GATE]
+        source: photo-youtube-2026
+        status: photo
     confusable_with: [line4-gates]
     notes: 서울교통공사 구역이라 AREX 자료에 없음. '공항철도'만 보이면 4호선 쪽과 구분 불가
 
@@ -53,6 +91,14 @@ nodes:
         sign_texts: [공항철도, Airport Railroad, 4호선, Line 4]
         source: current-map
         status: placeholder
+      - landmark_id: lm-line4-transfer-gate-photo
+        sign_texts: [환승, Transfer, 4호선, Line 4, GTX A, 추가요금 없음, No additional fare]
+        source: photo-youtube-2026
+        status: photo
+      - landmark_id: lm-line4-transfer-sign-photo
+        sign_texts: [4호선, 갈아타는 곳, Transfer]
+        source: photo-arex-blog-2021
+        status: photo
     confusable_with: [line1-gates]
 
   - node_id: arex-concourse
@@ -84,8 +130,14 @@ nodes:
 
   - node_id: express-gates
     floor_id: B2
-    landmarks: []
-    notes: 공식 자료에 개찰구 표기 없음. 답사 필요
+    landmarks:
+      - landmark_id: lm-express-gates-photo
+        sign_texts: [인천국제공항(직통열차), 직통열차 타는 곳, Express Train, 직통전용, Express Only]
+        source: photo-youtube-2026
+        status: photo
+    notes: >-
+      공식 자료에 개찰구 표기 없음. 2026 영상과 2019 스트리트뷰(B2)에 주황색 개찰구, 그 너머 B2 ↔ B7 엘리베이터.
+      개찰구 옆에 프리미엄 라운지(2019)
 
   - node_id: allstop-tickets
     floor_id: B3
@@ -106,6 +158,14 @@ nodes:
         sign_texts: ["1,4호선 갈아타는 곳", "Transfer to Line 1, Line 4"]
         source: arex-map
         status: desk
+      - landmark_id: lm-b3-deposit-refund-photo
+        sign_texts: [보증금 환급기, Deposit Refund Machine, 서울역 열차시각표, Seoul Station Time Table]
+        source: streetview-2019
+        status: photo
+      - landmark_id: lm-b3-floor-pillar-photo
+        sign_texts: [지하 3층(B3), 일반열차, All stop Train, 도심공항터미널]
+        source: photo-konest
+        status: photo
     confusable_with: [arex-concourse, allstop-gates]
     notes: >-
       역 안내: B3 중앙에 고객안내센터와 승차권 발매기, 1·4호선 갈아타는 곳이 B3 에서 이어짐.
@@ -114,8 +174,14 @@ nodes:
 
   - node_id: allstop-gates
     floor_id: B3
-    landmarks: []
-    notes: 공식 자료에 개찰구 표기 없음. 답사 필요
+    landmarks:
+      - landmark_id: lm-allstop-gates-photo
+        sign_texts: [공항철도(일반), All stop Train, 공항철도 서울역 막차 안내]
+        source: streetview-2019
+        status: photo
+    notes: >-
+      2019 스트리트뷰: B3 엘리베이터 앞에서 "← 공항철도(일반) All stop Train" 방향으로 개찰구. 개찰구를 정면으로 볼 때
+      왼쪽 뒤편 벽에 일반열차 승차권 발매기·교통카드 충전기와 보증금 환급기 (allstop-tickets 카드)
 
   - node_id: express-platform
     floor_id: B7
@@ -136,3 +202,57 @@ nodes:
         status: desk
     confusable_with: [express-platform]
     notes: 역 안내 - 일반열차 승강장은 좌측으로 가면 공덕역 방향
+
+# ── 지도에 아직 없는 지점 (R4 제안, 사진 근거) ─────────────────────────────────
+# evaluate.py 는 이 목록을 보지 않는다. 지도에 노드를 만들면 위 nodes 로 옮긴다.
+proposed_nodes:
+  - node_id: express-arrivals-transfer
+    floor_id: null  # 층 표시가 사진에 없음. 확인 필요
+    landmarks:
+      - sign_texts: [직통열차 하차고객 전용게이트, Gate for Express Train passengers (transfer to Subway), EXPRESS TRAIN ARRIVALS ONLY, 직통열차 승차권 효력 만료]
+        source: photo-youtube-2026
+      - sign_texts: [직통열차 하차고객 전용발매기, Subway Ticket Machine for Express Train passengers]
+        source: photo-youtube-2026
+      - sign_texts: [주황색 게이트에 교통카드 태그, Touch Tmoney Card at the Orange Gate, 발매기에서 1회권 발매 후 파란색 게이트에 태그]
+        source: photo-youtube-2026
+    notes: 직통열차에서 내려 지하철로 갈아타는 곳. 주황(교통카드)·파란(1회권) 게이트, 전용발매기 3~4대, 근처에 1·4호선 환승 개찰구와 계단·에스컬레이터
+
+  - node_id: b3-exit15-gates
+    floor_id: B3
+    landmarks:
+      - sign_texts: [나가는 곳, Way Out, "15", KTX, 도심공항터미널, City Airport Terminal]
+        source: streetview-2019
+      - sign_texts: [현위치 지하3층 (B3), You are on the B3, KTX 나가는 곳 15 출구]
+        source: photo-arex-blog-2021
+      - sign_texts: [게이트 통과 후 지상 2층으로 올라가세요, (여기는 지하 3층), This is B3]
+        source: photo-blog-2023
+    notes: >-
+      B3에서 KTX·15번 출구로 나가는 개찰구. 개찰구를 지나면 ATM, 그 오른쪽에 계단과 지상으로 가는 긴 에스컬레이터 (2019 스트리트뷰).
+      개찰구 옆 승차권자동정산기. 2023 사진에는 "KTX 이용 고객은 게이트 통과 후 지상 2층으로" 안내판
+
+  - node_id: b6-transfer-escalators
+    floor_id: B6
+    landmarks:
+      - sign_texts: [지하 6층, B6, 갈아타는 곳, KTX, 나가는 곳]
+        source: photo-arex-blog-2021
+    notes: B7 승강장에서 올라온 중간층. "갈아타는 곳 KTX 2층(2F) / 1·4 지하3층(B3)" 표지 아래 상행 에스컬레이터. 이 층에서 이용할 수 없는 엘리베이터가 있음
+
+# 사진으로 본 경로 (R4 edges 제안. 거리·방향은 현장 확인 전)
+proposed_routes:
+  - name: 직통·일반열차 도착 → KTX
+    path: [express-platform/allstop-platform, b6-transfer-escalators, b3-exit15-gates, ktx-hall]
+    evidence: "B7 에스컬레이터 '갈아타는 곳 KTX / 1·4' → B6 → B3 개찰구(15 / KTX) → 긴 에스컬레이터 → 2층 맞이방 '타는 곳 11~14번홈'"
+  - name: 도착 → 1·4호선
+    path: [express-platform/allstop-platform, b6-transfer-escalators, line1-gates/line4-gates]
+    evidence: 1·4호선 갈아타는 곳은 B3 (공식 안내도). 환승 개찰구 "추가요금 없음"
+  - name: 직통열차 하차 → 지하철
+    path: [express-platform, express-arrivals-transfer, line1-gates/line4-gates]
+    evidence: 하차 전용 게이트와 전용발매기 (2026 영상). 층은 확인 필요
+  - name: 2층에서 공항철도 타러 가기
+    path: [ktx-hall, express-gates/allstop-gates]
+    evidence: "2층 엘리베이터 '공항철도 타는 곳 직통열차(B2) 일반열차(B3)' (2023 사진)"
+
+# 지도와 다른 점 (R4 확인 요청)
+map_differences:
+  - 1·4호선 개찰구: 지도는 B1, 공식 안내도는 1·4호선 갈아타는 곳이 B3 (RQ-17)
+  - 1회용 교통카드 반납기: 지도는 B1(1호선 개찰구 옆). 공항철도 쪽 보증금 환급기는 2019 스트리트뷰 기준 B3 일반열차 발매기 옆 → 서로 다른 기계일 수 있음

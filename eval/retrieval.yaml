@@ -50,8 +50,12 @@ cases:
   - {id: R36, q: "I lost my wallet.", lang: en, gold: [doc-seoul-help-desks]}
   - {id: R37, q: "지갑을 잃어버렸어요", lang: ko, gold: [doc-seoul-help-desks]}
   - {id: R38, q: "Can I check in for my flight at Seoul Station?", lang: en, gold: [doc-seoul-help-desks, doc-express-ticket]}
-  - {id: R39, q: "1호선으로 갈아타는 곳이 어디예요?", lang: ko, gold: [doc-allstop-ticket, doc-seoul-help-desks], from: P4}
+  - {id: R39, q: "1호선으로 갈아타는 곳이 어디예요?", lang: ko, gold: [doc-allstop-ticket, doc-seoul-help-desks, doc-seoul-arex-transfer], from: P4}
   - {id: R40, q: "Where is the Express platform at Seoul Station?", lang: en, gold: [doc-arex-train-types], from: P1}
+  # 메인 시나리오 (2026-10-23, doc-seoul-arex-transfer 추가 뒤 작성. 회귀 확인용)
+  - {id: R45, q: "공항철도에서 내려서 4호선으로 갈아타려면 몇 층으로 가요?", lang: ko, gold: [doc-seoul-arex-transfer]}
+  - {id: R46, q: "Can I transfer to KTX at Seoul Station from the airport train?", lang: en, gold: [doc-seoul-arex-transfer]}
+  - {id: R47, q: "서울역 공항철도 승강장은 몇 층이에요?", lang: ko, gold: [doc-seoul-arex-transfer, doc-arex-train-types]}
   # 범위 밖: 아무 문서도 나오지 않아야 정답
   - {id: R41, q: "What is the weather tomorrow?", lang: en, gold: [], from: Q15}
   - {id: R42, q: "근처 맛집 추천해줘", lang: ko, gold: []}
