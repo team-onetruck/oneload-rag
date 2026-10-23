@@ -27,7 +27,7 @@ QA가 P0로 남긴 **INT-07**("Backend 기본 RuleAgent/NoVision, 실제 Agent/V
 
 - 패치: [`backend-ai-wiring.patch`](backend-ai-wiring.patch)
 - `app/main.py`: `MockKnowledgeSearch()` → `hangil_rag.search_knowledge`
-- `pyproject.toml`: `hangil-rag`를 태그 압축 파일 주소(`v0.2.0`)로 추가
+- `pyproject.toml`: `hangil-rag`를 태그 압축 파일 주소(`v0.3.0`)로 추가
   - 백엔드 이미지(`python:3.12-slim`)에 git이 없어서 git 주소는 빌드가 실패합니다.
   - `scripts/pin_agent.sh`는 `oneload-agent`만 바꾸므로 이 주소와 충돌하지 않습니다.
 

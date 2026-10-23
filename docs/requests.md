@@ -64,7 +64,7 @@ R3(RAG·데이터)가 작업하면서 다른 역할에 요청하거나 함께 �
 ### RQ-02 RAG 연결
 
 - `create_app()`에서 `MockKnowledgeSearch()`를 `hangil_rag.search_knowledge`로 바꿉니다. 코드는 레포 README의 "백엔드 연결"에 있습니다.
-- 백엔드 의존성에 `hangil-rag`를 태그 압축 파일 주소(`…/archive/refs/tags/v0.2.0.tar.gz`)로 추가합니다. 백엔드 이미지에 git이 없어 git 주소는 빌드가 실패합니다.
+- 백엔드 의존성에 `hangil-rag`를 태그 압축 파일 주소(`…/archive/refs/tags/v0.3.0.tar.gz`)로 추가합니다. 백엔드 이미지에 git이 없어 git 주소는 빌드가 실패합니다.
 - 기본은 DB가 필요 없는 메모리 검색입니다. pgvector는 `RAG_BACKEND=pgvector`로 켭니다.
 
 ### RQ-03 pgvector 저장 위치

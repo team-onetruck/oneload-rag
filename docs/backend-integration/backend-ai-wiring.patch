@@ -38,4 +38,4 @@ index 49dc076..1b832d3 100644
  [tool.uv.sources]
  oneload-agent = { path = "../oneload_agent", editable = true }
 +# R3 search, pinned to a release tag by URL (the slim image has no git).
-+hangil-rag = { url = "https://github.com/team-onetruck/oneload-rag/archive/refs/tags/v0.2.0.tar.gz" }
++hangil-rag = { url = "https://github.com/team-onetruck/oneload-rag/archive/refs/tags/v0.3.0.tar.gz" }
