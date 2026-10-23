@@ -15,12 +15,12 @@ R3(RAG·데이터)가 작업하면서 다른 역할에 요청하거나 함께 �
 | ID | 대상 | 요약 | 상태 |
 | --- | --- | --- | --- |
 | RQ-01 | R4 | 백엔드·`oneload-data`가 인용하는 AREX 공식 URL이 404 | 제안 |
-| RQ-02 | R4 | `MockKnowledgeSearch` → `hangil_rag.search_knowledge` 교체 (QA INT-07) | 패치 준비 (`docs/backend-integration/`) |
+| RQ-02 | R4 | `MockKnowledgeSearch` → `hangil_rag.search_knowledge` 교체 (QA INT-07) | 패치 준비 (backend `c9b8d8a` 기준, `docs/backend-integration/`) |
 | RQ-03 | R4 | 같은 Postgres의 `rag` 스키마 사용, 확장 권한, 적재 시점 | 제안 |
 | RQ-04 | R4 | `RuleAgent` 데모 출처 제목·URL이 실제 문서와 다름 | 제안 |
 | RQ-05 | R4 | "도움받을 곳" POI 추가 (고객안내센터, 트래블센터, 환승통로 등) | 제안 |
 | RQ-06 | R2 | 검색 예외는 `ToolUnavailable`만 잡힘 | 제안 |
-| RQ-07 | R2 | Agent를 pip으로 설치할 수 있게 패키지화 | 제안 |
+| RQ-07 | R2 | Agent를 pip으로 설치할 수 있게 패키지화 | R2 반영 (`54c321f`). 태그 요청 |
 | RQ-08 | R2·R6 | 실제 검색은 출처가 mock보다 많이 붙을 수 있음 | 제안 |
 | RQ-09 | R2 | 문제 해결 문서(`scope: help`)와 "그곳으로 가기" 버튼 | 제안 (RAG 쪽 반영) |
 | RQ-10 | R2·R6·R1 | 커뮤니티 후기를 어디까지 데이터로 쓸지 | R3 결정, 팀 공유 필요 |
@@ -62,7 +62,7 @@ R3(RAG·데이터)가 작업하면서 다른 역할에 요청하거나 함께 �
 ### RQ-02 RAG 연결
 
 - `create_app()`에서 `MockKnowledgeSearch()`를 `hangil_rag.search_knowledge`로 바꿉니다. 코드는 레포 README의 "백엔드 연결"에 있습니다.
-- 백엔드 의존성에 `hangil-rag @ git+https://github.com/team-onetruck/oneload-rag@<tag>`를 추가합니다.
+- 백엔드 의존성에 `hangil-rag`를 태그 압축 파일 주소(`…/archive/refs/tags/v0.2.0.tar.gz`)로 추가합니다. 백엔드 이미지에 git이 없어 git 주소는 빌드가 실패합니다.
 - 기본은 DB가 필요 없는 메모리 검색입니다. pgvector는 `RAG_BACKEND=pgvector`로 켭니다.
 
 ### RQ-03 pgvector 저장 위치
@@ -112,6 +112,8 @@ R3(RAG·데이터)가 작업하면서 다른 역할에 요청하거나 함께 �
 
 - `oneload_agent`에는 `pyproject.toml`이 없어 pip으로 설치할 수 없습니다. 지금은 백엔드가 `sys.path`로 불러와야 합니다.
 - RAG는 `pip install git+...@tag`로 설치할 수 있습니다. Agent도 같은 방식이면 백엔드 의존성 관리가 쉬워집니다.
+- **2026-10-23 R2 반영 (`54c321f`):** `oneload-agent` 패키지(지시문·데모 자료 포함). R3 패치가 압축 파일 주소로 받도록 바꿨고, 백엔드 이미지 빌드·조립·API 연결 6/6을 확인했습니다.
+- **남은 요청:** 버전 태그를 달아 주세요(예: `v0.1.0`). 지금은 커밋 주소로 받습니다.
 
 ### RQ-08 출처 개수 (R6와 함께)
 
@@ -356,11 +358,10 @@ R3는 실제 코드를 따랐습니다. 설계서를 고칠지 정해 주세요.
   - 기본값에서 백엔드 테스트 44개 통과
   - `llm` 모드 조립 확인
   - API 단위 연결 6/6 통과
-- **배포에 필요한 것 (방법 A)**
-  1. 백엔드 CI deploy 작업에서 `oneload_agent` checkout (읽기 토큰 secret)
-  2. `deploy.sh`가 `hangil_r2/`·`prompts/`를 `~/hangil-api`로 복사
-  3. 백엔드 secret `AI_MODE=llm`
-- 장기적으로는 RQ-07(Agent 패키지화) 뒤 git 의존성으로 바꾸는 방법 B가 깔끔합니다.
+- **배포에 필요한 것 (방법 A)**: 2026-10-23 갱신. Agent가 패키지가 되어 복사는 필요 없습니다.
+  - 패치 적용 후 `uv lock` (Agent·RAG가 압축 파일 주소 의존성으로 이미지에 들어감)
+  - 서버 설정 `AI_MODE=llm`, `OPENAI_API_KEY`
+  - ~~백엔드 CI deploy 작업에서 `oneload_agent` checkout, `deploy.sh`로 복사~~ (compose 전환과 RQ-07 해결로 철회)
 - 참고: 이번 시험이 Python 3.12(백엔드 버전)에서 돌았으므로 Agent는 3.12에서도 동작합니다.
 
 ### RQ-30 반영 (2026-10-23)
@@ -406,3 +407,4 @@ R3는 실제 코드를 따랐습니다. 설계서를 고칠지 정해 주세요.
 - 2026-10-23: RQ-31 갱신 (compose 전환 반영, 방안 A/B, git 의존성 빌드 실패와 압축 파일 주소 해결)
 - 2026-10-23: RQ-12 갱신 (RAG #3 범위 밖·실시간 질문 개선, R6 확인 대기)
 - 2026-10-23: RAG #3 범위 판정을 pgvector 검색에도 적용
+- 2026-10-23: RQ-07 R2 반영 확인. 패치를 backend `c9b8d8a`·`oneload-agent` 의존성·`hangil-rag` v0.2.0 기준으로 갱신

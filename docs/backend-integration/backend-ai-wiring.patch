@@ -1,5 +1,5 @@
 diff --git a/app/config.py b/app/config.py
-index 14bdfff..6da9c06 100644
+index 32a6421..ae3015f 100644
 --- a/app/config.py
 +++ b/app/config.py
 @@ -1,5 +1,6 @@
@@ -9,12 +9,12 @@ index 14bdfff..6da9c06 100644
  
  from pydantic_settings import BaseSettings, SettingsConfigDict
  
-@@ -21,6 +22,10 @@ class Settings(BaseSettings):
+@@ -23,6 +24,10 @@ class Settings(BaseSettings):
      max_image_bytes: int = 2 * 1024 * 1024
      recent_messages: int = 10
  
 +    # "llm" wires the R2 agent/vision (OpenAI) and R3 knowledge search; "rule" keeps RuleAgent/NoVision.
-+    # The server sets it with the APP_AI_MODE secret. Tests and local runs stay on "rule".
++    # The server sets it with the AI_MODE environment variable. Tests and local runs stay on "rule".
 +    ai_mode: Literal["rule", "llm"] = "rule"
 +
  
@@ -45,27 +45,25 @@ index 48486df..23e1863 100644
 +_agent, _vision = _ai_collaborators()
 +app = create_app(agent=_agent, vision=_vision)
 diff --git a/pyproject.toml b/pyproject.toml
-index e37a380..d1481b8 100644
+index e37a380..d6620e8 100644
 --- a/pyproject.toml
 +++ b/pyproject.toml
-@@ -6,9 +6,13 @@ requires-python = ">=3.12"
+@@ -6,7 +6,9 @@ requires-python = ">=3.12"
  dependencies = [
      "alembic>=1.20.1",
      "fastapi>=0.159.1",
 +    "hangil-rag",
-+    "langchain-openai==1.7.2",
-+    "langgraph==1.2.16",
      "networkx>=3.7",
++    "oneload-agent",
      "psycopg[binary]>=3.3.6",
      "pydantic-settings>=2.16.1",
-+    "python-dotenv==1.2.4",
      "python-multipart>=0.0.32",
-     "sqlalchemy>=2.0",
-     "uvicorn[standard]>=0.54.0",
-@@ -30,3 +34,6 @@ select = ["E", "F", "I", "B", "UP", "SIM"]
+@@ -30,3 +32,8 @@ select = ["E", "F", "I", "B", "UP", "SIM"]
  
  [tool.pytest.ini_options]
  testpaths = ["tests"]
 +
++# R2 agent and R3 search as tarballs: the slim image has no git, so git URLs fail to build.
 +[tool.uv.sources]
-+hangil-rag = { url = "https://github.com/team-onetruck/oneload-rag/archive/refs/tags/v0.1.0.tar.gz" }
++hangil-rag = { url = "https://github.com/team-onetruck/oneload-rag/archive/refs/tags/v0.2.0.tar.gz" }
++oneload-agent = { url = "https://github.com/team-onetruck/oneload_agent/archive/54c321f7d86f55f5d3178744088b2c3827d73914.tar.gz" }
