@@ -15,8 +15,9 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from e2e_backend import Client, ids, migrate  # noqa: E402  (옆 레포 경로 · DB 설정도 여기서)
+from e2e_backend import Client, ids, migrate  # noqa: E402  (옆 레포 경로 · DB 설정도 여기서. 먼저 와야 함)
 
+# isort: split
 from app.ai.rule_agent import RuleAgent  # noqa: E402
 from app.main import create_app  # noqa: E402
 from fastapi.testclient import TestClient  # noqa: E402
