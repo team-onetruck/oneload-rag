@@ -24,7 +24,7 @@ jobs:
       RAG_AGENT_DIR: ${{ github.workspace }}/oneload_agent
       RAG_BACKEND_DIR: ${{ github.workspace }}/oneload-backend
       RAG_DATA_DIR: ${{ github.workspace }}/oneload-data
-      # oneload_agent / oneload-backend are private: a read-only token is needed to check them out.
+      # The sibling repos are checked out with a read-only token (they were private when this was set up).
       # Without it (e.g. pull requests from forks) the contract tests are skipped, never silently passed.
       HAS_TEAM_TOKEN: ${{ secrets.TEAM_REPO_TOKEN != '' }}
       # Token present -> contract tests must run: a failed checkout/import fails the job instead of skipping.

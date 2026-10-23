@@ -111,7 +111,7 @@ uv run pytest -q
   - 옆 레포가 없으면 skip합니다.
 - **pgvector 연동 테스트**는 `RAG_TEST_DATABASE_URL`(지워도 되는 DB)이 있을 때만 돕니다.
 - **CI**(`.github/workflows/ci.yml`)는 pgvector 서비스 컨테이너와 두 레포 checkout으로 전부 실행합니다.
-  - 두 레포가 private이라 **레포 secret `TEAM_REPO_TOKEN`**(두 레포 읽기 전용 토큰)이 필요합니다.
+  - 옆 레포는 **레포 secret `TEAM_REPO_TOKEN`**(읽기 전용 토큰)으로 받습니다. 처음에는 두 레포가 private이라 필요했고, 지금은 public이 되어 토큰이 없어도 받을 수 있습니다.
   - 토큰이 없으면 계약 테스트는 skip으로 표시됩니다(통과로 처리하지 않음).
 
 - CI(GitHub Actions)는 2026-10-22부터 통과 중입니다. 서비스 컨테이너의 실제 pgvector DB에서 적재·검색 테스트까지 돕니다. 실패하면 실패한 테스트 이름과 메시지가 실행 페이지에 주석으로 남습니다(로그는 로그인 필요).
