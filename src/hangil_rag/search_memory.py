@@ -64,7 +64,7 @@ _ASK_KO = {
 }
 _FILLER_EN = {
     "why", "should", "now", "have", "has", "was", "were", "will", "would", "there", "any", "get", "go", "want",
-    "need", "tell", "let", "know", "be", "with", "from", "by", "your", "our", "we", "if",
+    "need", "tell", "let", "know", "be", "with", "from", "by", "your", "our", "we", "if", "vs", "versus",
 }  # fmt: skip
 # 실시간 현황은 문서로 답할 수 없다 (잔여석 · 빈 좌석 · 실시간). shortcut: 표현 목록, 질문 로그가 쌓이면 보강
 _REALTIME = re.compile(
