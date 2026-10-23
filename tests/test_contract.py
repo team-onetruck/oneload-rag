@@ -42,8 +42,8 @@ if not (AGENT and BACKEND):
 sys.path[:0] = [str(BACKEND), str(AGENT)]
 try:
     from app.ai.contracts import Source
-    from app.ai.rule_agent import _SOURCES
-    from hangil_r2 import FakeLLM, LLMAgent
+    from app.ai.rule_agent import _SOURCES, RuleAgent
+    from hangil_r2 import FakeLLM, LLMAgent, LLMVision
     from hangil_r2.backend.contracts import AgentContext, Slots
     from hangil_r2.backend.guard import guard
     from hangil_r2.backend.mapdata import MapStore
@@ -165,3 +165,45 @@ def test_a14_english():
     assert r.destination.poi_id == "poi-express-tickets"
     assert r.sources[0].title == "Buying an Express train ticket at Seoul Station"
     assert "doc-deposit-refund" not in [s.document_id for s in r.sources]  # "ticket" 하나로 붙지 않음
+
+
+# ── README "백엔드 연결" 예제와 같은 조립 (이슈: Agent 에 vision 을 빠뜨리면 대화 첨부 사진을 안 읽음) ──────────
+class CountingLLM(FakeLLM):
+    """read_scene(사진 읽기) 호출 수를 센다."""
+
+    def __init__(self, **kw):
+        super().__init__(**kw)
+        self.scene_calls = 0
+
+    def read_scene(self, image):
+        self.scene_calls += 1
+        return super().read_scene(image)
+
+
+def readme_wiring(llm):
+    """README 와 같은 모양: 같은 Vision 하나를 Agent 와 create_app 양쪽에 (OpenAILLM 대신 가짜 LLM)."""
+    vision = LLMVision(llm)
+    agent = LLMAgent(llm, search_knowledge=search_knowledge, vision=vision, fallback=RuleAgent())
+    return agent, vision
+
+
+def test_readme_wiring_reads_message_photo():
+    llm = CountingLLM(scene={"image_quality": "usable", "facilities": ["ticket_machine"]})
+    agent, _ = readme_wiring(llm)
+    c = ctx(slots=Slots(train_type="express"))
+    r = guard(agent.handle_message(c, "이거 뭐 눌러?", b"\xff\xd8\xff", None), c.map, c.language)
+    assert llm.scene_calls == 1 and r.status == "answered"
+
+
+def test_readme_wiring_keeps_rag_for_text_questions():
+    agent, _ = readme_wiring(CountingLLM())
+    c = ctx()
+    r = guard(agent.handle_message(c, "보증금 환급은 어떻게 해?", None, None), c.map, c.language)
+    assert r.status == "answered" and r.sources[0].document_id == "doc-deposit-refund"
+
+
+def test_readme_passes_the_same_vision_to_agent_and_create_app():
+    """/localizations 는 create_app(vision=...) 의 것을 쓴다. README 가 두 곳 모두에 넣는지 확인."""
+    readme = (HERE / "README.md").read_text(encoding="utf-8")
+    assert "LLMAgent(llm, search_knowledge=search_knowledge, vision=vision" in readme
+    assert "create_app(agent=agent, vision=vision)" in readme

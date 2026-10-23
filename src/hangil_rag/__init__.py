@@ -1,8 +1,10 @@
 """한길 R3 RAG — R2 Agent 의 search_knowledge 도구 (oneload_agent hangil_r2/knowledge.py KnowledgeSearch).
 
-백엔드 연결 예 (MockKnowledgeSearch 자리):
+백엔드 연결 예 (MockKnowledgeSearch 자리, Vision 은 Agent 와 create_app 양쪽에):
     from hangil_rag import search_knowledge
-    agent = LLMAgent(llm, search_knowledge=search_knowledge, fallback=RuleAgent())
+    vision = LLMVision(llm)
+    agent = LLMAgent(llm, search_knowledge=search_knowledge, vision=vision, fallback=RuleAgent())
+    app = create_app(agent=agent, vision=vision)
 
 RAG_BACKEND=pgvector 이면 pgvector 하이브리드 검색, 아니면 DB 없는 메모리 키워드 검색.
 """

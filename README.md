@@ -39,11 +39,17 @@ pip install "hangil-rag[pgvector,openai] @ git+https://github.com/team-onetruck/
 from hangil_r2 import LLMAgent, LLMVision, OpenAILLM
 from hangil_rag import search_knowledge  # MockKnowledgeSearch 대신
 from app.ai.rule_agent import RuleAgent
+from app.main import create_app
 
 llm = OpenAILLM()
-app.state.agent = LLMAgent(llm, search_knowledge=search_knowledge, fallback=RuleAgent())
-app.state.vision = LLMVision(llm)
+vision = LLMVision(llm)  # 같은 Vision 하나를 두 곳에 넣는다
+agent = LLMAgent(llm, search_knowledge=search_knowledge, vision=vision, fallback=RuleAgent())
+app = create_app(agent=agent, vision=vision)
 ```
+
+- `LLMAgent(vision=...)`: `/messages`에 함께 온 사진(예: 발매기 사진)을 Agent가 읽습니다. **빠뜨리면 대화 첨부 사진을 읽지 않습니다.**
+- `create_app(vision=...)`: `/localizations` 사진 위치 인식에 씁니다.
+- 위 조립은 `tests/test_contract.py`가 CI에서 확인합니다(사진 읽기, 텍스트 질문의 RAG 근거).
 
 - **검색 방식 선택:** 기본은 메모리 검색입니다. `RAG_BACKEND=pgvector`이면 pgvector를 쓰며, 이때는 먼저 [적재](#pgvector-적재)해야 합니다.
 - **장애 처리:** 검색 장애가 나면 `SearchUnavailable`을 던집니다. Agent(`hangil_r2`)가 같은 프로세스에 있으면 이 예외는 Agent의 `ToolUnavailable`이기도 합니다. 따라서 Agent는 감싸는 코드 없이 `cannot_answer`로 보류합니다.
