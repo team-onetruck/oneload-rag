@@ -44,7 +44,7 @@ R3(RAG·데이터)가 작업하면서 다른 역할에 요청하거나 함께 �
 | RQ-28 | R4·R2 | `search_pois`는 "질문이 별칭 안에 통째로 있을 때만" 찾음 → 낱말 단위 비교 검토 | 제안 |
 | RQ-29 | R6·R1 | 촬영·개인정보 처리 절차 초안(`docs/photo-privacy.md`)의 ⚠️ 항목 결정 | 제안 |
 | RQ-30 | 요청자·R2·R4 | RAG를 MCP 서버로도 제공 | 반영 (MCP 서버 + Docker). 구조 확인 필요 |
-| RQ-31 | R4·infra | 배포 때 Agent 코드(`hangil_r2/`, `prompts/`)를 서버로 복사 + `AI_MODE=llm` secret | 제안 |
+| RQ-31 | R4·infra | Agent·RAG를 서버에 올리는 방법 (구조 결정 후 compose 기준) | 구조 결정 대기 |
 
 ## R4 (Backend · 공간 데이터)
 
@@ -382,6 +382,14 @@ R3는 실제 코드를 따랐습니다. 설계서를 고칠지 정해 주세요.
   - 백엔드 → Agent: 별도 서비스로 부르나요?
   - Agent → RAG: MCP로 부르나요?
 
+### RQ-31 갱신 (2026-10-23, backend `493884f` · infra `8587d3b` 확인)
+
+- infra가 launchd에서 **docker compose**(`db`·`api`·`caddy`)로 바뀌어, 처음 제안한 "`deploy.sh`로 `~/hangil-api`에 복사"는 더 이상 맞지 않습니다(QA handoff도 같은 지적).
+- 백엔드는 여전히 `RuleAgent`/`NoVision`이고, compose에 Agent·RAG 서비스는 없습니다.
+- **두 방안 (자세한 내용은 `docs/backend-integration/README.md`)**
+  - **A. 백엔드 안 조립** (설계서 기준): 패치 사용. `hangil-rag`는 git 대신 **태그 압축 파일 주소**로 받아야 합니다. slim 이미지에 git이 없어 빌드가 실패하는 것을 R3가 확인했습니다. Agent 코드를 이미지에 넣는 방법도 필요합니다.
+  - **B. Agent 별도 서비스 + RAG MCP** (팀 답변 기준): compose에 `rag` 서비스를 추가합니다(R3 이미지 준비 완료). 백엔드 → Agent 호출 방식은 R2·R4가 새로 정해야 합니다.
+
 ## 변경 이력
 
 - 2026-10-22: 처음 작성. RQ-01~RQ-15
@@ -394,3 +402,4 @@ R3는 실제 코드를 따랐습니다. 설계서를 고칠지 정해 주세요.
 - 2026-10-23: RQ-30(MCP 서버 요청) 추가. 이슈 #1(CI 필수 모드)·#2(README Vision 연결) 수정
 - 2026-10-23: RQ-02 패치 준비, RQ-31(배포 때 Agent 복사·AI_MODE) 추가
 - 2026-10-23: RQ-30 반영 (MCP 서버, Docker, CI 확인). 백엔드-Agent 분리 구조 확인 요청
+- 2026-10-23: RQ-31 갱신 (compose 전환 반영, 방안 A/B, git 의존성 빌드 실패와 압축 파일 주소 해결)

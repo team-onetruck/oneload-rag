@@ -1,88 +1,86 @@
-# 백엔드에 R2 Agent + R3 RAG 연결하기 (R4용, QA INT-07)
+# 백엔드에 R2 Agent + R3 RAG 연결하기 (R4·infra용, QA INT-07)
 
-QA가 P0로 남긴 **INT-07**("Backend 기본 RuleAgent/NoVision, 실제 Agent/Vision 주입, R3 검색 교체")을 풀기 위한 패치 초안입니다. R3가 백엔드 **복사본**에 적용해 시험했고, 백엔드 레포 자체는 고치지 않았습니다. 적용 여부와 방식은 R4가 정합니다.
+QA가 P0로 남긴 **INT-07**("Backend 기본 RuleAgent/NoVision, 실제 Agent/Vision 주입, R3 검색 교체")에서 R3 몫을 정리한 자료입니다. R3는 백엔드·infra 레포를 수정하지 않았습니다.
 
-## 무엇이 바뀌나
+## 먼저 정할 것: 구조 (2026-10-23 기준)
 
-| 파일 | 변경 |
+코드와 팀에서 들은 구조가 아직 다릅니다.
+
+| 출처 | 내용 |
 | --- | --- |
-| `app/config.py` | `ai_mode: Literal["rule", "llm"] = "rule"` 설정 추가 |
-| `app/main.py` | `ai_mode == "llm"`이면 `LLMAgent`, `LLMVision`, `hangil_rag.search_knowledge`를 조립해 `create_app(agent=..., vision=...)`에 넣음. **기본값 `rule`은 지금과 똑같이** `RuleAgent`/`NoVision` |
-| `pyproject.toml` | `hangil-rag`(git 태그 `v0.1.0`), `langgraph==1.2.16`, `langchain-openai==1.7.2`, `python-dotenv==1.2.4` 추가 |
+| 설계서 v0.2 2.3, API 명세 v0.3 3장 | 단일 백엔드 프로세스 안에서 Agent·RAG를 **함수 호출**로 연결 (분리하면 내부 HTTP) |
+| 지금 코드 (backend `493884f`, infra `8587d3b`) | 백엔드는 `app = create_app()` 그대로라 **RuleAgent/NoVision**. compose에는 `db`·`api`·`caddy`만 있고 Agent·RAG 서비스는 없음 |
+| 팀 답변 (RQ-30) | **백엔드와 LangGraph(Agent)는 분리**, Agent가 **MCP 도구 호출**로 RAG를 부름, 서버 안 Docker의 내부 HTTP |
 
-- 같은 Vision 하나를 Agent(`/messages` 첨부 사진)와 `create_app`(`/localizations`) 양쪽에 넣습니다. RAG 이슈 #2와 Agent 이슈 #2에서 나온 방식입니다.
-- AI 패키지는 `ai_mode == "llm"`일 때만 import합니다. 그래서 테스트와 로컬 실행은 AI 패키지가 없어도 됩니다.
+두 가지 방안이 있습니다. R2·R4가 정하면 R3가 자료를 맞춥니다.
 
-## 적용 방법
+| | 방안 A: 백엔드 안 조립 | 방안 B: Agent 별도 서비스 + RAG MCP |
+| --- | --- | --- |
+| 백엔드 | `create_app(agent=LLMAgent(...))` (아래 패치) | 백엔드가 Agent 서비스를 HTTP로 부르는 클라이언트 필요 (R4·R2가 새로 정함) |
+| Agent → RAG | 함수 `hangil_rag.search_knowledge` | MCP `http://rag:8000/mcp` (R3 준비 완료, 아래 compose 예) |
+| 백엔드 의존성 | `hangil-rag`, `langgraph`, `langchain-openai`, `python-dotenv` + Agent 코드 | 없음 |
+| 근거 | 설계서와 같고, R3가 패치·API 시험 완료 | 팀 답변과 같고, 아직 코드 없음 |
+
+## 방안 A: 백엔드 안 조립 (패치 초안)
+
+- 패치: [`backend-ai-wiring.patch`](backend-ai-wiring.patch)
+- `app/config.py`: `ai_mode: Literal["rule", "llm"] = "rule"`
+- `app/main.py`: `llm`이면 `LLMAgent` + 같은 `LLMVision` + `hangil_rag.search_knowledge` + fallback `RuleAgent`를 조립합니다. **기본 `rule`은 지금과 같습니다.**
+- `pyproject.toml`: `hangil-rag`를 **GitHub 태그 압축 파일 주소**(`…/archive/refs/tags/v0.1.0.tar.gz`)로 받습니다.
+  - 백엔드 이미지(`python:3.12-slim`)에는 git이 없어서 git 주소로 받으면 `docker build`가 "Git executable not found"로 실패합니다(R3 확인).
 
 ```sh
 cd oneload-backend
 git apply ../oneload-rag/docs/backend-integration/backend-ai-wiring.patch
-uv lock                      # 패치에는 uv.lock 이 없어서 새로 만든다
-uv run ruff check . && uv run pytest -q
+uv lock && uv run ruff check . && uv run pytest -q
 ```
 
-## 확인한 것 (2026-10-23, 백엔드 `a82b7be` · Agent `250271e` · RAG `v0.1.0`)
+**R3가 확인한 것**
 
 | 확인 | 결과 |
 | --- | --- |
-| 패치를 실제 백엔드 최신 코드에 적용할 수 있는지 (`git apply --check`) | ✅ |
-| 기본값(`rule`)에서 백엔드 테스트 | ✅ 44 passed, ruff 통과 |
-| `AI_MODE=llm`일 때 조립 | ✅ `LLMAgent` + `LLMVision`(Agent와 같은 객체) + `hangil_rag.search_knowledge` + 실패 시 `RuleAgent`, `/health` 200 |
-| 설정이 없을 때 | ✅ `RuleAgent` / `NoVision` (지금과 같음) |
-| 백엔드 API 단위 연결 (`oneload-rag/scripts/e2e_backend.py`, FakeLLM) | ✅ 6/6: RAG 근거(출처 URL·확인일), 요금 질문 → 요금 문서만, 일반열차 흐름에 직통 문서 없음(A-21), 영어 제목, `/messages` 첨부 사진 읽기, `/localizations`가 같은 Vision 사용 |
-| Python 버전 | 백엔드와 같은 3.12에서 시험 (Agent는 3.13에서 개발됨) |
+| backend `493884f`에 `git apply --check` | ✅ |
+| 기본값(rule)에서 백엔드 테스트 (`a82b7be` 기준) | ✅ 44 passed |
+| `AI_MODE=llm` 조립 | ✅ LLMAgent + 같은 LLMVision + hangil_rag + fallback RuleAgent, `/health` 200 |
+| 백엔드 Docker 이미지 빌드 (`493884f`의 Dockerfile + 패치) | ✅ 압축 파일 주소로 빌드됨. 이미지 안에서 `hangil_rag`(문서 13개)·`langgraph` import |
+| 백엔드 API 단위 연결 (`scripts/e2e_backend.py`, FakeLLM) | ✅ 6/6 |
 
-`AI_MODE=llm` 조립 확인에서는 실제 LLM을 부르지 않았습니다(`/health`만 호출). 실제 OpenAI로 대화하는 시험은 키와 비용이 드니 배포 전에 한 번 따로 하면 됩니다.
+**방안 A에 남은 일:** Agent 코드(`hangil_r2/`와 옆의 `prompts/`)가 백엔드 이미지 안에 있어야 합니다. Agent에 `pyproject.toml`이 없어 의존성으로 넣을 수 없으니(RQ-07), 둘 중 하나가 필요합니다.
+- R2가 패키지로 만들기 → `hangil-rag`처럼 압축 파일 주소 의존성으로 받기
+- 이미지 빌드 때 Agent 레포를 함께 받아 `COPY`하기 (infra의 compose build에 Agent 소스 추가)
 
-## 남은 문제: 서버에서 Agent 코드를 불러오는 방법
+## 방안 B: RAG를 compose 서비스로 띄우기 (R3 준비 완료)
 
-`oneload_agent`에는 `pyproject.toml`이 없어서 pip이나 uv로 설치할 수 없습니다(RQ-07). 시험에서는 `PYTHONPATH`로 불러왔습니다. 서버에 올릴 방법은 두 가지입니다.
+`oneload-rag`의 `Dockerfile`이 MCP 서버 이미지입니다. infra `macserver/compose.yaml`에 서비스 하나를 추가하는 예입니다.
 
-### 방법 A: 지금 바로 (배포 때 복사)
+```yaml
+  rag:
+    image: hangil-rag:latest
+    build:
+      context: ${RAG_DIR:-.}   # oneload-rag checkout
+    restart: unless-stopped
+    # 기본은 DB 없는 메모리 검색이라 설정이 필요 없음. 포트는 공개하지 않고 compose 네트워크 안에서만 씀.
+    # Agent → http://rag:8000/mcp , 상태 확인은 이미지의 HEALTHCHECK(/health)
+```
 
-서버는 `~/hangil-api`(백엔드 복사본)에서 `uv run uvicorn app.main:app`으로 뜹니다. uvicorn은 실행 폴더를 import 경로에 넣으므로, Agent의 **`hangil_r2/`와 `prompts/`**를 그 폴더에 함께 복사하면 됩니다. Agent는 `hangil_r2/` 옆의 `prompts/`에서 프롬프트를 읽습니다.
-
-1. **백엔드 CI의 deploy 작업**에서 Agent 레포도 받아 옵니다. 비공개 레포라 읽기 토큰 secret이 필요합니다(예: `oneload-rag`의 `TEAM_REPO_TOKEN`과 같은 종류).
-
-   ```yaml
-   - uses: actions/checkout@v4
-     with:
-       repository: team-onetruck/oneload_agent
-       path: agent
-       token: ${{ secrets.TEAM_REPO_TOKEN }}
-   - run: infra/macserver/deploy.sh backend data agent
-     env:
-       APP_OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-       APP_AI_MODE: ${{ secrets.AI_MODE }}   # 값: llm
-   ```
-
-2. **`oneload-infra/macserver/deploy.sh`**에서 세 번째 인수로 받은 Agent 폴더를 복사합니다. 백엔드 rsync(`--delete`) **뒤에** 넣어야 지워지지 않습니다.
-
-   ```bash
-   AGENT_SRC="$(cd "$3" && pwd)"
-   rsync -a --delete "$AGENT_SRC/hangil_r2" "$AGENT_SRC/prompts" "$APP/"
-   ```
-
-3. 백엔드 레포 secret에 `AI_MODE=llm`을 추가합니다. `deploy.sh`가 `APP_` 접두사를 떼서 `~/hangil-api.env`에 `AI_MODE=llm`으로 씁니다.
-
-### 방법 B: 나중에 (R2가 패키지로 만들면)
-
-R2가 `oneload_agent`에 `pyproject.toml`을 추가하면(RQ-07) `hangil-rag`처럼 git 의존성으로 넣을 수 있습니다. 다만 비공개 레포라 서버의 `uv sync`에도 읽기 권한이 필요합니다.
+- pgvector로 바꿀 때만 다음이 필요합니다.
+  - 설정: `RAG_BACKEND=pgvector`, `RAG_DATABASE_URL=postgresql://hangil:hangil@db:5432/hangil`, `OPENAI_API_KEY`
+  - 적재: `python -m hangil_rag.ingest` 1회
+  - 다만 R3 평가에서는 메모리 검색이 더 나았습니다(`eval/README.md`).
+- Agent 쪽 연결 예(R2): README의 `MultiServerMCPClient` 예시
+  - `langchain-mcp-adapters` 0.3.2로 확인했습니다.
 
 ## 연결한 뒤 확인
 
 ```sh
-# 백엔드 API 단위 연결 (FakeLLM, 키 불필요, 로컬 compose DB 필요)
+# 방안 A: 백엔드 API 단위 연결 (FakeLLM, 키 불필요, 로컬 compose DB 필요)
 cd oneload-rag
 uv run --project ../oneload-backend --with langgraph==1.2.16 --with python-dotenv==1.2.4 --with ../oneload-rag \
   python scripts/e2e_backend.py
 
-# R2 쪽 호환 점검 (Agent README)
-cd ../oneload_agent
-DATABASE_URL=postgresql+psycopg://hangil:hangil@localhost:54329/hangil_test \
-uv run --project ../oneload-backend --with langgraph==1.2.16 --with python-dotenv==1.2.4 \
-  python scripts/check_backend_compat.py ../oneload-backend --e2e
+# 방안 B: RAG MCP 서버 (CI가 매번 확인하는 것과 같음)
+docker build -t hangil-rag . && docker run -p 127.0.0.1:8000:8000 hangil-rag
+curl http://127.0.0.1:8000/health
 ```
 
-QA(R6)는 지금 Mock 검색으로 검사합니다. 연결 후 R3 검색 상태로 다시 검사하려면 QA 쪽 Agent 조립에서 `MockKnowledgeSearch()`를 `hangil_rag.search_knowledge`로 바꾸면 됩니다(`pip install "hangil-rag @ git+https://github.com/team-onetruck/oneload-rag@v0.1.0"`).
+QA(R6)는 지금 Mock 검색으로 검사합니다. 연결한 뒤에는 실제 RAG 경로로 다시 검사해야 합니다(QA handoff 97·99행).
