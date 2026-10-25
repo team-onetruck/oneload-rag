@@ -15,7 +15,7 @@ R3(RAG·데이터)가 작업하면서 다른 역할에 요청하거나 함께 �
 | ID | 대상 | 요약 | 상태 |
 | --- | --- | --- | --- |
 | RQ-01 | R4 | 백엔드·`oneload-data`가 인용하는 AREX 공식 URL이 404 | 제안 |
-| RQ-02 | R4 | `MockKnowledgeSearch` → `hangil_rag.search_knowledge` 교체 (QA INT-07) | Agent·Vision 운영 조립 반영됨. **검색만 Mock** → 2줄 패치 준비 (backend `b1aa5f5`) |
+| RQ-02 | R4 | `MockKnowledgeSearch` → `hangil_rag.search_knowledge` 교체 (QA INT-07) | **반영** (backend `a355b32`, 2026-10-25, `hangil-rag` v0.3.0). R6 로컬 재검사 API 28/28. 릴리스 설치본 재검사는 남음 |
 | RQ-03 | R4 | 같은 Postgres의 `rag` 스키마 사용, 확장 권한, 적재 시점 | 제안 |
 | RQ-04 | R4 | `RuleAgent` 데모 출처 제목·URL이 실제 문서와 다름 | 제안 |
 | RQ-05 | R4 | "도움받을 곳" POI 추가 (고객안내센터, 트래블센터, 환승통로 등) | 제안 |
@@ -30,7 +30,7 @@ R3(RAG·데이터)가 작업하면서 다른 역할에 요청하거나 함께 �
 | RQ-14 | R1 | CI용 `TEAM_REPO_TOKEN` 등록 | 반영 (2026-10-23, 계약 테스트 CI에서 실행 중) |
 | RQ-15 | R1·R4 | 설계서 v0.2와 실제 코드가 다른 부분 정리 | 제안 |
 | RQ-16 | R4·R6 | 임시 위치 데이터(`localization/`)를 `oneload-data`·QA로 옮기기 | 제안 |
-| RQ-17 | R4 | 지도: 1·4호선 환승 통로가 B2가 아니라 B3에서 이어짐 (공식 자료) | 제안 |
+| RQ-17 | R4 | 지도: 1·4호선 환승 통로가 B2가 아니라 B3에서 이어짐 (공식 자료) | 일부 반영 (지도 2026-10-25.1: 통로는 B3로, 개찰구 노드는 아직 B1) |
 | RQ-18 | R4·R2 | 백엔드 `match_location`은 정확 일치만 해서 일부만 읽히거나 오타 난 글자에 약함 (D-26 근거 자료) | 제안 |
 | RQ-19 | R4 | B2 AREX "트래블센터"와 2층 코레일 "트래블센터" 이름이 같음 | 제안 |
 | RQ-20 | R2 | `KnowledgeHit`에 출처 종류가 없어 Agent가 미확인 정보를 구분할 수 없음 | 제안 |
@@ -46,7 +46,7 @@ R3(RAG·데이터)가 작업하면서 다른 역할에 요청하거나 함께 �
 | RQ-30 | 요청자·R2·R4 | RAG를 MCP 서버로도 제공 | 반영 (MCP 서버 + Docker). 구조 확인 필요 |
 | RQ-31 | R4·infra | Agent·RAG를 서버에 올리는 방법 (구조 결정 후 compose 기준) | 구조 결정 대기 |
 | RQ-32 | R2·R6 | 검색 문서가 질문에 답하는지 Agent(LLM)가 판단, 인용한 자료만 출처로 (RAG #3 후속) | 일부 반영 (agent `eca420e` 답변 검증). 인용한 자료만 출처로는 미반영 |
-| RQ-33 | R4 | 사진 근거 지도 자료: 표지판 문구·제안 노드 3곳·경로 4개, 지도와 다른 점 2개 (`localization/seoul-station.landmarks.yaml`) | 제안 |
+| RQ-33 | R4 | 사진 근거 지도 자료: 표지판 문구·제안 노드 3곳·경로 4개, 지도와 다른 점 2개 (`localization/seoul-station.landmarks.yaml`) | 일부 반영 (지도 2026-10-25.1: 표지판 문구 16개. 제안 노드·경로는 미반영) |
 | RQ-34 | R4·R2 | 실제 LLM 확인에서 나온 것: 1·4호선·KTX POI가 없어 한국어 환승 질문이 "자료 없음", 되묻기에 자유 답변하면 반복 (`eval/agent-live-2026-10-23.md`) | 제안 |
 
 ## R4 (Backend · 공간 데이터)
@@ -64,6 +64,7 @@ R3(RAG·데이터)가 작업하면서 다른 역할에 요청하거나 함께 �
 
 ### RQ-02 RAG 연결
 
+- **반영됨 (2026-10-25):** backend `a355b32`가 아래 패치를 적용했습니다. 운영 Agent가 `hangil_rag.search_knowledge`(v0.3.0, 메모리 검색)를 씁니다.
 - `create_app()`에서 `MockKnowledgeSearch()`를 `hangil_rag.search_knowledge`로 바꿉니다. 코드는 레포 README의 "백엔드 연결"에 있습니다.
 - 백엔드 의존성에 `hangil-rag`를 태그 압축 파일 주소(`…/archive/refs/tags/v0.3.0.tar.gz`)로 추가합니다. 백엔드 이미지에 git이 없어 git 주소는 빌드가 실패합니다.
 - 기본은 DB가 필요 없는 메모리 검색입니다. pgvector는 `RAG_BACKEND=pgvector`로 켭니다.
@@ -450,3 +451,4 @@ R3는 실제 코드를 따랐습니다. 설계서를 고칠지 정해 주세요.
 - 2026-10-23: RQ-02 갱신. 백엔드 운영 조립에 LLMAgent·LLMVision 반영됨(backend `f9d790f`~). 검색만 `MockKnowledgeSearch()`라 `hangil_rag.search_knowledge`로 바꾸는 최소 패치로 교체 (68 passed, Docker 확인)
 - 2026-10-23: RQ-33(사진 근거 지도 자료) 추가. 지도 2026-10-23.1에 맞춰 위치 카드·별칭 사전 버전 갱신
 - 2026-10-23: RQ-34(실제 LLM 확인 결과) 추가, RQ-32 상태 갱신(답변 검증 일부 반영). 시연 시나리오 초안 `docs/demo-scenario.md`
+- 2026-10-26: RQ-02 반영 확인 (backend `a355b32`). RQ-17·RQ-33 일부 반영 (지도 2026-10-25.1). 위치 카드·별칭 사전 버전을 2026-10-25.1로 갱신 (POI·노드는 그대로, 통로 1개·표지판 16개 추가)

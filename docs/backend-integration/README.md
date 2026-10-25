@@ -1,5 +1,7 @@
 # 백엔드에 R2 Agent + R3 RAG 연결하기 (R4·infra용, QA INT-07)
 
+> **2026-10-25 반영됨:** backend `a355b32`가 아래 방안 A 패치를 적용했습니다. 이 문서는 적용 기록과 방안 B(MCP) 참고용으로 남깁니다.
+
 QA가 P0로 남긴 **INT-07**("Backend 기본 RuleAgent/NoVision, 실제 Agent/Vision 주입, R3 검색 교체")에서 R3 몫을 정리한 자료입니다. R3는 백엔드·infra 레포를 수정하지 않았습니다.
 
 ## 먼저 정할 것: 구조 (2026-10-23 기준)

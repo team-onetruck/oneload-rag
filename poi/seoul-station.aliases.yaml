@@ -7,7 +7,7 @@
 # 같은 표현이 두 POI 에 있으면 일부러 둘 다 나오게 한 것이다 (예: "arex ticket" → 직통 · 일반 둘 다 → Agent 가 되묻는다).
 
 map_id: seoul-station
-map_version: 2026-10-23.1
+map_version: 2026-10-25.1
 
 pois:
   poi-express-tickets:
