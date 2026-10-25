@@ -41,6 +41,8 @@ class Doc(BaseModel):
     # community: 이용자 후기 기반 (초기 개발용, 기본 검색에서 제외). field_check: 현장 · 전화 확인
     source_kind: Literal["official", "field_check", "community"]
     other_sources: list[str] = []
+    # scope=fare 필수: 이 문서가 값을 매기는 대상. 가격 질문은 이 말이 있어야 답할 범위로 본다 (RAG #3)
+    priced: list[str] = []
     verified_at: date
     verified_by: str = Field(min_length=1)
     body_ko: str = Field(min_length=1)
@@ -50,6 +52,8 @@ class Doc(BaseModel):
     def _official_has_url(self) -> Doc:
         if self.source_kind != "field_check" and not self.source_url:
             raise ValueError(f"source_kind={self.source_kind} 이면 source_url 필수")
+        if self.scope == "fare" and not any(p.strip() for p in self.priced):
+            raise ValueError("scope=fare 이면 priced(값을 매기는 대상) 필수")
         return self
 
     def title(self, lang: str) -> str:

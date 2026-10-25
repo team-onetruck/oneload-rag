@@ -193,3 +193,73 @@ def test_price_words_find_fare_docs():
 def test_demonstratives_do_not_make_a_question_out_of_scope():
     """'이거 뭐 눌러?' 의 '이거' 는 영어 this 처럼 기능어다 (발매기 사진 질문)."""
     assert MemorySearch()("직통열차 이거 뭐 눌러?", "ko", ctx("express"))
+
+
+# ── RAG #3 후속: 가격 질문은 우리 문서가 값을 매긴 대상(priced)일 때만 ──────────────────────
+def official() -> MemorySearch:
+    return MemorySearch(docs=load_docs(include_community=False))
+
+
+@pytest.mark.parametrize(
+    ("query", "lang"),
+    [
+        ("택시 기본요금이 얼마예요?", "ko"),  # 택시는 문서에 있지만 값을 매기지 않는다
+        ("부산 가는 KTX 요금 얼마예요?", "ko"),  # KTX 는 환승 문서에만 있다
+        ("공항버스 요금은 얼마인가요?", "ko"),
+        ("How much is the taxi fare to the airport?", "en"),
+        ("What is the fee for a lost passport?", "en"),
+    ],
+)
+def test_price_of_something_we_do_not_price_is_empty(query, lang):
+    assert official()(query, lang, {"slots": {}}) == []
+
+
+@pytest.mark.parametrize(
+    ("query", "lang", "train", "doc"),
+    [
+        ("직통열차 요금 얼마야?", "ko", None, "doc-fare-arex-express"),
+        ("얼마예요?", "ko", "allstop", "doc-fare-arex-allstop"),  # 열차를 이미 골랐으면 그 열차 요금
+        ("공덕에서 김포공항까지 얼마예요?", "ko", "allstop", "doc-fare-arex-allstop"),
+        ("기후동행카드 1일권 가격", "ko", None, "doc-fare-passes-cards"),
+        ("How much is a 3-day Climate Card?", "en", None, "doc-fare-passes-cards"),
+        ("What does the AREX Express cost for adults?", "en", None, "doc-fare-arex-express"),
+        ("How much is the fare right now?", "en", None, "doc-fare-arex-express"),  # 대상 없이 요금만 물으면 공항철도
+        # 열차를 고르기 전, 요금표에 있는 역 이름으로 묻는 질문
+        ("인천공항까지 얼마예요?", "ko", None, "doc-fare-arex-allstop"),
+        ("서울역에서 인천공항 가는 표 얼마예요?", "ko", None, "doc-fare-arex-allstop"),
+        ("인천공항 가려면 얼마 들어요?", "ko", None, "doc-fare-arex-allstop"),
+        ("How much is it to Incheon Airport?", "en", None, "doc-fare-arex-allstop"),
+        ("How much is the airport train?", "en", None, "doc-fare-arex-allstop"),
+    ],
+)
+def test_price_of_what_we_price_still_finds_fare_doc(query, lang, train, doc):
+    assert doc in ids(official()(query, lang, ctx(train)))
+
+
+def test_every_fare_doc_says_what_it_prices():
+    assert all(d.priced for d in load_docs() if d.scope == "fare")
+
+
+@pytest.mark.parametrize(
+    ("query", "lang", "doc"),
+    [
+        ("Can I purchase an Express ticket from a machine?", "en", "doc-express-ticket"),  # purchase → buy
+        ("What is the price of a seven-day Climate Card?", "en", "doc-fare-passes-cards"),  # seven → 7
+        ("Is the nonstop train faster?", "en", "doc-arex-train-types"),  # nonstop → non-stop
+    ],
+)
+def test_synonyms_reach_document_words(query, lang, doc):
+    assert doc in ids(official()(query, lang, ctx()))
+
+
+@pytest.mark.parametrize(
+    ("query", "lang"),
+    [
+        ("인천공항까지 얼마나 걸려요?", "ko"),
+        ("직통열차는 얼마나 걸려요?", "ko"),
+        ("How much time does it take to the airport?", "en"),
+    ],
+)
+def test_how_long_is_not_a_price_question(query, lang):
+    """'얼마나 걸려요' · 'how much time' 은 시간 질문: 가격 판정에 걸리지 않고 열차 종류 문서(소요 시간)를 찾는다."""
+    assert "doc-arex-train-types" in ids(official()(query, lang, ctx()))

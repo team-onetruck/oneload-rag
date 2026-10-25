@@ -6,6 +6,17 @@ scope: fare
 train_type: allstop
 source_url: https://www.airportrailroad.com/train/normal/fare
 source_kind: official
+priced: # 이 문서가 값을 매기는 대상 (가격 질문 판정)
+  - 일반열차
+  - 공항철도
+  - AREX
+  - All-stop
+  - Airport Railroad
+  - 1회용 교통카드
+  - single-journey
+  - single-use
+  - 보증금
+  - deposit
 verified_at: 2026-10-23
 verified_by: R3
 ---

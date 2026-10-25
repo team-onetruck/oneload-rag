@@ -6,6 +6,13 @@ scope: fare
 train_type: express
 source_url: https://www.airportrailroad.com/train/express/introduce
 source_kind: official
+priced: # 이 문서가 값을 매기는 대상 (가격 질문 판정)
+  - 직통열차
+  - 직통
+  - 공항철도
+  - AREX
+  - Express
+  - Airport Railroad
 verified_at: 2026-10-22
 verified_by: R3
 ---

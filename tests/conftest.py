@@ -51,6 +51,7 @@ def fixture_docs(tmp_path) -> Path:
         "직통열차 요금 시험 문서",
         "Express fare test doc",
         scope="fare",
+        priced=["직통열차"],
         title_ko="직통열차 요금",
         title_en="Express fare",
     )
