@@ -1,5 +1,7 @@
 # 백엔드에 R2 Agent + R3 RAG 연결하기 (R4·infra용, QA INT-07)
 
+> **2026-10-25 반영됨:** backend `a355b32`가 아래 방안 A 패치를 적용했습니다. 이 문서는 적용 기록과 방안 B(MCP) 참고용으로 남깁니다.
+
 QA가 P0로 남긴 **INT-07**("Backend 기본 RuleAgent/NoVision, 실제 Agent/Vision 주입, R3 검색 교체")에서 R3 몫을 정리한 자료입니다. R3는 백엔드·infra 레포를 수정하지 않았습니다.
 
 ## 먼저 정할 것: 구조 (2026-10-23 기준)
@@ -75,7 +77,7 @@ uv lock && uv run ruff check . && uv run pytest -q
 # 방안 A: 백엔드 API 단위 연결 (FakeLLM, 키 불필요, 로컬 compose DB 필요)
 cd oneload-rag
 # 패치를 적용한 백엔드라면 Agent·RAG가 의존성으로 이미 들어 있음
-uv run --project ../oneload-backend --with ../oneload-rag python scripts/e2e_backend.py
+uv run --project ../oneload-backend --with-editable ../oneload-rag python scripts/e2e_backend.py
 
 # 방안 B: RAG MCP 서버 (CI가 매번 확인하는 것과 같음)
 docker build -t hangil-rag . && docker run -p 127.0.0.1:8000:8000 hangil-rag

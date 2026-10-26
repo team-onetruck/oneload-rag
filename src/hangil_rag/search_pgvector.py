@@ -1,4 +1,7 @@
-"""pgvector 하이브리드 검색 (초안): 범위 판정 → 메타데이터 필터 → 벡터 + 키워드 점수 → 임계값 → 상위 k.
+"""pgvector 하이브리드 검색 (대안, RAG_BACKEND=pgvector): 범위 판정 → 열차 필터 → 벡터 + 키워드 점수 → 임계값 → 상위 k.
+
+기본값이 아닌 이유: 지금 문서 규모에서는 메모리 검색이 더 잘 찾는다 (docs/optimization-log.md 4).
+발췌는 문서마다 가장 점수가 높은 청크(`###` 소제목) 하나다.
 
 색인은 ingest.py 가 만든 `rag.chunks` (백엔드 테이블과 섞이지 않게 별도 스키마, 같은 Postgres).
 환경 변수: RAG_DATABASE_URL · RAG_EMBEDDING_MODEL · RAG_EMBEDDING_DIM · RAG_MIN_SCORE (.env.example).

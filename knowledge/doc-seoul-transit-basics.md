@@ -12,6 +12,10 @@ other_sources:
   - http://www.seoulmetro.co.kr/en/page.do?menuIdx=644
   - https://mediahub.seoul.go.kr/archives/2017343
   - https://mediahub.seoul.go.kr/archives/2015499
+  - https://www.airportrailroad.com/train/express/introduce
+  - https://www.arex.or.kr/file/%EC%97%AC%EA%B0%9D%EC%9A%B4%EC%86%A1%EC%95%BD%EA%B4%80(2025.12.26.).pdf
+  - https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=221111
+  - https://pay.tmoney.co.kr/ncs/pct/ugd/ReadFrgnGd.dev
 verified_at: 2026-10-22
 verified_by: R3
 ---
@@ -34,10 +38,12 @@ verified_by: R3
 
 ### 표 사기와 해외 카드
 
-- 2026년 3월 17일부터 서울 1~8호선(서울교통공사) 273개 역의 신형 교통카드 발매기 440대에서 해외 발행 신용·체크카드(비자, 마스터 등)와 간편결제로 일회용 승차권과 기후동행카드 단기권을 사고 충전할 수 있다. 해외 발행 카드는 평균 3.7%의 서비스이용료가 붙는다.
-- 공항철도 역의 1회용 교통카드 구매는 공항철도 일반열차 안내를 참고한다.
-- 말이 통하지 않으면 1330 관광통역안내를 쓴다 (도움받을 곳 안내 참고).
+- 해외 발행 카드(비자, 마스터 등)로 살 수 있는지는 어디서 무엇을 사느냐에 따라 다르다.
+- 2026년 3월 17일부터 서울 1~8호선(서울교통공사) 273개 역의 신형 교통카드 발매기 440대에서 해외 발행 신용·체크카드와 간편결제로 일회용 승차권과 기후동행카드 단기권을 사고 충전할 수 있다. 기존 충전기는 대부분 현금만 받았다. 해외 발행 카드는 평균 3.7%의 서비스이용료가 붙는다.
+- 공항철도 직통열차 승차권 발매기도 해외 발행 카드를 받는다. 공항철도 역의 1회용 교통카드도 신용카드로 살 수 있지만, 어떤 카드 브랜드를 받는지는 공식 안내에 없다.
+- 카드가 안 되면 역 고객안내센터에 묻는다. 말이 통하지 않으면 1330 관광통역안내를 쓴다 (도움받을 곳 안내 참고).
 
+<!-- 해외 카드 요약(2026-10-26): 사실은 doc-express-ticket · doc-allstop-ticket · doc-tmoney-card 와 같은 출처. 1~8호선은 서울시 516544(신형 발매기 440대, 3.7%)와 2015499(기존 충전기 대부분 현금) 다시 확인. "카드사마다 다를 수 있다"는 공식 자료에 없어 쓰지 않음 -->
 <!-- TODO(R3): 공식 자료 확인 필요 - 버스 앞문 승차·뒷문 하차, 버스에서 현금 사용 가능 여부 -->
 <!-- 요금은 scope=fare 문서(doc-fare-*)에 둔다. Agent 는 요금 질문에 fare 문서만 근거로 쓴다 -->
 
@@ -59,8 +65,9 @@ verified_by: R3
 
 ### Buying tickets with a foreign card
 
-- Since 17 March 2026, the 440 new ticket machines at 273 stations on Seoul Metro Lines 1–8 accept foreign-issued credit and debit cards (Visa, Mastercard, etc.) and mobile payment for single-journey tickets and Climate Card short-term passes. Foreign cards carry a service fee of about 3.7% on average.
-- For single-journey tickets at AREX stations, see the AREX All-stop guide.
-- If you cannot communicate, use the 1330 Korea Travel Hotline (see the help desk guide).
+- Whether a foreign-issued card (Visa, Mastercard, etc.) works depends on where you buy and what.
+- Since 17 March 2026, the 440 new ticket machines at 273 stations on Seoul Metro Lines 1–8 accept foreign-issued credit and debit cards and mobile payment for single-journey tickets and Climate Card short-term passes. Most older machines took cash only. Foreign cards carry a service fee of about 3.7% on average.
+- AREX Express ticket machines accept foreign-issued cards as well. Single-journey tickets at AREX stations can be bought by credit card too, but the official guide does not list which card brands work.
+- If your card does not work, ask the station customer service center. If you cannot communicate, use the 1330 Korea Travel Hotline (see the help desk guide).
 
 <!-- 서울시 국문 안내를 옮긴 것. 개찰구 오른쪽 단말기는 서울교통공사 영문 안내 표현 -->

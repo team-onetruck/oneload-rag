@@ -5,6 +5,21 @@ title_en: "Prices and fees of transit passes and cards: Climate Card short-term,
 scope: fare
 source_url: https://news.seoul.go.kr/traffic/archives/510651
 source_kind: official
+priced: # 이 문서가 값을 매기는 대상 (가격 질문 판정)
+  - 기후동행카드
+  - Climate Card
+  - 엠패스
+  - Mpass
+  - 티머니
+  - T-money
+  - WOWPASS
+  - 와우패스
+  - 교통카드
+  - transit card
+  - 지하철
+  - subway
+  - 기본운임
+  - base fare
 other_sources:
   - https://pay.tmoney.co.kr/ncs/pct/ugd/ReadClmtAcmpCardFrgnGd.dev
   - https://pay.tmoney.co.kr/ncs/pct/tmnyintd/ReadFrgnMpassIntd.dev

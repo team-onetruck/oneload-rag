@@ -4,11 +4,12 @@ e2e_backend.py 와 같은 조립(백엔드 API + R2 LLMAgent + R3 검색)에서 
 OpenAI 키가 필요하고 비용이 든다 (질문 16개, 몇십 원 수준). 결과는 표로 출력한다.
 
     set -a; . ../.env; set +a
-    uv run --project ../oneload-backend --with ../oneload-rag python scripts/agent_live_check.py
+    uv run --project ../oneload-backend --with-editable ../oneload-rag python scripts/agent_live_check.py
 """
 
 from __future__ import annotations
 
+import json
 import os
 import re
 import sys
@@ -44,6 +45,11 @@ CASES = [
     ("ko", "직통열차 요금 얼마야?", "in"),
     ("ko", "서울역 공항철도 승강장은 몇 층이에요?", "in"),
 ]
+if os.environ.get("CASES_JSON"):  # R6 형식 평가셋으로: CASES_JSON=../oneload-qa/eval/retrieval_holdout_v3.json
+    CASES = [
+        (c["lang"], c["q"], "in" if c["gold"] else "out")
+        for c in json.loads(Path(os.environ["CASES_JSON"]).read_text(encoding="utf-8"))["cases"]
+    ]
 if os.environ.get("ONLY"):  # 일부만 다시: ONLY=12,13
     CASES = [CASES[int(i) - 1] for i in os.environ["ONLY"].split(",")]
 MONEY = re.compile(r"\d[\d,]*\s*(원|won|KRW)|₩\s*\d", re.I)

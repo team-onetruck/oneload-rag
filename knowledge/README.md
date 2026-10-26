@@ -15,12 +15,18 @@ source_url: https://...             # 필수 키. 대표 출처. field_check 이
 source_kind: official               # 필수. official(공식 자료) | field_check(현장·전화 확인) | community(이용자 후기, 미확인)
 other_sources:                      # 선택. 함께 확인한 다른 출처
   - https://...
+priced:                             # scope: fare 이면 필수. 이 문서가 값을 매기는 대상 (가격 질문 판정)
+  - 직통열차
+  - Express
 verified_at: 2026-10-22             # 필수. 출처를 열어 내용을 확인한 날 (YYYY-MM-DD)
 verified_by: R3                     # 필수. 확인한 사람
 ---
 ```
 
 - `scope: fare`: 요금 문서는 반드시 이 값으로 둔다. Agent는 요금 질문에 `scope=fare` 문서만 근거로 쓴다.
+- `priced`: 요금 문서가 값을 매기는 대상(열차·카드·패스 이름, 한국어·영어). 가격 질문은 이 말이 있거나, 열차를 이미 골랐거나, 질문의 말이 모두 요금 문서에 있을 때만 검색 결과가 나온다. 그래서 "택시 기본요금"에 공항철도 요금표가 붙지 않는다(RAG #3).
+  - 대소문자·띄어쓰기·하이픈은 무시한다(`All-stop` = `all stop`). 질문에 이 말이 그대로 들어 있으면 맞는다.
+  - 새 요금 문서를 더하거나 값을 매기는 대상이 늘면 이 목록도 고친다.
 - `train_type`: `context.slots.train_type`이 `express`나 `allstop`이면, 다른 열차 전용 문서는 검색에서 빠진다(Agent A-21).
 - `verified_by: claude-draft`: 초안 작성 도구가 공식 페이지를 읽고 쓴 문서라는 뜻이다. 사람이 출처를 다시 열어 확인한 뒤 이름과 날짜로 바꾼다.
 
