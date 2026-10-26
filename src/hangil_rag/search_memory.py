@@ -20,7 +20,7 @@ import math
 import re
 from pathlib import Path
 
-from .loader import TRAIN_TYPES, Doc, load_docs
+from .loader import TRAIN_TYPES, Doc, chunks, load_docs
 from .schemas import KnowledgeHit
 
 log = logging.getLogger("hangil_rag")
@@ -157,6 +157,10 @@ class MemorySearch:
             for t in title | body:
                 self._df[t] = self._df.get(t, 0) + 1
         self._priced = {_squash(p) for d in self.docs for p in d.priced}
+        # 발췌는 문서 전체가 아니라 질문에 맞는 '###' 소제목 하나 (LLM 에 넘기는 글을 줄인다)
+        self._chunks: dict[tuple[str, str], list[tuple[set[str], str]]] = {}
+        for c in (c for d in self.docs for c in chunks(d)):
+            self._chunks.setdefault((c.doc.doc_id, c.lang), []).append((tokens(f"{c.heading} {c.text}"), c.text))
         self._fare_vocab = set().union(*(title | body for d, title, body in self._index if d.scope == "fare"))
 
     def _idf(self, t: str) -> float:
@@ -241,7 +245,14 @@ class MemorySearch:
         hits = official[: self.k - len(community)] + community if community else official[: self.k]
         if not hits:  # 반환은 둘 다 빈 목록, 구분은 로그로만 (임계값 조정용)
             log.info("rag_empty reason=%s top_score=%.2f", "below_threshold" if scored else "no_match", top(scored))
-        return [to_hit(d, language, d.body(language)) for _, d in hits]
+        return [to_hit(d, language, self.excerpt(d, language, q)) for _, d in hits]
+
+    def excerpt(self, doc: Doc, language: str, q: set[str]) -> str:
+        """질문 낱말이 가장 많이 겹치는 소제목 하나. 제목 낱말만 겹치면(문서 전체를 묻는 질문) 본문 전체."""
+        parts = self._chunks.get((doc.doc_id, "en" if language == "en" else "ko"), [])
+        specific = q - tokens(f"{doc.title_ko} {doc.title_en}")
+        best, text = max(((len(specific & ct), text) for ct, text in parts), key=lambda x: x[0], default=(0, ""))
+        return text if best and len(parts) > 1 else doc.body(language)
 
 
 def _expand(q: set[str], query: str) -> set[str]:

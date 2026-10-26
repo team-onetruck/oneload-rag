@@ -263,3 +263,12 @@ def test_synonyms_reach_document_words(query, lang, doc):
 def test_how_long_is_not_a_price_question(query, lang):
     """'얼마나 걸려요' · 'how much time' 은 시간 질문: 가격 판정에 걸리지 않고 열차 종류 문서(소요 시간)를 찾는다."""
     assert "doc-arex-train-types" in ids(official()(query, lang, ctx()))
+
+
+def test_excerpt_is_the_matching_section_not_the_whole_doc(search):
+    """소제목을 가리키는 질문은 그 소제목만 발췌한다 (LLM 에 넘기는 글을 줄임).
+
+    문서 전체를 묻는 질문은 본문 전체: test_help_order_puts_station_desks_before_phone_lines"""
+    hit = MemorySearch()("직통열차 발매기에서 해외 신용카드로 결제할 수 있어요?", "ko", ctx())[0]
+    assert hit.document_id == "doc-express-ticket" and "비자" in hit.excerpt  # '결제 수단' 소제목
+    assert "고객안내센터" not in hit.excerpt  # 첫 소제목(사는 곳)은 빠짐
