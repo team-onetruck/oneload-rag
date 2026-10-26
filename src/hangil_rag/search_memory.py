@@ -1,4 +1,7 @@
-"""DB 없이 도는 키워드 검색 — MockKnowledgeSearch 자리에 바로 넣는 1차 구현 (테스트 · 로컬 시연용).
+"""DB 없이 도는 키워드 검색 — 운영 기본값 (RAG_BACKEND 미설정). 문서 14개 규모에서 pgvector 보다 잘 찾는다.
+
+검색 한 번의 흐름 (__call__): 범위 판정(scope_reason) → 문서마다 점수 → 최소 · 상대 컷오프 → 상위 3개 → 발췌(excerpt).
+평가 · 측정: eval/measure.py, 개선 이력: docs/optimization-log.md.
 
 질문과 문서를 같은 규칙으로 토큰으로 나눠 겹치는 비율로 점수를 매긴다.
 - 한글 낱말은 글자 2-gram ("직통열차는" → 직통 · 통열 · 열차 · 차는) 이라 조사가 붙어도 맞는다.
@@ -11,6 +14,9 @@
 - 가격 질문 (RAG #3 후속): 가격은 요금 문서가 값을 매긴 것에 대해서만 답할 범위다. 위 비율 대신 이것으로 판정한다.
   머리말 priced 의 대상이 있거나 열차를 이미 골랐으면 안. 아니면 질문의 내용어가 모두 요금 문서에 있는 말일
   때만 안 ("인천공항까지 얼마예요?" 는 안, "택시 기본요금" · "KTX 가격" 은 밖).
+- 발췌: 고른 문서 안에서 질문과 가장 많이 겹치는 `###` 소제목 하나만 넘긴다 (Agent 가 LLM 프롬프트에 그대로 넣음).
+- 손으로 고른 낱말 목록(_STOP_KO · _ASK_KO · _SYNONYM ...)이 많다. 고칠 때는 평가셋을 다시 돌린다: 문서 · 목록이
+  조금만 바뀌어도 범위 판정 경계 근처 질문이 오간다.
 """
 
 from __future__ import annotations
@@ -105,6 +111,7 @@ def _grams(word: str) -> set[str]:
 
 
 def tokens(text: str) -> set[str]:
+    """검색 단위. 영어는 낱말(기능어 제외), 한글은 2글자 조각 (조사를 뗀 형태도 함께)."""
     out: set[str] = set()
     for word in words(text):
         if word.isascii():
@@ -146,6 +153,8 @@ def _squash(text: str) -> str:
 
 
 class MemorySearch:
+    """문서를 메모리에 올려 두고 Agent 의 search_knowledge(query, language, context) 로 불린다. 색인은 생성 때 한 번."""
+
     def __init__(
         self, docs: list[Doc] | None = None, directory: Path | None = None, k: int = TOP_K, min_score: float = MIN_SCORE
     ):
@@ -171,6 +180,7 @@ class MemorySearch:
         return sum(self._unknown(w) for w in words(query))
 
     def _unknown(self, w: str) -> bool:
+        """이 낱말이 문서 어디에도 없나. 한글은 2글자 조각이나 첫 글자 하나라도 문서에 있으면 아는 낱말로 본다."""
         if w.isascii():
             return not (w in _STOP or w in _FILLER_EN or w.isdigit() or _stem(w) in self._df)
         s = _PARTICLE.sub("", w) or w
@@ -199,7 +209,9 @@ class MemorySearch:
         return _grams(_PARTICLE.sub("", w) or w) <= self._fare_vocab
 
     def coverage(self, query: str, train: str | None) -> float:
-        """가장 잘 맞는 문서가 덮는 질문 정보량의 비율 (0~1). 범위 밖 판정에 쓴다."""
+        """가장 잘 맞는 문서가 덮는 질문 정보량의 비율 (0~1). 범위 밖 판정에 쓴다.
+
+        정보량 = 아는 토큰의 idf 합 + 모르는 낱말 수 × 가장 큰 idf. 모르는 낱말이 많을수록 비율이 낮아진다."""
         known = [t for t in _expand(tokens(query), query) if t in self._df]
         total = sum(self._idf(t) for t in known) + self._unknown_words(query) * math.log(len(self._index) + 1)
         best = max(

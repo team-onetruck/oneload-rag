@@ -2,6 +2,9 @@
 
     uv run python eval/retrieval.py            # 지금 설정 (기본: 메모리 검색, RAG_BACKEND=pgvector 면 pgvector)
     uv run python eval/retrieval.py --sweep    # 메모리 검색 임계값 후보 비교
+    uv run python eval/retrieval.py --holdout  # R3 보류 검증 28문항 (RAG #3 때 실행 전 고정, 지금은 회귀용)
+
+여러 평가셋 · 발췌 크기 · 메모리를 한 번에 보려면 eval/measure.py.
 
 공식 문서만 본다 (RAG_INCLUDE_COMMUNITY 는 끈다).
 """
