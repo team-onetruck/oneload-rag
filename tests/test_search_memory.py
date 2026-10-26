@@ -272,3 +272,16 @@ def test_excerpt_is_the_matching_section_not_the_whole_doc(search):
     hit = MemorySearch()("직통열차 발매기에서 해외 신용카드로 결제할 수 있어요?", "ko", ctx())[0]
     assert hit.document_id == "doc-express-ticket" and "비자" in hit.excerpt  # '결제 수단' 소제목
     assert "고객안내센터" not in hit.excerpt  # 첫 소제목(사는 곳)은 빠짐
+
+
+@pytest.mark.parametrize(
+    "query",
+    ["직통열차 두 구간의 정상운임은 서로 같은가요? 비교해 주세요.", "Are the AREX Express regular fares identical?"],
+)
+def test_price_question_about_a_priced_target_is_not_blocked_by_other_words(query):
+    """값을 매기는 대상(직통열차 · AREX)을 말했으면 '비교 · identical' 같은 꾸미는 말이 문서에 없어도 찾는다 (R6 v3)."""
+    assert "doc-fare-arex-express" in ids(MemorySearch()(query, "ko", ctx()))
+
+
+def test_sold_out_is_realtime():
+    assert MemorySearch()("다음 직통열차 매진됐어요?", "ko", ctx()) == []

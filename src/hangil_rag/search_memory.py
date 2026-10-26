@@ -9,8 +9,8 @@
   걸리지 않게, 질문의 정보량(드문 낱말일수록 무겁게, 문서에 아예 없는 낱말은 가장 무겁게) 중 가장 잘 맞는
   문서가 덮는 비율이 MIN_COVERAGE 보다 낮으면 빈 결과. 실시간 현황(빈 좌석 등)을 묻는 질문도 빈 결과.
 - 가격 질문 (RAG #3 후속): 가격은 요금 문서가 값을 매긴 것에 대해서만 답할 범위다. 위 비율 대신 이것으로 판정한다.
-  문서에 없는 낱말이 있으면 밖. 머리말 priced 의 대상이 있거나 열차를 이미 골랐으면 안. 둘 다 아니면 질문의
-  내용어가 모두 요금 문서에 있는 말일 때만 안 ("인천공항까지 얼마예요?" 는 안, "택시 기본요금" · "KTX 가격" 은 밖).
+  머리말 priced 의 대상이 있거나 열차를 이미 골랐으면 안. 아니면 질문의 내용어가 모두 요금 문서에 있는 말일
+  때만 안 ("인천공항까지 얼마예요?" 는 안, "택시 기본요금" · "KTX 가격" 은 밖).
 """
 
 from __future__ import annotations
@@ -85,7 +85,7 @@ _WHEN = {"right", "today", "currently", "지금", "현재", "오늘"}
 _TRIP_KO = {"가는", "가려면", "가면", "갈", "가요", "타는", "타려면", "타면", "들어요", "드나요", "드는", "표", "데"}
 # 실시간 현황은 문서로 답할 수 없다 (잔여석 · 빈 좌석 · 실시간). shortcut: 표현 목록, 질문 로그가 쌓이면 보강
 _REALTIME = re.compile(
-    r"실시간|잔여\s*(좌석|석)|(빈|남은)\s*(좌석|자리|석)|자리\s*(가\s*)?남|real[- ]?time"
+    r"실시간|매진|잔여\s*(좌석|석)|(빈|남은)\s*(좌석|자리|석)|자리\s*(가\s*)?남|real[- ]?time|sold out"
     r"|seats?\s+((are|is)\s+)?(left|available|remaining)|(empty|free|available)\s+seats?",
     re.I,
 )
@@ -183,11 +183,12 @@ class MemorySearch:
         flags = _price_flags(ws)
         if not any(flags):
             return None
-        rest = [w for w, price in zip(ws, flags, strict=True) if not price and w not in _TRIP_KO]
-        if any(self._unknown(w) for w in rest):  # 리무진 · 부산 · busan: 문서에 없는 것의 값
-            return "price_unknown_word"
+        # 값을 매기는 대상을 말했거나 열차를 골랐으면 답할 범위. 질문을 꾸미는 말(비교·저녁·플라스틱 ...)이
+        # 문서에 없어도 거절하지 않는다(R6 v3: 이 규칙이 정상 가격 질문 7개를 막음). 그 대상의 어떤 비용인지
+        # (좌석 변경 · 재발급 수수료)까지는 낱말로 가리지 못해 Agent 의 근거 판단에 맡긴다 (RQ-32)
         if train in TRAIN_TYPES or any(p in _squash(query) for p in self._priced):
             return None
+        rest = [w for w, price in zip(ws, flags, strict=True) if not price and w not in _TRIP_KO]
         # priced 를 직접 말하지 않았으면 질문의 내용어가 모두 요금 문서에 있는 말이어야 한다.
         # "인천공항까지 얼마예요?" (요금표의 역 이름) 는 안, "택시 기본요금" · "KTX 가격" (요금 문서에 없음) 은 밖
         return "price_not_priced" if any(_is_content(w) and not self._in_fare_docs(w) for w in rest) else None
