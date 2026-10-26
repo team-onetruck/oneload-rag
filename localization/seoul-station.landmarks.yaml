@@ -12,7 +12,7 @@
 # 실제 정확도는 현장 사진으로만 잴 수 있다. 이 파일은 매칭 로직 개발 · 시연용이다.
 
 map_id: seoul-station
-map_version: 2026-10-25.1 # oneload-data maps/seoul-station.json 의 노드 기준
+map_version: 2026-10-25.2 # oneload-data maps/seoul-station.json 의 노드 기준
 
 sources:
   arex-map:
