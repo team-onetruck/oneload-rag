@@ -2,7 +2,7 @@
 
     uv run python eval/measure.py            # 결과를 docs/optimization-log.md 의 표에 옮겨 적는다
 
-R6 평가셋은 옆 폴더 oneload-qa 가 있으면 함께 잰다. R6 가 판정에 쓴 뒤 공개한 셋(v2 · v3)만 넣는다.
+R6 평가셋은 옆 폴더 oneload-qa 가 있으면 함께 잰다. R6 가 판정에 쓴 뒤 공개한 셋(v2 · v3 · v4)만 넣는다.
 아직 판정 전인 새 셋은 넣지 않는다 (결과를 보고 고치면 독립 판정이 안 된다).
 공식 문서만 본다 (RAG_INCLUDE_COMMUNITY 는 끈다).
 """
@@ -38,6 +38,7 @@ def sets() -> dict[str, list[dict]]:
         ("R6 32", "retrieval_cases.json"),
         ("R6 v2 40", "retrieval_holdout_v2.json"),
         ("R6 v3 48", "retrieval_holdout_v3.json"),
+        ("R6 v4 48", "split_holdout_v4.json"),
     )
     for name, file in r6:
         if (QA / file).is_file():

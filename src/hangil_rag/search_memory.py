@@ -34,8 +34,10 @@ log = logging.getLogger("hangil_rag")
 TOP_K = 3  # Agent 도 상위 3개만 쓴다 (agent.py _search)
 MIN_SCORE = 0.25  # eval/retrieval.py --sweep 기준 (2026-10-22, 평가셋 44문항). R6 가 확정
 RELATIVE_CUTOFF = 0.5  # 1위 점수의 절반 미만은 뺀다 ("ticket" 같은 흔한 낱말 하나로 엉뚱한 문서가 근거로 붙지 않게)
-# 범위 판정 기준 (RAG #3). R3 44문항 · R6 개발 16문항으로 정함: 범위 밖 최고 0.242, 정답 최저 0.257 (2026-10-23)
-MIN_COVERAGE = 0.25
+# 범위 판정 기준 (RAG #3). 검색은 정상 질문을 놓치지 않는 쪽, 범위 밖 질문 거절은 Agent 근거 판단이 맡는다(QA #3 분리
+# 기준). 공개된 평가셋 6개(R3 47·보류 28, R6 32·v2·v3·v4)에서 정상 질문 최저 0.147 → 여유를 두고 0.12 (2026-10-26).
+# 처음 값 0.25 는 R6 v4 정상 질문 5개(0.19~0.24)를 막았다
+MIN_COVERAGE = 0.12
 
 _WORD = re.compile(r"[0-9a-z]+|[가-힣]+")
 _STOP = {
@@ -89,9 +91,11 @@ _FILLER_EN = {
 # "인천공항 가는 표 얼마예요?" 의 대상은 인천공항까지 가는 것이다. shortcut: 손으로 고른 목록, 질문 로그로 보강
 _WHEN = {"right", "today", "currently", "지금", "현재", "오늘"}
 _TRIP_KO = {"가는", "가려면", "가면", "갈", "가요", "타는", "타려면", "타면", "들어요", "드나요", "드는", "표", "데"}
-# 실시간 현황은 문서로 답할 수 없다 (잔여석 · 빈 좌석 · 실시간). shortcut: 표현 목록, 질문 로그가 쌓이면 보강
+# 실시간 현황 · 날씨는 문서로 답할 수 없다 (잔여석 · 빈 좌석 · 매진 · 날씨). 범위 점수가 정상 질문과 겹쳐(날씨 0.144,
+# 정상 최저 0.147) 기준값으로는 못 가른다. shortcut: 표현 목록, 질문 로그가 쌓이면 보강
 _REALTIME = re.compile(
-    r"실시간|매진|잔여\s*(좌석|석)|(빈|남은)\s*(좌석|자리|석)|자리\s*(가\s*)?남|real[- ]?time|sold out"
+    r"실시간|매진|날씨|기온|weather|forecast"
+    r"|잔여\s*(좌석|석)|(빈|남은)\s*(좌석|자리|석)|자리\s*(가\s*)?남|real[- ]?time|sold out"
     r"|seats?\s+((are|is)\s+)?(left|available|remaining)|(empty|free|available)\s+seats?",
     re.I,
 )
