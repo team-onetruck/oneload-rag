@@ -4,8 +4,8 @@ README "백엔드 연결" 과 같은 조립(같은 Vision 을 Agent · create_ap
 /sessions → /messages · /localizations 를 실제 HTTP 경로(TestClient)로 부른다. LLM 은 FakeLLM (API 키 · 비용 없음).
 백엔드 저장소는 읽기만 한다. DB 는 일회용 데이터베이스를 만들어 마이그레이션한다.
 
-    uv run --project ../oneload-backend --with langgraph==1.2.16 --with python-dotenv==1.2.4 --with ../oneload-rag \\
-      python scripts/e2e_backend.py
+    uv run --project ../oneload-backend --with langgraph==1.2.16 --with python-dotenv==1.2.4 \\
+      --with-editable ../oneload-rag python scripts/e2e_backend.py
     # DB: E2E_DATABASE_URL (기본 postgresql+psycopg://hangil:hangil@localhost:54329/hangil_rag_e2e, 백엔드 compose DB)
 """
 

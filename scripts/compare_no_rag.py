@@ -8,7 +8,7 @@
 OpenAI 키가 필요하다 (질문 64개 × 두 방식 + 채점, 몇백 원). 결과 표는 docs/presentation-brief.md 에 옮긴다.
 
     set -a; . ../.env; set +a
-    uv run --project ../oneload-backend --with ../oneload-rag python scripts/compare_no_rag.py
+    uv run --project ../oneload-backend --with-editable ../oneload-rag python scripts/compare_no_rag.py
 """
 
 from __future__ import annotations

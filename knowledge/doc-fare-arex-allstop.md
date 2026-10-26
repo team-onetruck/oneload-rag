@@ -29,7 +29,7 @@ verified_by: R3
 - 서울역에서 공덕·홍대입구·디지털미디어시티까지 1,550원, 마곡나루·김포공항까지 1,750원, 계양 1,950원, 검암 2,050원, 청라국제도시 2,150원, 영종 3,350원, 운서 3,850원, 공항화물청사 4,450원이다.
 - 1회용 교통카드로 타면 어른은 위 요금에 100원이 더 붙고, 보증금 500원을 따로 낸다. 보증금은 도착역에서 돌려받는다.
 
-### 역간 기준운임 전체 (어른, 선·후불 교통카드, 단위: 원)
+**역간 기준운임 전체 (어른, 선·후불 교통카드, 단위: 원)**
 
 | 출발＼도착 | 서울 | 공덕 | 홍대입구 | 디지털미디어시티 | 마곡나루 | 김포공항 | 계양 | 검암 | 청라국제도시 | 영종 | 운서 | 공항화물청사 | 인천공항1터미널 | 인천공항2터미널 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
@@ -58,7 +58,7 @@ Taken from the official AREX fare table; the fare is the same in both directions
 - From Seoul Station: KRW 1,550 to Gongdeok, Hongik Univ. and Digital Media City; KRW 1,750 to Magongnaru and Gimpo Airport; KRW 1,950 to Gyeyang; KRW 2,050 to Geomam; KRW 2,150 to Cheongna International City; KRW 3,350 to Yeongjong; KRW 3,850 to Unseo; KRW 4,450 to Airport Cargo Terminal.
 - With a single-journey ticket, adults pay KRW 100 more than the fares above, plus a KRW 500 deposit that you get back at your arrival station.
 
-### Fares between all stations (adult, prepaid/postpaid transit card, KRW)
+**Fares between all stations (adult, prepaid/postpaid transit card, KRW)**
 
 | From＼To | Seoul | Gongdeok | Hongik Univ. | Digital Media City | Magongnaru | Gimpo Int'l Airport | Gyeyang | Geomam | Cheongna Int'l City | Yeongjong | Unseo | Airport Cargo Terminal | Incheon Airport T1 | Incheon Airport T2 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|

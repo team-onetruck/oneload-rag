@@ -52,12 +52,14 @@ R3가 RAG를 어떤 순서로, 왜 그렇게 만들었는지 되짚어 보는 �
 | 측정 도구 `eval/measure.py`, `scripts/latency_check.py` + 기록 `docs/optimization-log.md` | 개선 전후를 같은 방법으로 잼 |
 | 응답 시간 측정 | 메시지 하나 약 2.8초 중 **LLM 98~99%, RAG 검색 0%** |
 | 범위 판정 완화 (R6 v4) | 검색은 놓치지 않기로 역할을 나눈 뒤(QA #3), v4 정상 질문 5개를 막던 기준값을 0.25 → 0.12. 공개 셋 6개 정답 146/147. 날씨는 실시간 표현으로 차단 |
+| 측정 정정 + 발췌 보완 | 실제 LLM 확인 스크립트가 uv 캐시의 옛 RAG를 쓰고 있었음 → `--with-editable`로 바꾸고 전부 다시 잼. 다시 재면서 발췌가 답을 빠뜨리는 경우 2가지(소제목 줄, 운임표 분할)를 고침. 해외 카드 요약 소제목 추가 |
 
 ## 4. 평가를 다루는 방식 (중요)
 
 - 평가셋은 **실행 전에 고정**하고, 결과를 본 뒤에는 그 셋으로 "좋아졌다"고 말하지 않는다(회귀 확인용으로만).
 - R6가 판정용으로 만든 셋(v3 등)은 **R6가 판정하기 전에는 R3가 돌리지 않는다.**
 - 실패한 시도도 기록한다(PR #4 첫 버전). 왜 실패했는지가 다음 설계의 근거가 된다.
+- 잘못 잰 숫자는 지우지 않고 정정 표시를 붙인다(optimization-log 항목 11). 측정 도구가 정말 지금 코드를 쓰는지 먼저 확인한다.
 
 ## 5. 지금 상태 (10-26)
 
@@ -72,8 +74,8 @@ R3가 RAG를 어떤 순서로, 왜 그렇게 만들었는지 되짚어 보는 �
 uv run pytest -q                       # 테스트 (옆 레포가 있으면 계약 테스트까지)
 uv run python eval/measure.py          # 평가셋 · 발췌 크기 · 메모리 · 검색 시간
 set -a; . ../.env; set +a              # 아래 둘은 OpenAI 키 필요 (몇십 원)
-uv run --project ../oneload-backend --with . python scripts/agent_live_check.py
-uv run --project ../oneload-backend --with . python scripts/latency_check.py
+uv run --project ../oneload-backend --with-editable . python scripts/agent_live_check.py
+uv run --project ../oneload-backend --with-editable . python scripts/latency_check.py
 ```
 
 ## 7. 파일 지도

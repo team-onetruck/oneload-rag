@@ -4,7 +4,7 @@ e2e_backend.py 와 같은 조립(백엔드 API + R2 LLMAgent + R3 검색)에서 
 OpenAI 키가 필요하고 비용이 든다 (질문 16개, 몇십 원 수준). 결과는 표로 출력한다.
 
     set -a; . ../.env; set +a
-    uv run --project ../oneload-backend --with ../oneload-rag python scripts/agent_live_check.py
+    uv run --project ../oneload-backend --with-editable ../oneload-rag python scripts/agent_live_check.py
 """
 
 from __future__ import annotations

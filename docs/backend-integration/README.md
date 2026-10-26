@@ -77,7 +77,7 @@ uv lock && uv run ruff check . && uv run pytest -q
 # 방안 A: 백엔드 API 단위 연결 (FakeLLM, 키 불필요, 로컬 compose DB 필요)
 cd oneload-rag
 # 패치를 적용한 백엔드라면 Agent·RAG가 의존성으로 이미 들어 있음
-uv run --project ../oneload-backend --with ../oneload-rag python scripts/e2e_backend.py
+uv run --project ../oneload-backend --with-editable ../oneload-rag python scripts/e2e_backend.py
 
 # 방안 B: RAG MCP 서버 (CI가 매번 확인하는 것과 같음)
 docker build -t hangil-rag . && docker run -p 127.0.0.1:8000:8000 hangil-rag

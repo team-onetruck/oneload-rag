@@ -170,10 +170,12 @@ class MemorySearch:
             for t in title | body:
                 self._df[t] = self._df.get(t, 0) + 1
         self._priced = {_squash(p) for d in self.docs for p in d.priced}
-        # 발췌는 문서 전체가 아니라 질문에 맞는 '###' 소제목 하나 (LLM 에 넘기는 글을 줄인다)
+        # 발췌는 문서 전체가 아니라 질문에 맞는 '###' 소제목 하나 (LLM 에 넘기는 글을 줄인다).
+        # 소제목 줄도 함께 넘긴다: 없으면 "3일권 30,500원"이 어느 패스 값인지 LLM 이 모른다 (pgvector 와 같음)
         self._chunks: dict[tuple[str, str], list[tuple[set[str], str]]] = {}
         for c in (c for d in self.docs for c in chunks(d)):
-            self._chunks.setdefault((c.doc.doc_id, c.lang), []).append((tokens(f"{c.heading} {c.text}"), c.text))
+            text = c.text if c.heading == c.doc.title(c.lang) else f"### {c.heading}\n{c.text}"
+            self._chunks.setdefault((c.doc.doc_id, c.lang), []).append((tokens(f"{c.heading} {c.text}"), text))
         self._fare_vocab = set().union(*(title | body for d, title, body in self._index if d.scope == "fare"))
 
     def _idf(self, t: str) -> float:

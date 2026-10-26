@@ -4,7 +4,7 @@ agent_live_check.py 와 같은 조립·질문 16개를 쓰고, 다른 레포 코
 OpenAI 키가 필요하다. 결과는 docs/optimization-log.md 에 옮겨 적는다.
 
     set -a; . ../.env; set +a
-    uv run --project ../oneload-backend --with ../oneload-rag python scripts/latency_check.py
+    uv run --project ../oneload-backend --with-editable ../oneload-rag python scripts/latency_check.py
 """
 
 from __future__ import annotations

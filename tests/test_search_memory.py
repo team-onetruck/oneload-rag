@@ -271,7 +271,14 @@ def test_excerpt_is_the_matching_section_not_the_whole_doc(search):
     문서 전체를 묻는 질문은 본문 전체: test_help_order_puts_station_desks_before_phone_lines"""
     hit = MemorySearch()("직통열차 발매기에서 해외 신용카드로 결제할 수 있어요?", "ko", ctx())[0]
     assert hit.document_id == "doc-express-ticket" and "비자" in hit.excerpt  # '결제 수단' 소제목
+    assert hit.excerpt.startswith("### 결제 수단")  # 소제목 줄도 넘겨야 LLM 이 무엇에 대한 글인지 안다
     assert "고객안내센터" not in hit.excerpt  # 첫 소제목(사는 곳)은 빠짐
+
+
+def test_fare_table_between_other_stations_is_in_the_excerpt():
+    """서울역이 아닌 두 역 사이 요금은 전체 운임표에만 있다. 서울역 기준 목록만 주면 "자료에 없다"가 된다 (R6 v3)."""
+    hit = MemorySearch()("일반열차 공덕에서 김포공항까지 요금", "ko", ctx())[0]
+    assert hit.document_id == "doc-fare-arex-allstop" and "| 공덕 | 1,550 |" in hit.excerpt
 
 
 @pytest.mark.parametrize(
